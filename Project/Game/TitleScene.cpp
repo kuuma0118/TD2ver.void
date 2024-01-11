@@ -13,6 +13,5 @@ void TiTleScene::Update(GameManager* gameManager){
 }
 
 void TiTleScene::Draw(GameManager* gameManager){
-	ImGui::Begin("Title");
-	ImGui::End();
+	
 }
