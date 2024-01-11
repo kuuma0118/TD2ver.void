@@ -93,7 +93,7 @@ void GameManager::run() {
 		postProcess_->Update();
 		//ImGui受付終了
 		imguiManager_->End();
-
+		
 		//描画開始
 		dxCommon_->PreDraw();
 		//ゲームシーンの描画

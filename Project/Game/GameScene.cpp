@@ -47,4 +47,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	Sprite::PostDraw();
 
 #pragma endregion
+
+	ImGui::Begin("Game");
+	ImGui::End();
 };
