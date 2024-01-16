@@ -49,6 +49,6 @@ private:
 	ViewProjection viewProjection_;
 
 	//ブロック
-	std::unique_ptr<Block> block_{};
+	std::list<Block*> blocks_;
 
 };

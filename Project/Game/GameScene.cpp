@@ -4,7 +4,11 @@
 
 GameScene::GameScene() {};
 
-GameScene::~GameScene() {};
+GameScene::~GameScene() {
+	for (Block* block_ : blocks_) {
+		delete block_;
+	}
+};
 
 void GameScene::Initialize(GameManager* gameManager) {
 	//Inputのインスタンスを取得
@@ -16,16 +20,35 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-
-	//ブロックの生成
-	block_ = std::make_unique<Block>();
-	block_->Initialize();
+	viewProjection_.translation_ = { 0.0f,0.0f,-50.0f };
+	worldTransform_.translation_.y = 5.0f;
+	
 };
 
 void GameScene::Update(GameManager* gameManager) {
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
-	block_->Update();
+
+	for (Block* block_ : blocks_) {
+		block_->Update();
+	}
+
+	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
+		worldTransform_.translation_.x += 2.0f;
+	}
+	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
+		worldTransform_.translation_.x -= 2.0f;
+	}
+
+	if (input_->IsPushKeyEnter(DIK_SPACE)) {
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, kBulletSpeed, 0);
+		Block* newBlock_ = new Block();
+
+		newBlock_->Initialize(worldTransform_);
+		blocks_.push_back(newBlock_);
+
+	}
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -46,8 +69,9 @@ void GameScene::Draw(GameManager* gameManager) {
 	Model::PreDraw();
 
 	//ブロックの描画
-	block_->Draw(viewProjection_);
-
+	for (Block* block_ : blocks_) {
+		block_->Draw(viewProjection_);
+	}
 	Model::PostDraw();
 
 #pragma endregion
