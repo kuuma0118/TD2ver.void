@@ -5,6 +5,7 @@
 #include "Engine/Components/PostProcess.h"
 #include "Engine/3D/Model/Model.h"
 #include "Engine/2D/Sprite.h"
+#include "Project/Player/Player.h"
 
 class GameScene : public IScene {
 public:
@@ -41,4 +42,9 @@ private:
 	//ポストプロセス
 	PostProcess* postProcess_ = nullptr;
 
+	// カメラ
+	ViewProjection viewProjection_;
+
+	// 自機
+	Player* player_;
 };

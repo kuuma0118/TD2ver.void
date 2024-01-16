@@ -103,6 +103,12 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{de3f9224-098b-4c48-8260-fa6a820477ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\Player">
+      <UniqueIdentifier>{61642084-8d64-446f-9734-438466fc8ee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Player">
+      <UniqueIdentifier>{08976c55-26dd-48f6-b249-8b150ffbdac1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,6 +215,15 @@
     </ClCompile>
     <ClCompile Include="Project\Game\GameScene.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Player\Player.cpp">
+      <Filter>ソース ファイル\Project\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Block.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Components\GamePad.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +346,15 @@
     </ClInclude>
     <ClInclude Include="Project\Game\GameManager.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Player.h">
+      <Filter>ヘッダー ファイル\Project\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Block.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Components\GamePad.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

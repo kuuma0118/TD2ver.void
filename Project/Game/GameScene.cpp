@@ -4,7 +4,9 @@
 
 GameScene::GameScene() {};
 
-GameScene::~GameScene() {};
+GameScene::~GameScene() {
+	delete player_;
+};
 
 void GameScene::Initialize(GameManager* gameManager) {
 	//Inputのインスタンスを取得
@@ -13,10 +15,22 @@ void GameScene::Initialize(GameManager* gameManager) {
 	audio_ = Audio::GetInstance();
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
+
+	// カメラ
+	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0,0,-5 };
+
+	// 自機
+	player_ = new Player();
+	player_->Init();
 };
 
 void GameScene::Update(GameManager* gameManager) {
+	// 自機
+	player_->Update();
 
+	viewProjection_.UpdateMatrix();
+	viewProjection_.TransferMatrix();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -35,6 +49,9 @@ void GameScene::Draw(GameManager* gameManager) {
 #pragma region モデルの描画
 
 	Model::PreDraw();
+
+	// 自機
+	player_->Draw(viewProjection_);
 
 	Model::PostDraw();
 

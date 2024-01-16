@@ -147,6 +147,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Project\Components\GamePad.cpp" />
+    <ClCompile Include="Project\Block.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\2D\Sprite.cpp" />
     <ClCompile Include="Engine\3D\DebugCamera\DebugCamera.cpp" />
@@ -194,10 +196,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Utility\MathFunction.cpp" />
     <ClCompile Include="Engine\Utility\Random.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Project\Player\Player.cpp" />
     <ClCompile Include="Project\Game\GameManager.cpp" />
     <ClCompile Include="Project\Game\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Project\Components\GamePad.h" />
+    <ClInclude Include="Project\Block.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\Sprite.h" />
     <ClInclude Include="Engine\3D\DebugCamera\DebugCamera.h" />
@@ -235,6 +240,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utility\MathFunction.h" />
     <ClInclude Include="Engine\Utility\MathStruct.h" />
     <ClInclude Include="Engine\Utility\Random.h" />
+    <ClInclude Include="Project\Player\Player.h" />
     <ClInclude Include="Project\Game\GameManager.h" />
     <ClInclude Include="Project\Game\GameScene.h" />
     <ClInclude Include="Project\Game\IScene.h" />
