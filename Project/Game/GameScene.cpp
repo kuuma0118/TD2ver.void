@@ -13,10 +13,19 @@ void GameScene::Initialize(GameManager* gameManager) {
 	audio_ = Audio::GetInstance();
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
+
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+
+	//ブロックの生成
+	block_ = std::make_unique<Block>();
+	block_->Initialize();
 };
 
 void GameScene::Update(GameManager* gameManager) {
-
+	worldTransform_.UpdateMatrix();
+	viewProjection_.UpdateMatrix();
+	block_->Update();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -36,6 +45,9 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Model::PreDraw();
 
+	//ブロックの描画
+	block_->Draw(viewProjection_);
+
 	Model::PostDraw();
 
 #pragma endregion
@@ -47,4 +59,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	Sprite::PostDraw();
 
 #pragma endregion
+
+
+
 };

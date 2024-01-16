@@ -6,6 +6,8 @@
 #include "Engine/3D/Model/Model.h"
 #include "Engine/2D/Sprite.h"
 
+#include "Project/Block.h"
+
 class GameScene : public IScene {
 public:
 	/// <summary>
@@ -40,5 +42,13 @@ private:
 	Audio* audio_ = nullptr;
 	//ポストプロセス
 	PostProcess* postProcess_ = nullptr;
+
+	//ワールドトランスフォーム
+	WorldTransform worldTransform_;
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
+
+	//ブロック
+	std::unique_ptr<Block> block_{};
 
 };
