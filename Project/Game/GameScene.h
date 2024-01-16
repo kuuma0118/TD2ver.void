@@ -50,5 +50,6 @@ private:
 
 	//ブロック
 	std::list<Block*> blocks_;
-
+	//弾リストを取得
+	const std::list<Block*>& Getblocks_()const { return blocks_; }
 };

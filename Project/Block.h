@@ -34,6 +34,9 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 
+	// ImGui
+	void AdjustmentParameter();
+
 
 	float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
 
