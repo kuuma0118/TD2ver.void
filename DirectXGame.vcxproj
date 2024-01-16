@@ -199,6 +199,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Player\Player.cpp" />
     <ClCompile Include="Project\Game\GameManager.cpp" />
     <ClCompile Include="Project\Game\GameScene.cpp" />
+    <ClCompile Include="Project\Game\OverScene\OverScene.cpp" />
+    <ClCompile Include="Project\Game\SelectScene\SelectScene.cpp" />
+    <ClCompile Include="Project\Game\TitleScene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Project\Components\GamePad.h" />
@@ -244,6 +247,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Game\GameManager.h" />
     <ClInclude Include="Project\Game\GameScene.h" />
     <ClInclude Include="Project\Game\IScene.h" />
+    <ClInclude Include="Project\Game\OverScene\OverScene.h" />
+    <ClInclude Include="Project\Game\SelectScene\SelectScene.h" />
+    <ClInclude Include="Project\Game\TitleScene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Externals\imgui\LICENSE.txt" />

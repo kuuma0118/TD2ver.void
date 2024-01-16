@@ -103,6 +103,30 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{de3f9224-098b-4c48-8260-fa6a820477ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{72e925c6-4c12-4faf-a7c9-5be1ffe5dedf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{c771de03-45df-4fd1-b296-160829346345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{809bd8c0-7f42-4729-b7a4-082179bfd73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{cc388f77-fe6c-4206-8637-26e5d2610140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{52aa3c02-3d0e-415b-a376-43cbcac7c608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{47026ae8-accf-41ed-8f83-b29497d0122b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{3d344662-c230-48c7-98fb-a3180d8f9280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{f752981e-9ee4-497f-8860-0145baa9edf0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\Project\Player">
       <UniqueIdentifier>{61642084-8d64-446f-9734-438466fc8ee4}</UniqueIdentifier>
     </Filter>
@@ -215,6 +239,18 @@
     </ClCompile>
     <ClCompile Include="Project\Game\GameScene.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\TitleScene\TitleScene.cpp">
+      <Filter>ソース ファイル\Project\Game\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\SelectScene\SelectScene.cpp">
+      <Filter>ソース ファイル\Project\Game\SelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\ClearScene\ClearScene.cpp">
+      <Filter>ソース ファイル\Project\Game\ClearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\OverScene\OverScene.cpp">
+      <Filter>ソース ファイル\Project\Game\OverScene</Filter>
     </ClCompile>
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>ソース ファイル\Project\Player</Filter>
@@ -346,6 +382,18 @@
     </ClInclude>
     <ClInclude Include="Project\Game\GameManager.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\TitleScene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\SelectScene\SelectScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\SelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\ClearScene\ClearScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\ClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\OverScene\OverScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
     </ClInclude>
     <ClInclude Include="Project\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\Player</Filter>
