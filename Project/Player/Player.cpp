@@ -29,7 +29,7 @@ void Player::Init() {
 	velocity_ = TransformNormal(velocity_, worldTransform_.matWorld_);
 
 	// 加速度
-	acceleration_ = { 0,-0.025f,0 };
+	acceleration_ = { 0,-0.05f,0 };
 	// ジャンプの初速
 	initialVel_ = 0.5f;
 
@@ -44,16 +44,16 @@ void Player::Init() {
 	// 着地したか
 	isLanding_ = false;
 
-	//SetCollisionPrimitive(kCollisionPrimitiveAABB);
+	SetCollisionAttribute(kCollisionAttributePlayer);
 }
 
 void Player::Update() {
-	if (gamePad_->ReleaseButton(XINPUT_GAMEPAD_A)) {
-		Log("Release\n");
-	}
+#ifdef _DEBUG
 	if (gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		Log("Trigger\n");
+		isJump_ = true;
 	}
+#endif // _DEBUG
 
 	/// ふるまい
 	// 初期化
@@ -73,6 +73,19 @@ void Player::Update() {
 
 void Player::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
+}
+
+void Player::OnCollision(const Collider* collider) {
+	
+}
+
+Vector3 Player::GetWorldPosition() {
+	Vector3 result = {
+		worldTransform_.matWorld_.m[3][0],
+		worldTransform_.matWorld_.m[3][1],
+		worldTransform_.matWorld_.m[3][2]
+	};
+	return result;
 }
 
 /// プライベート関数↓

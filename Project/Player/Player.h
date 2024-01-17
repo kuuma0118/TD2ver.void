@@ -7,7 +7,7 @@
 #include <optional>
 #include <memory>
 
-class Player //: public Collider
+class Player : public Collider
 {
 public:
 	/// 
@@ -27,6 +27,9 @@ public:
 
 	// 描画処理
 	void Draw(const ViewProjection& viewProjection);
+
+	// 当たった時の処理
+	void OnCollision(const Collider* collider) override;
 
 	///
 	///	User Method
@@ -86,6 +89,8 @@ public:
 	// ワールド座標
 	WorldTransform GetWorldTransform() { return worldTransform_; }
 
+
+
 	/// Setter
 
 	/// <summary>
@@ -94,7 +99,8 @@ public:
 	/// <param name="pos">座標</param>
 	void GetPosition(Vector3 pos) { worldTransform_.translation_ = pos; }
 
-	// 
+	// ワールド座標
+	Vector3 GetWorldPosition()override;
 
 private:
 	// 入力
@@ -137,5 +143,5 @@ private:
 
 private:// 定数
 	// 移動量
-	const float kSpeed = 0.01f;
+	const float kSpeed = 0.02f;
 };
