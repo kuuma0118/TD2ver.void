@@ -36,9 +36,10 @@ public: // メンバ関数
 
 	// ImGui
 	void AdjustmentParameter();
+	void OnCollision();
+	Vector3 GetworldTransform_() { return worldTransform_.translation_; }
 
-
-	float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
+	float SetfoolSpeed(float foolspeed) {  foolSpeed_ = foolspeed; }
 
 private: // メンバ変数
 

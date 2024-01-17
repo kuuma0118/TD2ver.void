@@ -35,6 +35,8 @@ public:
 	/// </summary>
 	void Draw(GameManager* gameManager) override;
 
+
+	void CheckAllCollisions();
 private:
 	//Input
 	Input* input_ = nullptr;
@@ -50,6 +52,8 @@ private:
 
 	//ブロック
 	std::list<Block*> blocks_;
+	std::list<Block*> blocks2_;
+
 	//弾リストを取得
 	const std::list<Block*>& Getblocks_()const { return blocks_; }
 };
