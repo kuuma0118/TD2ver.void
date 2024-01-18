@@ -47,7 +47,6 @@ void GameOverScene::Update(GameManager* gameManager)
 
 	if (input_->IsPushKeyEnter(DIK_T))
 	{
-		audio_->StopAudio(overSoundHandle_);
 		gameManager->ChangeScene(new GameTitleScene());
 	}
 
@@ -68,14 +67,9 @@ void GameOverScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
-			audio_->StopAudio(overSoundHandle_);
 			gameManager->ChangeScene(new GameScene);
 		}
 	}
-
-	playerWorldTransform_.UpdateMatrix();
-	weaponWorldTransform_.UpdateMatrix();
-	bossWorldTransform_.UpdateMatrix();
 
 	viewProjection_.UpdateMatrix();
 };
@@ -94,21 +88,12 @@ void GameOverScene::Draw(GameManager* gameManager)
 #pragma endregion
 
 	//深度バッファをクリア
-	DirectXCommon::GetInstance()->ClearDepthBuffer();
+	FCS::GetInstance()->ClearDepthBuffer();
 
 #pragma region モデルの描画
 
 	//モデルの描画
 	Model::PreDraw();
-
-	//背景の描画
-	backGround_->Draw(viewProjection_);
-
-	playerModel_->Draw(playerWorldTransform_, viewProjection_);
-
-	weaponModel_->Draw(weaponWorldTransform_, viewProjection_);
-
-	bossModel_->Draw(bossWorldTransform_, viewProjection_);
 
 	Model::PostDraw();
 
@@ -129,12 +114,6 @@ void GameOverScene::Draw(GameManager* gameManager)
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
-
-	loseSprite_->Draw();
-
-	x4x3Sprite_->Draw();
-
-	pressASprite_->Draw();
 
 	transitionSprite_->Draw();
 

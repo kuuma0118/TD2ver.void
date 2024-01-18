@@ -16,7 +16,7 @@
 #include <memory>
 #include <Utility/CollisionManager/CollisionManager.h>
 
-class GameTitleScene : public IScene
+class GameSelectScene : public IScene
 {
 public:
 	//トランジションの時間
@@ -25,12 +25,12 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	GameTitleScene();
+	GameSelectScene();
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameTitleScene();
+	~GameSelectScene();
 
 	/// <summary>
 	/// 初期化
@@ -86,8 +86,6 @@ private:
 	bool isTransitionEnd_ = false;
 	//トランジションのタイマー
 	float transitionTimer_ = 0;
-
-	ViewProjection viewProjection_{};
 
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;

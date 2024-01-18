@@ -3,11 +3,11 @@
 #include "GameScene.h"
 #include <algorithm>
 
-GameTitleScene::GameTitleScene() {};
+GameSelectScene::GameSelectScene() {};
 
-GameTitleScene::~GameTitleScene() {};
+GameSelectScene::~GameSelectScene() {};
 
-void GameTitleScene::Initialize(GameManager* gameManager)
+void GameSelectScene::Initialize(GameManager* gameManager)
 {
 	//TextureManagerのインスタンスを取得
 	textureManager_ = TextureManager::GetInstance();
@@ -15,8 +15,6 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
-
-	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
 
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
@@ -29,7 +27,7 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	collisionManager_ = std::make_unique<CollisionManager>();
 };
 
-void GameTitleScene::Update(GameManager* gameManager)
+void GameSelectScene::Update(GameManager* gameManager)
 {
 	if (!Input::GetInstance()->GetJoystickState(joyState_))
 	{
@@ -80,7 +78,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 
 };
 
-void GameTitleScene::Draw(GameManager* gameManager)
+void GameSelectScene::Draw(GameManager* gameManager)
 {
 	PostProcess::GetInstance()->PreDraw();
 
