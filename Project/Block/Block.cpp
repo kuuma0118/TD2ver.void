@@ -34,7 +34,6 @@ void Block::Initialize(WorldTransform worldTransform) {
 }
 
 void Block::Update() {
-	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
 	AdjustmentParameter();
@@ -42,8 +41,10 @@ void Block::Update() {
 	worldTransform_.translation_.y -= foolSpeed_;
 
 	if (worldTransform_.translation_.y <= -10) {
-		foolSpeed_ = 0;
-	}
+		float Y = worldTransform_.translation_.y - (-10);
+		worldTransform_.translation_.y -= Y;
+	}	
+	worldTransform_.UpdateMatrix();
 }
 
 void Block::Draw(ViewProjection viewProjection_) {

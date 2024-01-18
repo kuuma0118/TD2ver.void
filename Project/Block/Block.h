@@ -76,6 +76,6 @@ private: // メンバ変数
 	bool foolflag = false;
 
 	//速度
-	float foolSpeed_ = 0.1f;
+	float foolSpeed_ = 0.2f;
 };
 

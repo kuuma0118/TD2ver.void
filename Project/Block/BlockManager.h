@@ -44,6 +44,26 @@ public: // メンバ関数
 	/// T字ブロック
 	/// </summary>
 	void Shape_T(Vector3 velocity);
+
+	/// <summary>
+	/// S字ブロック
+	/// </summary>
+	void Shape_S(Vector3 velocity);
+
+	/// <summary>
+	/// O字ブロック
+	/// </summary>
+	void Shape_O(Vector3 velocity);
+
+	/// <summary>
+	/// J字ブロック
+	/// </summary>
+	void Shape_J(Vector3 velocity);
+
+	/// <summary>
+	/// L字ブロック
+	/// </summary>
+	void Shape_L(Vector3 velocity);
 private:
 
 	//Input
