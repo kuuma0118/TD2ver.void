@@ -25,6 +25,12 @@ void Block::Initialize(WorldTransform worldTransform) {
 
 	// 当たり判定の形状を設定
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
+
+	AABB aabb = {
+		{-0.99f,-0.99f,-0.99f},
+		{0.99f,0.99f,0.99f}
+	};
+	SetAABB(aabb);
 }
 
 void Block::Update() {
