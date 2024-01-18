@@ -148,7 +148,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Project\Components\GamePad.cpp" />
-    <ClCompile Include="Project\Block.cpp" />
+    <ClCompile Include="Project\Block\Block.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\2D\Sprite.cpp" />
     <ClCompile Include="Engine\3D\DebugCamera\DebugCamera.cpp" />
@@ -202,7 +202,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Project\Components\GamePad.h" />
-    <ClInclude Include="Project\Block.h" />
+    <ClInclude Include="Project\Block\Block.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\Sprite.h" />
     <ClInclude Include="Engine\3D\DebugCamera\DebugCamera.h" />

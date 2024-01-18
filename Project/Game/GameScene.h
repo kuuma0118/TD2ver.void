@@ -7,7 +7,7 @@
 #include "Engine/2D/Sprite.h"
 #include "Project/Player/Player.h"
 
-#include "Project/Block.h"
+#include "Project/Block/Block.h"
 
 class GameScene : public IScene {
 public:
