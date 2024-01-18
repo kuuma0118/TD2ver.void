@@ -52,7 +52,9 @@ public: // メンバ関数
 	//void OnCollision();
 	Vector3 GetworldTransform_() { return worldTransform_.translation_; }
 
-	float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
+	void SetworldTransform_(Vector3 worldTransform) {this->worldTransform_.translation_ = worldTransform;}
+
+	//float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
 
 private: // メンバ変数
 

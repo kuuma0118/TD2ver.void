@@ -15,7 +15,8 @@
 /// Project↓
 // GameObject
 #include "Project/Player/Player.h"
-#include "Project/Block/Block.h"
+//#include "Project/Block/Block.h"
+#include "Project//Block/BlockManager.h"
 
 class GameScene : public IScene {
 public:
@@ -46,7 +47,7 @@ public:
 
 private:// プライベートな関数
 	// ブロックリストを取得
-	const std::list<Block*>& Getblocks_()const { return blocks_; }
+//	const std::list<Block*>& Getblocks_()const { return blocks_; }
 
 private:// メンバ変数
 #pragma region エンジンの基本機能
@@ -70,8 +71,9 @@ private:// メンバ変数
 	WorldTransform worldTransform_;
 
 	//ブロック
-	std::list<Block*> blocks_;
-	std::list<Block*> blocks2_;
+	//std::list<Block*> blocks_;
+	BlockManager* blockManager_;
+
 	// 自機
 	Player* player_;
 

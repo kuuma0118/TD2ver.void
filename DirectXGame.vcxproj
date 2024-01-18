@@ -147,6 +147,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Project\Block\BlockManager.cpp" />
     <ClCompile Include="Project\Components\GamePad.cpp" />
     <ClCompile Include="Project\Block\Block.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
@@ -201,6 +202,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Game\GameScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Project\Block\BlockManager.h" />
     <ClInclude Include="Project\Components\GamePad.h" />
     <ClInclude Include="Project\Block\Block.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
