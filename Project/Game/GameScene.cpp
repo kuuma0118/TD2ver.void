@@ -46,10 +46,10 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 
 	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-		worldTransform_.translation_.x += 2.0f;
+		worldTransform_.translation_.x += 2.001f;
 	}
 	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-		worldTransform_.translation_.x -= 2.0f;
+		worldTransform_.translation_.x -= 2.001f;
 	}
 
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
