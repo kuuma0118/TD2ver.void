@@ -6,10 +6,10 @@
 #include "Engine/Utility/Log.h"
 
 Player::~Player() {
-	//delete model_;
+	
 }
 
-void Player::Init() {
+void Player::Initialize() {
 	// 入力
 	input_ = Input::GetInstance();
 	gamePad_ = GamePad::GetInstance();
@@ -17,17 +17,19 @@ void Player::Init() {
 	model_.reset(Model::CreateFromOBJ("Resources", "block.obj"));
 	assert(model_);
 
-	// ワールドトランスフォームの初期化
+	// ワールド座標の初期化
 	worldTransform_.Initialize();
+	// 初期位置
 	worldTransform_.translation_ = { 0,0,0 };
+	// 右向きに設定
 	worldTransform_.rotation_ = { 0,(float)M_PI / 2, 0 };
+	// worldMatrixに反映
 	worldTransform_.UpdateMatrix();
 
 	// 速度ベクトル
 	velocity_ = { 0,0,kSpeed };
 	// 自機の向きに合わせ、回転
 	velocity_ = TransformNormal(velocity_, worldTransform_.matWorld_);
-
 	// 加速度
 	acceleration_ = { 0,-0.05f,0 };
 	// ジャンプの初速
@@ -77,7 +79,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 }
 
 void Player::OnCollision(const Collider* collider) {
-	
+	//inverseVelSignal_ = true;
 }
 
 Vector3 Player::GetWorldPosition() {

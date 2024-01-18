@@ -14,9 +14,9 @@ void Block::Initialize(WorldTransform worldTransform) {
 	worldTransform_.translation_ = worldTransform.translation_;
 	worldTransform_.UpdateMatrix();
 
-	texHandle_ = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_ = TextureManager::Load("Resources/white.png");
 
-	model_.reset(Model::CreateFromOBJ("Resources", "cube.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();

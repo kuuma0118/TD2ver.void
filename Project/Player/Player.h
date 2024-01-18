@@ -20,7 +20,7 @@ public:
 	~Player();
 
 	// 初期化
-	void Init();
+	void Initialize();
 
 	// 更新処理
 	void Update();

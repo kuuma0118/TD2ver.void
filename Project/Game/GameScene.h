@@ -71,7 +71,6 @@ private:// メンバ変数
 
 	//ブロック
 	std::list<Block*> blocks_;
-	std::list<Block*> blocks2_;
 	// 自機
 	Player* player_;
 
