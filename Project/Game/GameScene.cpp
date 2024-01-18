@@ -7,6 +7,11 @@ GameScene::GameScene() {};
 GameScene::~GameScene() {
 	delete player_;
 };
+GameScene::~GameScene() {
+	for (Block* block_ : blocks_) {
+		delete block_;
+	}
+};
 
 void GameScene::Initialize(GameManager* gameManager) {
 	//Inputのインスタンスを取得
@@ -19,18 +24,46 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// カメラ
 	viewProjection_.Initialize();
 	viewProjection_.translation_ = { 0,0,-5 };
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0.0f,0.0f,-50.0f };
+	worldTransform_.translation_.y = 5.0f;
 
 	// 自機
 	player_ = new Player();
 	player_->Init();
+
+
+	
 };
 
 void GameScene::Update(GameManager* gameManager) {
 	// 自機
 	player_->Update();
-
+	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
-	viewProjection_.TransferMatrix();
+
+	for (Block* block_ : blocks_) {
+		block_->Update();
+	}
+
+	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
+		worldTransform_.translation_.x += 2.0f;
+	}
+	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
+		worldTransform_.translation_.x -= 2.0f;
+	}
+
+	if (input_->IsPushKeyEnter(DIK_SPACE)) {
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, kBulletSpeed, 0);
+		Block* newBlock_ = new Block();
+
+		newBlock_->Initialize(worldTransform_);
+		blocks_.push_back(newBlock_);
+
+	}
+	CheckAllCollisions();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -53,6 +86,10 @@ void GameScene::Draw(GameManager* gameManager) {
 	// 自機
 	player_->Draw(viewProjection_);
 
+	//ブロックの描画
+	for (Block* block_ : blocks_) {
+		block_->Draw(viewProjection_);
+	}
 	Model::PostDraw();
 
 #pragma endregion
@@ -64,4 +101,33 @@ void GameScene::Draw(GameManager* gameManager) {
 	Sprite::PostDraw();
 
 #pragma endregion
+
+
+
 };
+
+void GameScene::CheckAllCollisions() {
+	//判定対象AとBの座標
+	Vector3 posA, posB;
+	//自弾と敵弾の当たり判定
+	for (Block* block1_ : blocks_) {
+		for (Block* block2_ : blocks2_) {
+			//自弾の座標
+			posA = block1_->GetworldTransform_();
+			//敵弾の座標
+			posB = block2_->GetworldTransform_();
+			posA.z = 1.0f;
+			//座標AとBの距離を求める
+			float distance = Length(Subtract(posA, posB));
+
+			
+
+			//球と球の当たり判定
+			if (distance <=13) {
+				for (Block* block_ : blocks_) {
+					block_->OnCollision();
+ 				}
+			}
+		}
+	}
+}

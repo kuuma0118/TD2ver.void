@@ -7,6 +7,8 @@
 #include "Engine/2D/Sprite.h"
 #include "Project/Player/Player.h"
 
+#include "Project/Block.h"
+
 class GameScene : public IScene {
 public:
 	/// <summary>
@@ -34,6 +36,8 @@ public:
 	/// </summary>
 	void Draw(GameManager* gameManager) override;
 
+
+	void CheckAllCollisions();
 private:
 	//Input
 	Input* input_ = nullptr;
@@ -42,8 +46,17 @@ private:
 	//ポストプロセス
 	PostProcess* postProcess_ = nullptr;
 
-	// カメラ
+	//ワールドトランスフォーム
+	WorldTransform worldTransform_;
+	//ビュープロジェクション
 	ViewProjection viewProjection_;
+
+	//ブロック
+	std::list<Block*> blocks_;
+	std::list<Block*> blocks2_;
+
+	//弾リストを取得
+	const std::list<Block*>& Getblocks_()const { return blocks_; }
 
 	// 自機
 	Player* player_;
