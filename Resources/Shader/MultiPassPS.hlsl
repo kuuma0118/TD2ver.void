@@ -1,18 +1,18 @@
 #include "MultiPass.hlsli"
 
-Texture2D<float32_t4> gTexture : register(t0);
+Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
 struct PixelShaderOutput
 {
-    float32_t4 color : SV_TARGET0; //通常
-    float32_t4 highIntensity : SV_TARGET1; //高輝度
+    float4 color : SV_TARGET0; //通常
+    float4 highIntensity : SV_TARGET1; //高輝度
 };
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
-    float32_t4 textureColor = gTexture.Sample(gSampler, input.texcoord);
+    float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
     output.color = textureColor;
     
     //高輝度を取得
