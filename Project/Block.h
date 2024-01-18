@@ -34,12 +34,25 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 
+	///
+	/// User Method
+	/// 
+
+	// 純粋仮想関数
+	void OnCollision(const Collider* collider) override;
+
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition() override;
+
 	// ImGui
 	void AdjustmentParameter();
-	void OnCollision();
+	//void OnCollision();
 	Vector3 GetworldTransform_() { return worldTransform_.translation_; }
 
-	float SetfoolSpeed(float foolspeed) {  foolSpeed_ = foolspeed; }
+	float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
 
 private: // メンバ変数
 

@@ -19,7 +19,7 @@ void Player::Init() {
 
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0,0,40 };
+	worldTransform_.translation_ = { 0,0,0 };
 	worldTransform_.rotation_ = { 0,(float)M_PI / 2, 0 };
 	worldTransform_.UpdateMatrix();
 
@@ -44,7 +44,8 @@ void Player::Init() {
 	// 着地したか
 	isLanding_ = false;
 
-	SetCollisionAttribute(kCollisionAttributePlayer);
+	// 当たり判定の形状を設定
+	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 }
 
 void Player::Update() {

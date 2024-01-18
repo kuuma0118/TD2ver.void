@@ -6,8 +6,6 @@ GameScene::GameScene() {};
 
 GameScene::~GameScene() {
 	delete player_;
-};
-GameScene::~GameScene() {
 	for (Block* block_ : blocks_) {
 		delete block_;
 	}
@@ -22,8 +20,8 @@ void GameScene::Initialize(GameManager* gameManager) {
 	postProcess_ = PostProcess::GetInstance();
 
 	// カメラ
-	viewProjection_.Initialize();
-	viewProjection_.translation_ = { 0,0,-5 };
+	//viewProjection_.Initialize();
+	//viewProjection_.translation_ = { 0,0,-5 };
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	viewProjection_.translation_ = { 0.0f,0.0f,-50.0f };
@@ -32,9 +30,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// 自機
 	player_ = new Player();
 	player_->Init();
-
-
-	
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -63,7 +58,7 @@ void GameScene::Update(GameManager* gameManager) {
 		blocks_.push_back(newBlock_);
 
 	}
-	CheckAllCollisions();
+	//CheckAllCollisions();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -107,27 +102,27 @@ void GameScene::Draw(GameManager* gameManager) {
 };
 
 void GameScene::CheckAllCollisions() {
-	//判定対象AとBの座標
-	Vector3 posA, posB;
-	//自弾と敵弾の当たり判定
-	for (Block* block1_ : blocks_) {
-		for (Block* block2_ : blocks2_) {
-			//自弾の座標
-			posA = block1_->GetworldTransform_();
-			//敵弾の座標
-			posB = block2_->GetworldTransform_();
-			posA.z = 1.0f;
-			//座標AとBの距離を求める
-			float distance = Length(Subtract(posA, posB));
+	////判定対象AとBの座標
+	//Vector3 posA, posB;
+	////自弾と敵弾の当たり判定
+	//for (Block* block1_ : blocks_) {
+	//	for (Block* block2_ : blocks2_) {
+	//		//自弾の座標
+	//		posA = block1_->GetworldTransform_();
+	//		//敵弾の座標
+	//		posB = block2_->GetworldTransform_();
+	//		posA.z = 1.0f;
+	//		//座標AとBの距離を求める
+	//		float distance = Length(Subtract(posA, posB));
 
-			
+	//		
 
-			//球と球の当たり判定
-			if (distance <=13) {
-				for (Block* block_ : blocks_) {
-					block_->OnCollision();
- 				}
-			}
-		}
-	}
+	//		//球と球の当たり判定
+	//		if (distance <=13) {
+	//			for (Block* block_ : blocks_) {
+	//				block_->OnCollision();
+ //				}
+	//		}
+	//	}
+	//}
 }
