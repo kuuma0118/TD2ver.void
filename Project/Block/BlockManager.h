@@ -6,6 +6,17 @@
 // Utility
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
 
+
+enum class Shape {
+	I,	//I字ブロック
+	T,	//T字ブロック
+	S,	//S字ブロック
+	O,	//O字ブロック
+	J,	//J字ブロック
+	L,	//L字ブロック
+};
+
+
 class BlockManager{
 	
 
@@ -64,6 +75,7 @@ public: // メンバ関数
 	/// L字ブロック
 	/// </summary>
 	void Shape_L(Vector3 velocity);
+
 private:
 
 	//Input
@@ -81,6 +93,9 @@ private:
 
 	//ブロックの間隔
 	float width = 2.001f;
+
+	//フェーズ
+	Shape shape_ = Shape::I;
 	//int num = rand();
 };
 

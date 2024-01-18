@@ -21,8 +21,36 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 void BlockManager::Update(Vector3 velocity){
 	worldTransform_.UpdateMatrix();
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
+
+		shape_ = Shape( rand() % 6);
 		///ここをランダムにする
-		Shape_L(velocity);
+		//Shape_L(velocity);
+		switch (shape_)
+		{
+		case Shape::I:
+			Shape_I(velocity);
+			break;
+
+		case Shape::T:
+			Shape_T(velocity);
+			break;
+
+		case Shape::S:
+			Shape_S(velocity);
+			break;
+
+		case Shape::O:
+			Shape_O(velocity);
+			break;
+
+		case Shape::J:
+			Shape_J(velocity);
+			break;
+
+		case Shape::L:
+			Shape_L(velocity);
+			break;
+		}
 	}
 	for (Block* block_ : blocks_) {
 		block_->Update();
@@ -33,6 +61,7 @@ void BlockManager::Draw(ViewProjection viewProjection_){
 	for (Block* block_ : blocks_) {
 		block_->Draw(viewProjection_);
 	}
+	
 }
 
 /// <summary>
@@ -305,6 +334,10 @@ void BlockManager::Shape_J(Vector3 velocity){
 #pragma endregion
 }
 
+/// <summary>
+///L字ブロック 
+/// </summary>
+/// <param name="velocity"></param>
 void BlockManager::Shape_L(Vector3 velocity){
 #pragma region ブロックの１番
 	// 実体生成
