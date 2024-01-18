@@ -3,9 +3,9 @@
 #include "Engine/3D/Model/Model.h"
 #include "Engine/2D/ImGuiManager.h"
 #include "Engine/Base/TextureManager.h"
-#include "Engine/Utility/CollisionManager/CollisionManager.h"
+#include "Engine/Utility/CollisionManager/Collider.h"
 
-class Block :public CollisionManager
+class Block :public Collider
 {
 
 public: // メンバ関数
