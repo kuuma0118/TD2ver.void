@@ -5,7 +5,7 @@
 #include "Engine/Base/TextureManager.h"
 #include "Engine/Utility/CollisionManager/Collider.h"
 
-class Block :public Collider
+class Block //:public Collider
 {
 
 public: // メンバ関数
@@ -33,6 +33,7 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
+
 
 	// ImGui
 	void AdjustmentParameter();
