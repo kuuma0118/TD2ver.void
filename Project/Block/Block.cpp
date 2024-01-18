@@ -12,6 +12,8 @@ void Block::Initialize(WorldTransform worldTransform) {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	worldTransform_.translation_ = worldTransform.translation_;
+	worldTransform_.UpdateMatrix();
+
 	texHandle_ = TextureManager::Load("Resources/uvChecker.png");
 
 	model_.reset(Model::CreateFromOBJ("Resources", "cube.obj"));

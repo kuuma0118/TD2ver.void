@@ -20,8 +20,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	postProcess_ = PostProcess::GetInstance();
 
 	// カメラ
-	//viewProjection_.Initialize();
-	//viewProjection_.translation_ = { 0,0,-5 };
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	viewProjection_.translation_ = { 0.0f,0.0f,-50.0f };
@@ -30,6 +28,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// 自機
 	player_ = new Player();
 	player_->Init();
+
+	// 当たり判定のインスタンスを生成
+	collisionManager_ = new CollisionManager();
+	// ゲームオブジェクトをコライダーのリストに登録
+	collisionManager_->SetColliderList(player_);
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -50,15 +53,21 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
+		// 落下速度
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, kBulletSpeed, 0);
+		// 実体生成
 		Block* newBlock_ = new Block();
-
+		// 初期化
 		newBlock_->Initialize(worldTransform_);
+		//リストに登録
 		blocks_.push_back(newBlock_);
-
+		// 当たり判定に追加
+		collisionManager_->SetColliderList(newBlock_);
 	}
-	//CheckAllCollisions();
+
+	// 当たり判定
+	collisionManager_->CheckAllCollisions();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -85,6 +94,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	for (Block* block_ : blocks_) {
 		block_->Draw(viewProjection_);
 	}
+
 	Model::PostDraw();
 
 #pragma endregion
@@ -96,12 +106,9 @@ void GameScene::Draw(GameManager* gameManager) {
 	Sprite::PostDraw();
 
 #pragma endregion
-
-
-
 };
 
-void GameScene::CheckAllCollisions() {
+//void GameScene::CheckAllCollisions() {
 	////判定対象AとBの座標
 	//Vector3 posA, posB;
 	////自弾と敵弾の当たり判定
@@ -125,4 +132,4 @@ void GameScene::CheckAllCollisions() {
 	//		}
 	//	}
 	//}
-}
+//}
