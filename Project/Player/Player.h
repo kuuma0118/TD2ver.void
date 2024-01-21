@@ -29,7 +29,7 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 
 	// 当たった時の処理
-	void OnCollision(const Collider* collider) override;
+	void OnCollision(Collider* collider) override;
 
 	///
 	///	User Method
@@ -84,24 +84,24 @@ private:
 
 public:
 	/// Getter
+
 	// 座標
 	Vector3 GetPosition() { return worldTransform_.translation_; }
-	// ワールド座標
+	// ワールドトランスフォーム
 	WorldTransform GetWorldTransform() { return worldTransform_; }
+	// ワールド座標
+	Vector3 GetWorldPosition()override;
+	
+	// 生存確認
+	bool GetIsAlive() { return isAlive_; }
 
-
-
-	/// Setter
+	///	Setter
 
 	/// <summary>
 	/// 座標を代入
 	/// </summary>
 	/// <param name="pos">座標</param>
-	void GetPosition(Vector3 pos) { worldTransform_.translation_ = pos; }
-
-	// ワールド座標
-	Vector3 GetWorldPosition()override;
-
+	void SetPosition(Vector3 pos) { worldTransform_.translation_ = pos; }
 private:
 	// 入力
 	Input* input_;
@@ -129,6 +129,8 @@ private:
 	bool isAir_;
 	// 着地したか
 	bool isLanding_;
+	// 生きてるか
+	bool isAlive_;
 
 	// 振るまい
 	enum class Behavior {
@@ -141,7 +143,9 @@ private:
 	// 次の振るまいリクエスト
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 
+	// 連続でヒットしているかの確認
+	uint32_t hitCounter_;
 private:// 定数
 	// 移動量
-	const float kSpeed = 0.02f;
+	const float kSpeed = 0.04f;
 };

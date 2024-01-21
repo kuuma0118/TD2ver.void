@@ -1,7 +1,6 @@
 ﻿#include "Block.h"
 
-Block::Block()
-{
+Block::Block(){
 }
 
 Block::~Block() {
@@ -27,27 +26,27 @@ void Block::Initialize(WorldTransform worldTransform) {
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = {
-		{-0.99f,-0.99f,-0.99f},
-		{0.99f,0.99f,0.99f}
+		{-0.9999f,-0.9999f,-0.9999f},
+		{0.9999f,0.9999f,0.9999f}
 	};
 	SetAABB(aabb);
 }
 
 void Block::Update() {
-	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
 	AdjustmentParameter();
 
 	worldTransform_.translation_.y -= foolSpeed_;
 
-	if (worldTransform_.translation_.y <= -10) {
-		foolSpeed_ = 0;
+	if (worldTransform_.translation_.y <= -5) {
+		float floor = worldTransform_.translation_.y - (-5);
+		worldTransform_.translation_.y -= floor;
 	}
+	worldTransform_.UpdateMatrix();
 }
 
 void Block::Draw(ViewProjection viewProjection_) {
-
 	model_->Draw(worldTransform_, viewProjection_, texHandle_);
 }
 
@@ -65,13 +64,12 @@ void Block::AdjustmentParameter()
 #endif // DEBUG
 }
 
-//void Block::OnCollision(){
-//	foolSpeed_ = 0.0f;
-//}
-
-
-void Block::OnCollision(const Collider* collider) {
-	foolSpeed_ = 0.0f;
+void Block::OnCollision(Collider* collider) {	 
+	if (worldTransform_.translation_.y > collider->GetWorldPosition().y && GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
+		worldTransform_.translation_.y += extrusion;
+		worldTransform_.UpdateMatrix();
+	}
 }
 
 Vector3 Block::GetWorldPosition() {

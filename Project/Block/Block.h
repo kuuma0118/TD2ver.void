@@ -39,7 +39,7 @@ public: // メンバ関数
 	/// 
 
 	// 純粋仮想関数
-	void OnCollision(const Collider* collider) override;
+	void OnCollision(Collider* collider) override;
 
 	/// <summary>
 	/// ワールド座標を取得
@@ -74,6 +74,6 @@ private: // メンバ変数
 	bool foolflag = false;
 
 	//速度
-	float foolSpeed_ = 0.1f;
+	float foolSpeed_ = 0.3f;
 };
 

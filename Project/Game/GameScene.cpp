@@ -22,7 +22,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// カメラ
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-	viewProjection_.translation_ = { 0.0f,0.0f,-50.0f };
+	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
 	worldTransform_.translation_.y = 5.0f;
 
 	// 自機
@@ -36,6 +36,10 @@ void GameScene::Initialize(GameManager* gameManager) {
 };
 
 void GameScene::Update(GameManager* gameManager) {
+	// 自機が死んだらシーンを切り替える
+	if (player_->GetIsAlive()) {
+
+	}
 	// 自機
 	player_->Update();
 	worldTransform_.UpdateMatrix();
@@ -46,10 +50,10 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 
 	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-		worldTransform_.translation_.x += 2.001f;
+		worldTransform_.translation_.x += 2.00f;
 	}
 	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-		worldTransform_.translation_.x -= 2.001f;
+		worldTransform_.translation_.x -= 2.00f;
 	}
 
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {

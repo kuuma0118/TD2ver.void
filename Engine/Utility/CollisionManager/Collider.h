@@ -8,7 +8,7 @@ public:
 	/// <summary>
 	/// 衝突時に呼ばれる関数
 	/// </summary>
-	virtual void OnCollision(const Collider* collider) {};
+	virtual void OnCollision(Collider* collider) {};
 
 	/// <summary>
 	/// ワールド座標を取得
