@@ -55,13 +55,11 @@ public: // メンバ関数
 	float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
 
 private: // メンバ変数
-
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
 	//3Dモデル
 	std::unique_ptr<Model> model_{};
-
 
 	//キーボード入力
 	Input* input_ = nullptr;

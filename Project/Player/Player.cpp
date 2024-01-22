@@ -6,7 +6,7 @@
 #include "Engine/Utility/Log.h"
 
 Player::~Player() {
-	
+
 }
 
 void Player::Initialize() {
@@ -41,10 +41,6 @@ void Player::Initialize() {
 	///ImGuiように作った変数
 	// ジャンプしたか
 	isJump_ = false;
-	// 空中にいるか
-	isAir_ = false;
-	// 着地したか
-	isLanding_ = false;
 	// 生きてるよ
 	isAlive_ = true;
 
@@ -52,6 +48,11 @@ void Player::Initialize() {
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 	// 衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
+	AABB aabb = {
+	{-0.8f,-0.9999f,-0.8f},
+	{0.8f,0.9999f,0.8f}
+	};
+	SetAABB(aabb);
 
 	hitCounter_ = 0;
 }
@@ -92,38 +93,48 @@ void Player::Draw(const ViewProjection& viewProjection) {
 }
 
 void Player::OnCollision(Collider* collider) {
-
 	float theta = atan2(worldTransform_.translation_.y - collider->GetWorldPosition().y, worldTransform_.translation_.x - collider->GetWorldPosition().x);
-	
-	// 下
-	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
-		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
-		worldTransform_.translation_.y += extrusion;
-		worldTransform_.UpdateMatrix();
-		if (hitCounter_ <= 1) {
-			isAir_ = false;
-			behaviorRequest_ = Behavior::kLanding;
-		}
-		velocity_.y = 0;
-		hitCounter_++;
-	}
+
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {
 		isAlive_ = false;
 		worldTransform_.UpdateMatrix();
 	}
-
-	// 右
+	// 下
+	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
+		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
+		worldTransform_.translation_.y += extrusion;
+		worldTransform_.UpdateMatrix();
+		if (hitCounter_ <= 0) {
+			isJump_ = false;
+			behaviorRequest_ = Behavior::kLanding;
+		}
+		velocity_.y = 0;
+		hitCounter_++;
+	}
+	// 左
 	if (theta < M_PI / 5 && theta > -(M_PI / 5)) {
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
+		if (!collider->GetIsTopHitAABB()) {
+			isJump_ = true;
+		}
+		else {
+			inverseVelSignal_ = true;
+		}
 	}
-	// 左
-	else if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
+	// 右
+	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();
+		if (!collider->GetIsTopHitAABB()) {
+			isJump_ = true;
+		}
+		else {
+			inverseVelSignal_ = true;
+		}
 	}
 }
 
@@ -213,7 +224,7 @@ void Player::B_Update() {
 }
 
 void Player::B_NormalInit() {
-	isLanding_ = false;
+
 }
 void Player::B_NormalUpdate() {
 	if (isJump_) {
@@ -222,6 +233,7 @@ void Player::B_NormalUpdate() {
 }
 
 void Player::B_JumpInit() {
+	// 速度を初期化
 	velocity_.y = 0;
 	// 初速を加算
 	velocity_.y += initialVel_;
@@ -232,20 +244,16 @@ void Player::B_JumpUpdate() {
 }
 
 void Player::B_AirInit() {
-	isAir_ = true;
 	hitCounter_ = 0;
 }
 void Player::B_AirUpdate() {
 	if (worldTransform_.translation_.y <= -5) {
-		worldTransform_.translation_.y = -5;
-		velocity_.y = 0;
-		behaviorRequest_ = Behavior::kLanding;
-		isAir_ = false;
+		behaviorRequest_ = Behavior::kLanding;		
 	}
 }
 
 void Player::B_LandingInit() {
-	isLanding_ = true;
+
 }
 void Player::B_LandingUpdate() {
 	behaviorRequest_ = Behavior::kNormal;
@@ -279,14 +287,6 @@ void Player::AdjustmentParameter() {
 			ImGui::DragFloat("initial velocity", &initialVel_, 0.001f, 0, 50);
 			ImGui::DragFloat3("acceleration", &acceleration_.x, 0.001f, -4.0f, 4.0f);
 			ImGui::Checkbox("isActive", &isJump_);
-			ImGui::TreePop();
-		}
-		if (ImGui::TreeNode("Air")) {
-			ImGui::Checkbox("isActive", &isAir_);
-			ImGui::TreePop();
-		}
-		if (ImGui::TreeNode("Landing")) {
-			ImGui::Checkbox("isActive", &isLanding_);
 			ImGui::TreePop();
 		}
 

@@ -125,10 +125,10 @@ private:
 	bool inverseVelSignal_;
 	// ジャンプしたか
 	bool isJump_;
-	// 空中にいるか
-	bool isAir_;
-	// 着地したか
-	bool isLanding_;
+	//// 空中にいるか
+	//bool isAir_;
+	//// 着地したか
+	//bool isLanding_;
 	// 生きてるか
 	bool isAlive_;
 
