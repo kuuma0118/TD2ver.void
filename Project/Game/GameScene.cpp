@@ -29,6 +29,16 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_ = new Player();
 	player_->Initialize();
 
+	// ゴールライン
+	goalLine_ = std::make_unique<Goal>();
+	goalLine_->Initialize();
+	goalLine_->SetPlayer(player_);
+
+	// デッドライン
+	deadLine_ = std::make_unique<DeadLine>();
+	deadLine_->Initialize();
+	deadLine_->SetPlayer(player_);
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -36,15 +46,13 @@ void GameScene::Initialize(GameManager* gameManager) {
 };
 
 void GameScene::Update(GameManager* gameManager) {
-	// 自機が死んだらシーンを切り替える
-	if (player_->GetIsAlive()) {
-
-	}
-	// 自機
-	player_->Update();
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
+	// 自機
+	player_->Update();
+
+	// 落下するブロック
 	for (Block* block_ : blocks_) {
 		block_->Update();
 	}
@@ -72,6 +80,21 @@ void GameScene::Update(GameManager* gameManager) {
 
 	// 当たり判定
 	collisionManager_->CheckAllCollisions();
+
+	// ゴールライン
+	goalLine_->Update(viewProjection_);
+
+	// デッドライン
+	deadLine_->Update(viewProjection_);
+
+	// 自機が死んだらゲームオーバー
+	if (player_->GetIsAlive()) {
+
+	}
+	// ゴールラインに達したらクリア
+	if (goalLine_->GetIsGoal()) {
+
+	}
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -99,6 +122,12 @@ void GameScene::Draw(GameManager* gameManager) {
 		block_->Draw(viewProjection_);
 	}
 
+	// ゴールライン
+	goalLine_->Draw3DLine(viewProjection_);
+
+	// デッドライン
+	deadLine_->Draw3DLine(viewProjection_);
+
 	Model::PostDraw();
 
 #pragma endregion
@@ -106,6 +135,12 @@ void GameScene::Draw(GameManager* gameManager) {
 #pragma region スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	// ゴールライン
+	goalLine_->Draw2DLine();
+
+	// デッドライン
+	deadLine_->Draw2DLine();
 
 	Sprite::PostDraw();
 

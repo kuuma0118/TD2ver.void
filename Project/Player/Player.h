@@ -84,7 +84,6 @@ private:
 
 public:
 	/// Getter
-
 	// 座標
 	Vector3 GetPosition() { return worldTransform_.translation_; }
 	// ワールドトランスフォーム
@@ -92,16 +91,13 @@ public:
 	// ワールド座標
 	Vector3 GetWorldPosition()override;
 	
-	// 生存確認
+	// 生きているかを取得
 	bool GetIsAlive() { return isAlive_; }
 
 	///	Setter
+	// 生きているかを設定
+	void SetIsAlive(bool isAlive) { isAlive_ = isAlive; }
 
-	/// <summary>
-	/// 座標を代入
-	/// </summary>
-	/// <param name="pos">座標</param>
-	void SetPosition(Vector3 pos) { worldTransform_.translation_ = pos; }
 private:
 	// 入力
 	Input* input_;

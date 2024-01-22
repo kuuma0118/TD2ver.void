@@ -246,9 +246,6 @@
     <ClCompile Include="Project\Game\SelectScene\SelectScene.cpp">
       <Filter>ソース ファイル\Project\Game\SelectScene</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Game\ClearScene\ClearScene.cpp">
-      <Filter>ソース ファイル\Project\Game\ClearScene</Filter>
-    </ClCompile>
     <ClCompile Include="Project\Game\OverScene\OverScene.cpp">
       <Filter>ソース ファイル\Project\Game\OverScene</Filter>
     </ClCompile>
@@ -259,6 +256,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\Block.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Goal\Goal.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\DeadLine\DeadLine.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -389,9 +392,6 @@
     <ClInclude Include="Project\Game\SelectScene\SelectScene.h">
       <Filter>ヘッダー ファイル\Project\Game\SelectScene</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Game\ClearScene\ClearScene.h">
-      <Filter>ヘッダー ファイル\Project\Game\ClearScene</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Game\OverScene\OverScene.h">
       <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
     </ClInclude>
@@ -402,6 +402,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Project\Block\Block.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Goal\Goal.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\DeadLine\DeadLine.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

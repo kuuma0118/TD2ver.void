@@ -16,6 +16,8 @@
 // GameObject
 #include "Project/Player/Player.h"
 #include "Project/Block/Block.h"
+#include "Project/Goal/Goal.h"
+#include "Project/DeadLine/DeadLine.h"
 
 class GameScene : public IScene {
 public:
@@ -73,6 +75,10 @@ private:// メンバ変数
 	std::list<Block*> blocks_;
 	// 自機
 	Player* player_;
+	// ゴールライン
+	std::unique_ptr<Goal> goalLine_;
+	// デッドライン
+	std::unique_ptr<DeadLine> deadLine_;
 
 #pragma endregion
 };
