@@ -1,6 +1,6 @@
-#include "Goal.h"
+#include "GoalLine.h"
 
-void Goal::Initialize() {
+void GoalLine::Initialize() {
 	// 使用するテクスチャを読み込む
 	lineTexture_ = TextureManager::Load("Resources/white.png");
 	// 実体を生成
@@ -22,7 +22,7 @@ void Goal::Initialize() {
 	isGoal_ = false;
 }
 
-void Goal::Update(const ViewProjection& viewProjection) {
+void GoalLine::Update(const ViewProjection& viewProjection) {
 	// ゴールラインより自機が上に行ったらクリア
 	if (player_->GetWorldPosition().y <= worldTransform_.translation_.y) {
 		isGoal_ = true;
@@ -34,20 +34,20 @@ void Goal::Update(const ViewProjection& viewProjection) {
 	WorldToScreenConversion(viewProjection);
 }
 
-void Goal::Draw3DLine(const ViewProjection& viewProjection) {
+void GoalLine::Draw3DLine(const ViewProjection& viewProjection) {
 #ifdef _DEBUG
 	// ワールド座標上の3Dライン
 	line3DModel_->Draw(worldTransform_, viewProjection, lineTexture_);
 #endif // _DEBUG
 }
 
-void Goal::Draw2DLine() {
+void GoalLine::Draw2DLine() {
 	line2DSprite_->Draw();
 }
 
 #pragma region プライベートな関数
 
-Matrix4x4 Goal::MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
+Matrix4x4 GoalLine::MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth) {
 	Matrix4x4 result;
 
 	result.m[0][0] = width / 2.0f;
@@ -73,7 +73,7 @@ Matrix4x4 Goal::MakeViewportMatrix(float left, float top, float width, float hei
 	return result;
 }
 
-Vector3 Goal::Transform(const Vector3& vector, const Matrix4x4& matrix) {
+Vector3 GoalLine::Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result{};
 	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] +
 		1.0f * matrix.m[3][0];
@@ -90,7 +90,7 @@ Vector3 Goal::Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	return result;
 }
 
-void Goal::WorldToScreenConversion(const ViewProjection& viewProjection) {
+void GoalLine::WorldToScreenConversion(const ViewProjection& viewProjection) {
 	// 3Dデッドラインのワールド座標を取得
 	Vector3 pos = GetWorldPosition();
 	// ビューポート行列

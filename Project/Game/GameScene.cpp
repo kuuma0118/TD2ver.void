@@ -30,7 +30,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_->Initialize();
 
 	// ゴールライン
-	goalLine_ = std::make_unique<Goal>();
+	goalLine_ = std::make_unique<GoalLine>();
 	goalLine_->Initialize();
 	goalLine_->SetPlayer(player_);
 

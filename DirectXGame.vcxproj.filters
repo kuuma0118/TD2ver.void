@@ -133,6 +133,36 @@
     <Filter Include="ヘッダー ファイル\Project\Player">
       <UniqueIdentifier>{08976c55-26dd-48f6-b249-8b150ffbdac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Camera">
+      <UniqueIdentifier>{9a33d6e1-a628-4ada-b153-0b097df8ad0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Camera">
+      <UniqueIdentifier>{18794fe8-0518-4904-8e49-dd31bc520c1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Components">
+      <UniqueIdentifier>{9c1fe96f-fc1d-4cfe-a8bc-2501d56d667d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Components">
+      <UniqueIdentifier>{34a2371a-23ba-4a48-a4d2-e02f39c61f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Block">
+      <UniqueIdentifier>{87e8851c-893e-486c-b304-99e47ff06ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Block">
+      <UniqueIdentifier>{de01ffcb-9d62-4e49-bf7e-8a9eda6dee4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\DeadLine">
+      <UniqueIdentifier>{c426b990-e153-441b-bc44-d2e9731a8f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\DeadLine">
+      <UniqueIdentifier>{a0c9aab8-2afa-4581-90ea-ff292bba8c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GoalLine">
+      <UniqueIdentifier>{99d7431c-9dc1-474d-9796-779690fedebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GoalLine">
+      <UniqueIdentifier>{e83aa152-f2f5-4ddb-9323-1c1a05f0bafd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -252,17 +282,20 @@
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>ソース ファイル\Project\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Components\GamePad.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\Project\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\Block.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Goal\Goal.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Project\Block</Filter>
     </ClCompile>
     <ClCompile Include="Project\DeadLine\DeadLine.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Project\DeadLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Components\GamePad.cpp">
+      <Filter>ソース ファイル\Project\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GoalLine\GoalLine.cpp">
+      <Filter>ソース ファイル\Project\GoalLine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -398,17 +431,20 @@
     <ClInclude Include="Project\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Components\GamePad.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Block\Block.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Goal\Goal.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル\Project\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Project\DeadLine\DeadLine.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Project\DeadLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Components\GamePad.h">
+      <Filter>ヘッダー ファイル\Project\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GoalLine\GoalLine.h">
+      <Filter>ヘッダー ファイル\Project\GoalLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Block\Block.h">
+      <Filter>ヘッダー ファイル\Project\Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

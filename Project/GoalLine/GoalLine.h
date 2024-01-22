@@ -7,16 +7,16 @@
 #include "Project/Player/Player.h"
 #include <memory>
 
-class Goal {
+class GoalLine {
 public:
 	///
 	///	Default Method
 	/// 
 
 	// コンストラクタ
-	Goal() = default;
+	GoalLine() = default;
 	// デストラクタ
-	~Goal() = default;
+	~GoalLine() = default;
 
 	/// <summary>
 	/// 初期化
