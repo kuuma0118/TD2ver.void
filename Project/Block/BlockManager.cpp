@@ -61,7 +61,6 @@ void BlockManager::Draw(ViewProjection viewProjection_){
 	for (Block* block_ : blocks_) {
 		block_->Draw(viewProjection_);
 	}
-	
 }
 
 /// <summary>

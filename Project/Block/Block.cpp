@@ -42,7 +42,7 @@ void Block::Update() {
 
 	if (worldTransform_.translation_.y <= -10) {
 		float Y = worldTransform_.translation_.y - (-10);
-		worldTransform_.translation_.y -= Y;
+		worldTransform_.translation_.y = Y;
 	}	
 	worldTransform_.UpdateMatrix();
 }
