@@ -6,9 +6,8 @@ GameScene::GameScene() {};
 
 GameScene::~GameScene() {
 	delete player_;
-	for (Block* block_ : blocks_) {
-		delete block_;
-	}
+	delete blockManager_;
+	
 };
 
 void GameScene::Initialize(GameManager* gameManager) {
@@ -24,7 +23,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	viewProjection_.Initialize();
 	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
 	worldTransform_.translation_.y = 5.0f;
-
+	worldTransform_.UpdateMatrix();
 	// 自機
 	player_ = new Player();
 	player_->Initialize();
@@ -43,6 +42,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
 	collisionManager_->SetColliderList(player_);
+
+	blockManager_ = new BlockManager();
+	blockManager_->Initialize(collisionManager_);
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -63,20 +65,13 @@ void GameScene::Update(GameManager* gameManager) {
 	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
 		worldTransform_.translation_.x -= 2.00f;
 	}
+	// 自機
+	player_->Update();
+	worldTransform_.UpdateMatrix();
+	viewProjection_.UpdateMatrix();
 
-	if (input_->IsPushKeyEnter(DIK_SPACE)) {
-		// 落下速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, kBulletSpeed, 0);
-		// 実体生成
-		Block* newBlock_ = new Block();
-		// 初期化
-		newBlock_->Initialize(worldTransform_);
-		//リストに登録
-		blocks_.push_back(newBlock_);
-		// 当たり判定に追加
-		collisionManager_->SetColliderList(newBlock_);
-	}
+	blockManager_->Update(worldTransform_.translation_);
+
 
 	// 当たり判定
 	collisionManager_->CheckAllCollisions();
@@ -118,9 +113,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	player_->Draw(viewProjection_);
 
 	//ブロックの描画
-	for (Block* block_ : blocks_) {
-		block_->Draw(viewProjection_);
-	}
+	blockManager_->Draw(viewProjection_);
 
 	// ゴールライン
 	goalLine_->Draw3DLine(viewProjection_);

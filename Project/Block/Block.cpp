@@ -1,23 +1,23 @@
 ﻿#include "Block.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <cassert>
 
 Block::Block(){
 }
 
 Block::~Block() {
-
 }
 
-void Block::Initialize(WorldTransform worldTransform) {
+void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model) {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	worldTransform_.translation_ = worldTransform.translation_;
 	worldTransform_.UpdateMatrix();
 
-	texHandle_ = TextureManager::Load("Resources/white.png");
-
-	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
+	texHandle_ = texHandle;
+	model_ = model;
+	assert(model_);
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
