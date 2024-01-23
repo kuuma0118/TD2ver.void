@@ -1,5 +1,6 @@
 #pragma once
 #include "Project/Block/Block.h"
+#include "Project/Block/HeadBlock.h"
 #include "Engine/Components/Input.h"
 
 
@@ -76,6 +77,11 @@ public: // メンバ関数
 	/// </summary>
 	void Shape_L(Vector3 velocity);
 
+	/// <summary>
+	/// ブロックの選別
+	/// </summary>
+	void Shape_rand();
+
 private:
 
 	//Input
@@ -87,12 +93,14 @@ private:
 
 	//ブロック
 	std::list<Block*> blocks_;
+	std::list<HeadBlock*> headblocks_;
+
 
 	// 当たり判定
 	CollisionManager* collisionManager_ = nullptr;
 
 	//ブロックの間隔
-	float width = 2.001f;
+	float width = 2.00f;
 
 	//フェーズ
 	Shape shape_ = Shape::I;
@@ -102,6 +110,7 @@ private:
 	std::unique_ptr<Model> model_{};
 
 	//テクスチャハンドル
-	uint32_t texHandle_ = 0;
+	uint32_t BlockTexHandle_ = 0;
+	uint32_t hardBlockTexHandle_ = 0;
 };
 
