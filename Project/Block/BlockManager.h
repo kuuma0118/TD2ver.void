@@ -99,7 +99,7 @@ private:
 	CollisionManager* collisionManager_ = nullptr;
 
 	//ブロックの間隔
-	float width = 2.00f;
+	float width = 2.0f;
 
 	//フェーズ
 	Shape shape_ = Shape::I;

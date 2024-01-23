@@ -28,8 +28,8 @@ void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model*
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = {
-		{-0.9999f,-0.9999f,-0.9999f},
-		{0.9999f,0.9999f,0.9999f}
+		{-0.9999f,-1.0f,-0.9999f},
+		{0.9999f,1.0f,0.9999f}
 	};
 	SetAABB(aabb);
 }

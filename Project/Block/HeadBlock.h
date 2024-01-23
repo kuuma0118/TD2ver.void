@@ -39,7 +39,7 @@ public: // メンバ関数
 	/// 
 
 	// 純粋仮想関数
-	void OnCollision(const Collider* collider) override;
+	void OnCollision(Collider* collider) override;
 
 	/// <summary>
 	/// ワールド座標を取得
