@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "GameManager.h"
 #include "GameScene.h"
+#include "ClearScene.h"
 #include "Engine/Base/TextureManager.h"
 #include <cassert>
 

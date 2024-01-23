@@ -1,4 +1,7 @@
 #include "GameScene.h"
+#include "GameManager.h"
+#include "ClearScene.h"
+#include "OverScene.h"
 #include "Engine/Base/TextureManager.h"
 #include <cassert>
 
@@ -68,6 +71,15 @@ void GameScene::Update(GameManager* gameManager) {
 		blocks_.push_back(newBlock_);
 		// 当たり判定に追加
 		collisionManager_->SetColliderList(newBlock_);
+	}
+
+	if (input_->IsPushKeyEnter(DIK_C)) {
+		/*audio_->StopAudio(SceneSoundHandle_);*/
+		gameManager->ChangeScene(new GameClearScene);
+	}
+	else if (input_->IsPushKeyEnter(DIK_O)) {
+	/*	audio_->StopAudio(SceneSoundHandle_);*/
+		gameManager->ChangeScene(new GameOverScene);
 	}
 
 	// 当たり判定
