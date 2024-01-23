@@ -6,10 +6,10 @@
 #include "Engine/Utility/Log.h"
 
 Player::~Player() {
-	//delete model_;
+
 }
 
-void Player::Init() {
+void Player::Initialize() {
 	// 入力
 	input_ = Input::GetInstance();
 	gamePad_ = GamePad::GetInstance();
@@ -17,17 +17,19 @@ void Player::Init() {
 	model_.reset(Model::CreateFromOBJ("Resources", "block.obj"));
 	assert(model_);
 
-	// ワールドトランスフォームの初期化
+	// ワールド座標の初期化
 	worldTransform_.Initialize();
+	// 初期位置
 	worldTransform_.translation_ = { 0,0,0 };
+	// 右向きに設定
 	worldTransform_.rotation_ = { 0,(float)M_PI / 2, 0 };
+	// worldMatrixに反映
 	worldTransform_.UpdateMatrix();
 
 	// 速度ベクトル
 	velocity_ = { 0,0,kSpeed };
 	// 自機の向きに合わせ、回転
 	velocity_ = TransformNormal(velocity_, worldTransform_.matWorld_);
-
 	// 加速度
 	acceleration_ = { 0,-0.05f,0 };
 	// ジャンプの初速
@@ -39,13 +41,20 @@ void Player::Init() {
 	///ImGuiように作った変数
 	// ジャンプしたか
 	isJump_ = false;
-	// 空中にいるか
-	isAir_ = false;
-	// 着地したか
-	isLanding_ = false;
+	// 生きてるよ
+	isAlive_ = true;
 
 	// 当たり判定の形状を設定
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
+	// 衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	AABB aabb = {
+	{-0.8f,-0.8f,-0.8f},
+	{0.8f,0.8f,0.8f}
+	};
+	SetAABB(aabb);
+
+	hitCounter_ = 0;
 }
 
 void Player::Update() {
@@ -55,6 +64,13 @@ void Player::Update() {
 		isJump_ = true;
 	}
 #endif // _DEBUG
+	// 重力を速度に足す
+	velocity_.y += acceleration_.y;
+	// 床の判定
+	if (worldTransform_.translation_.y <= -5) {
+		worldTransform_.translation_.y = -5;
+		velocity_.y = 0;
+	}
 
 	/// ふるまい
 	// 初期化
@@ -76,8 +92,50 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
 }
 
-void Player::OnCollision(const Collider* collider) {
-	
+void Player::OnCollision(Collider* collider) {
+	float theta = atan2(worldTransform_.translation_.y - collider->GetWorldPosition().y, worldTransform_.translation_.x - collider->GetWorldPosition().x);
+
+	// 上
+	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {
+		isAlive_ = false;
+		worldTransform_.UpdateMatrix();
+	}
+	// 下
+	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
+		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
+		worldTransform_.translation_.y += extrusion;
+		worldTransform_.UpdateMatrix();
+		if (hitCounter_ <= 0) {
+			isJump_ = false;
+			behaviorRequest_ = Behavior::kLanding;
+		}
+		velocity_.y = 0;
+		hitCounter_++;
+	}
+	// 左
+	if (theta < M_PI / 5 && theta > -(M_PI / 5)) {
+		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
+		worldTransform_.translation_.x += extrusion;
+		worldTransform_.UpdateMatrix();
+		if (!collider->GetIsTopHitAABB()) {
+			isJump_ = true;
+		}
+		else {
+			inverseVelSignal_ = true;
+		}
+	}
+	// 右
+	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
+		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
+		worldTransform_.translation_.x -= extrusion;
+		worldTransform_.UpdateMatrix();
+		if (!collider->GetIsTopHitAABB()) {
+			isJump_ = true;
+		}
+		else {
+			inverseVelSignal_ = true;
+		}
+	}
 }
 
 Vector3 Player::GetWorldPosition() {
@@ -166,7 +224,7 @@ void Player::B_Update() {
 }
 
 void Player::B_NormalInit() {
-	isLanding_ = false;
+
 }
 void Player::B_NormalUpdate() {
 	if (isJump_) {
@@ -175,6 +233,8 @@ void Player::B_NormalUpdate() {
 }
 
 void Player::B_JumpInit() {
+	// 速度を初期化
+	velocity_.y = 0;
 	// 初速を加算
 	velocity_.y += initialVel_;
 	isJump_ = false;
@@ -184,20 +244,16 @@ void Player::B_JumpUpdate() {
 }
 
 void Player::B_AirInit() {
-	isAir_ = true;
+	hitCounter_ = 0;
 }
 void Player::B_AirUpdate() {
-	velocity_.y += acceleration_.y;
-	if (worldTransform_.translation_.y <= 0) {
-		worldTransform_.translation_.y = 0;
-		velocity_.y = 0;
-		behaviorRequest_ = Behavior::kLanding;
-		isAir_ = false;
+	if (worldTransform_.translation_.y <= -5) {
+		behaviorRequest_ = Behavior::kLanding;		
 	}
 }
 
 void Player::B_LandingInit() {
-	isLanding_ = true;
+
 }
 void Player::B_LandingUpdate() {
 	behaviorRequest_ = Behavior::kNormal;
@@ -233,17 +289,10 @@ void Player::AdjustmentParameter() {
 			ImGui::Checkbox("isActive", &isJump_);
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNode("Air")) {
-			ImGui::Checkbox("isActive", &isAir_);
-			ImGui::TreePop();
-		}
-		if (ImGui::TreeNode("Landing")) {
-			ImGui::Checkbox("isActive", &isLanding_);
-			ImGui::TreePop();
-		}
 
 		ImGui::TreePop();
 	}
+	ImGui::Text("IsAlive:%d", isAlive_);
 
 	ImGui::End();
 #endif // DEBUG

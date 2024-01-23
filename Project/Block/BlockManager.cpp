@@ -23,7 +23,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 	BlockTexHandle_ = TextureManager::Load("Resources/uvChecker.png");
 	hardBlockTexHandle_= TextureManager::Load("Resources/cube.jpg");
 
-	model_.reset(Model::CreateFromOBJ("Resources", "cube.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	assert(model_);
 }
 

@@ -8,7 +8,7 @@ public:
 	/// <summary>
 	/// 衝突時に呼ばれる関数
 	/// </summary>
-	virtual void OnCollision(const Collider* collider) {};
+	virtual void OnCollision(Collider* collider) {};
 
 	/// <summary>
 	/// ワールド座標を取得
@@ -88,6 +88,18 @@ public:
 	/// <param name="damage"></param>
 	void SetDamage(float damage) { damage_ = damage; };
 
+	/// <summary>
+	/// AABBの上面部分に当たったかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsTopHitAABB() { return isTopHitAABB_; }
+
+	/// <summary>
+	/// AABBの上面部分に当たったかを設定
+	/// </summary>
+	/// <param name="isActive"></param>
+	void SetIsTopHitAABB(bool isActive) { isTopHitAABB_ = isActive; }
+
 private:
 	//衝突半径
 	float radius_ = 1.0f;
@@ -101,4 +113,7 @@ private:
 	uint32_t collisionPrimitive_ = kCollisionPrimitiveSphere;
 	//ダメージ
 	float damage_ = 1.0f;
+
+	// 上方向に当たってる
+	bool isTopHitAABB_ = false;
 };

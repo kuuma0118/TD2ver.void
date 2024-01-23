@@ -83,7 +83,6 @@ public: // メンバ関数
 	void Shape_rand();
 
 private:
-
 	//Input
 	Input* input_ = nullptr;
 	//ビュープロジェクション(カメラ)

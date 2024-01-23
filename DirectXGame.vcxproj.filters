@@ -103,11 +103,65 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{de3f9224-098b-4c48-8260-fa6a820477ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{72e925c6-4c12-4faf-a7c9-5be1ffe5dedf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{c771de03-45df-4fd1-b296-160829346345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{809bd8c0-7f42-4729-b7a4-082179bfd73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{cc388f77-fe6c-4206-8637-26e5d2610140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{52aa3c02-3d0e-415b-a376-43cbcac7c608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{47026ae8-accf-41ed-8f83-b29497d0122b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{3d344662-c230-48c7-98fb-a3180d8f9280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{f752981e-9ee4-497f-8860-0145baa9edf0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\Project\Player">
       <UniqueIdentifier>{61642084-8d64-446f-9734-438466fc8ee4}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\Project\Player">
       <UniqueIdentifier>{08976c55-26dd-48f6-b249-8b150ffbdac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Camera">
+      <UniqueIdentifier>{9a33d6e1-a628-4ada-b153-0b097df8ad0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Camera">
+      <UniqueIdentifier>{18794fe8-0518-4904-8e49-dd31bc520c1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Components">
+      <UniqueIdentifier>{9c1fe96f-fc1d-4cfe-a8bc-2501d56d667d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Components">
+      <UniqueIdentifier>{34a2371a-23ba-4a48-a4d2-e02f39c61f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Block">
+      <UniqueIdentifier>{87e8851c-893e-486c-b304-99e47ff06ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Block">
+      <UniqueIdentifier>{de01ffcb-9d62-4e49-bf7e-8a9eda6dee4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\DeadLine">
+      <UniqueIdentifier>{c426b990-e153-441b-bc44-d2e9731a8f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\DeadLine">
+      <UniqueIdentifier>{a0c9aab8-2afa-4581-90ea-ff292bba8c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GoalLine">
+      <UniqueIdentifier>{99d7431c-9dc1-474d-9796-779690fedebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GoalLine">
+      <UniqueIdentifier>{e83aa152-f2f5-4ddb-9323-1c1a05f0bafd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -216,14 +270,32 @@
     <ClCompile Include="Project\Game\GameScene.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Game\TitleScene\TitleScene.cpp">
+      <Filter>ソース ファイル\Project\Game\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\SelectScene\SelectScene.cpp">
+      <Filter>ソース ファイル\Project\Game\SelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\OverScene\OverScene.cpp">
+      <Filter>ソース ファイル\Project\Game\OverScene</Filter>
+    </ClCompile>
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>ソース ファイル\Project\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Components\GamePad.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Project\Camera\Camera.cpp">
+      <Filter>ソース ファイル\Project\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\Block.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Project\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\DeadLine\DeadLine.cpp">
+      <Filter>ソース ファイル\Project\DeadLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Components\GamePad.cpp">
+      <Filter>ソース ファイル\Project\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GoalLine\GoalLine.cpp">
+      <Filter>ソース ファイル\Project\GoalLine</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\BlockManager.cpp">
       <Filter>ソース ファイル</Filter>
@@ -353,14 +425,32 @@
     <ClInclude Include="Project\Game\GameManager.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Project\Game\TitleScene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\SelectScene\SelectScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\SelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\OverScene\OverScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
+    </ClInclude>
     <ClInclude Include="Project\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Project\Camera\Camera.h">
+      <Filter>ヘッダー ファイル\Project\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\DeadLine\DeadLine.h">
+      <Filter>ヘッダー ファイル\Project\DeadLine</Filter>
+    </ClInclude>
     <ClInclude Include="Project\Components\GamePad.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Project\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GoalLine\GoalLine.h">
+      <Filter>ヘッダー ファイル\Project\GoalLine</Filter>
     </ClInclude>
     <ClInclude Include="Project\Block\Block.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Project\Block</Filter>
     </ClInclude>
     <ClInclude Include="Project\Block\BlockManager.h">
       <Filter>ヘッダー ファイル</Filter>

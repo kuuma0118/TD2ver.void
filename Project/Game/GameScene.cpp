@@ -21,12 +21,22 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// カメラ
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
-	viewProjection_.translation_ = { 0.0f,0.0f,-50.0f };
+	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
 	worldTransform_.translation_.y = 5.0f;
 	worldTransform_.UpdateMatrix();
 	// 自機
 	player_ = new Player();
-	player_->Init();
+	player_->Initialize();
+
+	// ゴールライン
+	goalLine_ = std::make_unique<GoalLine>();
+	goalLine_->Initialize();
+	goalLine_->SetPlayer(player_);
+
+	// デッドライン
+	deadLine_ = std::make_unique<DeadLine>();
+	deadLine_->Initialize();
+	deadLine_->SetPlayer(player_);
 
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
@@ -38,22 +48,37 @@ void GameScene::Initialize(GameManager* gameManager) {
 };
 
 void GameScene::Update(GameManager* gameManager) {
-	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-		worldTransform_.translation_.x += 2.001f;
-	}
-	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-		worldTransform_.translation_.x -= 2.001f;
-	}
-	// 自機
-	player_->Update();
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
-	blockManager_->Update(worldTransform_.translation_);
+	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
+		worldTransform_.translation_.x += 2.00f;
+	}
+	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
+		worldTransform_.translation_.x -= 2.00f;
+	}
+	// 自機
+	player_->Update();
 
+	blockManager_->Update(worldTransform_.translation_);
 
 	// 当たり判定
 	collisionManager_->CheckAllCollisions();
+
+	// ゴールライン
+	goalLine_->Update(viewProjection_);
+
+	// デッドライン
+	deadLine_->Update(viewProjection_);
+
+	// 自機が死んだらゲームオーバー
+	if (player_->GetIsAlive()) {
+
+	}
+	// ゴールラインに達したらクリア
+	if (goalLine_->GetIsGoal()) {
+
+	}
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -79,6 +104,12 @@ void GameScene::Draw(GameManager* gameManager) {
 	//ブロックの描画
 	blockManager_->Draw(viewProjection_);
 
+	// ゴールライン
+	goalLine_->Draw3DLine(viewProjection_);
+
+	// デッドライン
+	deadLine_->Draw3DLine(viewProjection_);
+
 	Model::PostDraw();
 
 #pragma endregion
@@ -87,33 +118,13 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
+	// ゴールライン
+	goalLine_->Draw2DLine();
+
+	// デッドライン
+	deadLine_->Draw2DLine();
+
 	Sprite::PostDraw();
 
 #pragma endregion
 };
-
-//void GameScene::CheckAllCollisions() {
-	////判定対象AとBの座標
-	//Vector3 posA, posB;
-	////自弾と敵弾の当たり判定
-	//for (Block* block1_ : blocks_) {
-	//	for (Block* block2_ : blocks2_) {
-	//		//自弾の座標
-	//		posA = block1_->GetworldTransform_();
-	//		//敵弾の座標
-	//		posB = block2_->GetworldTransform_();
-	//		posA.z = 1.0f;
-	//		//座標AとBの距離を求める
-	//		float distance = Length(Subtract(posA, posB));
-
-	//		
-
-	//		//球と球の当たり判定
-	//		if (distance <=13) {
-	//			for (Block* block_ : blocks_) {
-	//				block_->OnCollision();
- //				}
-	//		}
-	//	}
-	//}
-//}

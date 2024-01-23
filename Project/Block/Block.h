@@ -39,7 +39,7 @@ public: // メンバ関数
 	/// 
 
 	// 純粋仮想関数
-	void OnCollision(const Collider* collider) override;
+	void OnCollision(Collider* collider) override;
 
 	/// <summary>
 	/// ワールド座標を取得
@@ -55,13 +55,11 @@ public: // メンバ関数
 	void SetworldTransform_(Vector3 worldTransform) {this->worldTransform_.translation_ = worldTransform;}
 
 private: // メンバ変数
-
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
 	//3Dモデル
 	Model* model_{};
-
 
 	//キーボード入力
 	Input* input_ = nullptr;
