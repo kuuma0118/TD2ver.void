@@ -15,14 +15,20 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 	collisionManager_ = collisionManager;
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
-	
+
+	texHandle_ = TextureManager::Load("Resources/uvChecker.png");
+
+	model_.reset(Model::CreateFromOBJ("Resources", "cube.obj"));
+	assert(model_);
 }
 
 void BlockManager::Update(Vector3 velocity){
 	worldTransform_.UpdateMatrix();
+
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
 
-		shape_ = Shape( rand() % 6);
+		//shape_ = Shape( rand() % 6);
+		shape_ = Shape::I;
 		///ここをランダムにする
 		//Shape_L(velocity);
 		switch (shape_)
@@ -60,7 +66,7 @@ void BlockManager::Update(Vector3 velocity){
 void BlockManager::Draw(ViewProjection viewProjection_){
 	for (Block* block_ : blocks_) {
 		block_->Draw(viewProjection_);
-	}
+	} 
 }
 
 /// <summary>
@@ -69,10 +75,9 @@ void BlockManager::Draw(ViewProjection viewProjection_){
 /// <param name="velocity"></param>
 void BlockManager::Shape_I(Vector3 velocity){
 #pragma region ブロックの１番
-	// 実体生成
 	Block* newBlock_1 = new Block();
 	// 初期化
-	newBlock_1->Initialize(worldTransform_);
+	newBlock_1->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_1->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_1);
@@ -84,7 +89,7 @@ void BlockManager::Shape_I(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_2 = new Block();
 	// 初期化
-	newBlock_2->Initialize(worldTransform_);
+	newBlock_2->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_2->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_2);
@@ -96,7 +101,7 @@ void BlockManager::Shape_I(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_3 = new Block();
 	// 初期化
-	newBlock_3->Initialize(worldTransform_);
+	newBlock_3->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_3->SetworldTransform_({ velocity.x,velocity.y - width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_3);
@@ -108,7 +113,7 @@ void BlockManager::Shape_I(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_4 = new Block();
 	// 初期化
-	newBlock_4->Initialize(worldTransform_);
+	newBlock_4->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_4->SetworldTransform_({ velocity.x,velocity.y - width- width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_4);
@@ -126,7 +131,7 @@ void BlockManager::Shape_T(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_1 = new Block();
 	// 初期化
-	newBlock_1->Initialize(worldTransform_);
+	newBlock_1->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_1);
@@ -138,7 +143,7 @@ void BlockManager::Shape_T(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_2 = new Block();
 	// 初期化
-	newBlock_2->Initialize(worldTransform_);
+	newBlock_2->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_2->SetworldTransform_({ velocity.x-width,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_2);
@@ -150,7 +155,7 @@ void BlockManager::Shape_T(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_3 = new Block();
 	// 初期化
-	newBlock_3->Initialize(worldTransform_);
+	newBlock_3->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_3->SetworldTransform_({ velocity.x+ width,velocity.y ,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_3);
@@ -162,7 +167,7 @@ void BlockManager::Shape_T(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_4 = new Block();
 	// 初期化
-	newBlock_4->Initialize(worldTransform_);
+	newBlock_4->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_4->SetworldTransform_({ velocity.x,velocity.y- width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_4);
@@ -180,7 +185,7 @@ void BlockManager::Shape_S(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_1 = new Block();
 	// 初期化
-	newBlock_1->Initialize(worldTransform_);
+	newBlock_1->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_1->SetworldTransform_({ velocity.x+width,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_1);
@@ -192,7 +197,7 @@ void BlockManager::Shape_S(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_2 = new Block();
 	// 初期化
-	newBlock_2->Initialize(worldTransform_);
+	newBlock_2->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_2->SetworldTransform_({ velocity.x ,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_2);
@@ -204,7 +209,7 @@ void BlockManager::Shape_S(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_3 = new Block();
 	// 初期化
-	newBlock_3->Initialize(worldTransform_);
+	newBlock_3->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_3->SetworldTransform_({ velocity.x ,velocity.y- width ,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_3);
@@ -216,7 +221,7 @@ void BlockManager::Shape_S(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_4 = new Block();
 	// 初期化
-	newBlock_4->Initialize(worldTransform_);
+	newBlock_4->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_4->SetworldTransform_({ velocity.x- width,velocity.y- width ,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_4);
@@ -234,7 +239,7 @@ void BlockManager::Shape_O(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_1 = new Block();
 	// 初期化
-	newBlock_1->Initialize(worldTransform_);
+	newBlock_1->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_1);
@@ -246,7 +251,7 @@ void BlockManager::Shape_O(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_2 = new Block();
 	// 初期化
-	newBlock_2->Initialize(worldTransform_);
+	newBlock_2->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_2);
@@ -258,7 +263,7 @@ void BlockManager::Shape_O(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_3 = new Block();
 	// 初期化
-	newBlock_3->Initialize(worldTransform_);
+	newBlock_3->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_3->SetworldTransform_({ velocity.x ,velocity.y - width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_3);
@@ -270,7 +275,7 @@ void BlockManager::Shape_O(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_4 = new Block();
 	// 初期化
-	newBlock_4->Initialize(worldTransform_);
+	newBlock_4->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_4->SetworldTransform_({ velocity.x + width,velocity.y - width ,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_4);
@@ -288,7 +293,7 @@ void BlockManager::Shape_J(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_1 = new Block();
 	// 初期化
-	newBlock_1->Initialize(worldTransform_);
+	newBlock_1->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_1->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_1);
@@ -300,7 +305,7 @@ void BlockManager::Shape_J(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_2 = new Block();
 	// 初期化
-	newBlock_2->Initialize(worldTransform_);
+	newBlock_2->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_2->SetworldTransform_({ velocity.x ,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_2);
@@ -312,7 +317,7 @@ void BlockManager::Shape_J(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_3 = new Block();
 	// 初期化
-	newBlock_3->Initialize(worldTransform_);
+	newBlock_3->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_3->SetworldTransform_({ velocity.x ,velocity.y - width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_3);
@@ -324,7 +329,7 @@ void BlockManager::Shape_J(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_4 = new Block();
 	// 初期化
-	newBlock_4->Initialize(worldTransform_);
+	newBlock_4->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_4->SetworldTransform_({ velocity.x - width,velocity.y - width ,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_4);
@@ -342,7 +347,7 @@ void BlockManager::Shape_L(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_1 = new Block();
 	// 初期化
-	newBlock_1->Initialize(worldTransform_);
+	newBlock_1->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_1->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_1);
@@ -354,7 +359,7 @@ void BlockManager::Shape_L(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_2 = new Block();
 	// 初期化
-	newBlock_2->Initialize(worldTransform_);
+	newBlock_2->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_2->SetworldTransform_({ velocity.x ,velocity.y,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_2);
@@ -366,7 +371,7 @@ void BlockManager::Shape_L(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_3 = new Block();
 	// 初期化
-	newBlock_3->Initialize(worldTransform_);
+	newBlock_3->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_3->SetworldTransform_({ velocity.x ,velocity.y - width,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_3);
@@ -378,7 +383,7 @@ void BlockManager::Shape_L(Vector3 velocity){
 	// 実体生成
 	Block* newBlock_4 = new Block();
 	// 初期化
-	newBlock_4->Initialize(worldTransform_);
+	newBlock_4->Initialize(worldTransform_,texHandle_,model_.get());
 	newBlock_4->SetworldTransform_({ velocity.x + width,velocity.y - width ,velocity.z });
 	//リストに登録
 	blocks_.push_back(newBlock_4);

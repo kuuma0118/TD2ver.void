@@ -1,22 +1,21 @@
 ﻿#include "Block.h"
+#include <cassert>
 
-Block::Block()
-{
+Block::Block(){
 }
 
 Block::~Block() {
-
 }
 
-void Block::Initialize(WorldTransform worldTransform) {
+void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model) {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	worldTransform_.translation_ = worldTransform.translation_;
 	worldTransform_.UpdateMatrix();
 
-	texHandle_ = TextureManager::Load("Resources/uvChecker.png");
-
-	model_.reset(Model::CreateFromOBJ("Resources", "cube.obj"));
+	texHandle_ = texHandle;
+	model_ = model;
+	assert(model_);
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -42,7 +41,7 @@ void Block::Update() {
 
 	if (worldTransform_.translation_.y <= -10) {
 		float Y = worldTransform_.translation_.y - (-10);
-		worldTransform_.translation_.y = Y;
+		worldTransform_.translation_.y -= Y;
 	}	
 	worldTransform_.UpdateMatrix();
 }

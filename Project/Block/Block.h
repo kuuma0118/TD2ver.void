@@ -22,7 +22,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WorldTransform worldTransform_);
+	void Initialize(WorldTransform worldTransform, uint32_t texHandle,  Model* model);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -54,15 +54,13 @@ public: // メンバ関数
 
 	void SetworldTransform_(Vector3 worldTransform) {this->worldTransform_.translation_ = worldTransform;}
 
-	//float SetfoolSpeed(float foolspeed) { foolSpeed_ = foolspeed; }
-
 private: // メンバ変数
 
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
 	//3Dモデル
-	std::unique_ptr<Model> model_{};
+	Model* model_{};
 
 
 	//キーボード入力

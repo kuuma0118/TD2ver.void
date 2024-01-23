@@ -97,5 +97,11 @@ private:
 	//フェーズ
 	Shape shape_ = Shape::I;
 	//int num = rand();
+
+	//3Dモデル
+	std::unique_ptr<Model> model_{};
+
+	//テクスチャハンドル
+	uint32_t texHandle_ = 0;
 };
 
