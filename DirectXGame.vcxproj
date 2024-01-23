@@ -147,7 +147,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Project\Camera\Camera.cpp" />
     <ClCompile Include="Project\DeadLine\DeadLine.cpp" />
     <ClCompile Include="Project\GoalLine\GoalLine.cpp" />
     <ClCompile Include="Project\Components\GamePad.cpp" />
@@ -207,7 +207,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Game\TitleScene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Project\Camera\Camera.h" />
     <ClInclude Include="Project\DeadLine\DeadLine.h" />
     <ClInclude Include="Project\GoalLine\GoalLine.h" />
     <ClInclude Include="Project\Components\GamePad.h" />

@@ -282,7 +282,7 @@
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>ソース ファイル\Project\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="Project\Camera\Camera.cpp">
       <Filter>ソース ファイル\Project\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\Block.cpp">
@@ -431,7 +431,7 @@
     <ClInclude Include="Project\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Project\Camera\Camera.h">
       <Filter>ヘッダー ファイル\Project\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Project\DeadLine\DeadLine.h">
