@@ -68,13 +68,6 @@ void Block::AdjustmentParameter()
 }
 
 void Block::OnCollision(Collider* collider) {	 
-	//if (worldTransform_.translation_.y > collider->GetWorldPosition().y && GetCollisionAttribute() == collider->GetCollisionAttribute()) {
-	//	float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
-	//	worldTransform_.translation_.y += extrusion;
-	//	worldTransform_.UpdateMatrix();
-	//}
-
-
 	float theta = atan2(worldTransform_.translation_.y - collider->GetWorldPosition().y, worldTransform_.translation_.x - collider->GetWorldPosition().x);
 
 	// 下

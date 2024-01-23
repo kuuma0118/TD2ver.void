@@ -18,7 +18,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 
 	texHandle_ = TextureManager::Load("Resources/uvChecker.png");
 
-	model_.reset(Model::CreateFromOBJ("Resources", "cube.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	assert(model_);
 }
 

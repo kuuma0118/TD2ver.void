@@ -77,7 +77,6 @@ public: // メンバ関数
 	void Shape_L(Vector3 velocity);
 
 private:
-
 	//Input
 	Input* input_ = nullptr;
 	//ビュープロジェクション(カメラ)

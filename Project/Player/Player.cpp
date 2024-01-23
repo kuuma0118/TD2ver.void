@@ -49,8 +49,8 @@ void Player::Initialize() {
 	// 衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
 	AABB aabb = {
-	{-0.8f,-0.9999f,-0.8f},
-	{0.8f,0.9999f,0.8f}
+	{-0.8f,-0.8f,-0.8f},
+	{0.8f,0.8f,0.8f}
 	};
 	SetAABB(aabb);
 

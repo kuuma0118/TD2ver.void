@@ -51,14 +51,6 @@ void GameScene::Update(GameManager* gameManager) {
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
-	// 自機
-	player_->Update();
-
-	// 落下するブロック
-	for (Block* block_ : blocks_) {
-		block_->Update();
-	}
-
 	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
 		worldTransform_.translation_.x += 2.00f;
 	}
@@ -67,11 +59,8 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 	// 自機
 	player_->Update();
-	worldTransform_.UpdateMatrix();
-	viewProjection_.UpdateMatrix();
 
 	blockManager_->Update(worldTransform_.translation_);
-
 
 	// 当たり判定
 	collisionManager_->CheckAllCollisions();

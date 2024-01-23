@@ -8,10 +8,10 @@
 //	/// Default Method
 //	/// 
 //
-//	// ‰Šú‰»
+//	// åˆæœŸåŒ–
 //	void Initialize();
 //
-//	// XVˆ—
+//	// æ›´æ–°å‡¦ç†
 //	void Update();
 //
 //	/// 
@@ -19,11 +19,11 @@
 //	/// 
 //
 //	/// Getter
-//	/// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“‚ğæ“¾
+//	/// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—
 //	const ViewProjection& GetViewProjection() { return viewProjection_; }
 //
 //	/// Setter
-//	// ’Ç]‚·‚é‘ÎÛ‚ğİ’è
+//	// è¿½å¾“ã™ã‚‹å¯¾è±¡ã‚’è¨­å®š
 //	void SetTarget(const WorldTransform* target) { target_ = target; }
 //
 //private:
