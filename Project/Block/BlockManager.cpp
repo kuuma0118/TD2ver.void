@@ -27,10 +27,10 @@ void BlockManager::Update(Vector3 velocity){
 
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
 
-		//shape_ = Shape( rand() % 6);
-		shape_ = Shape::I;
-		///ここをランダムにする
-		//Shape_L(velocity);
+		//形状をランダムにする
+		shape_ = Shape( rand() % 6);
+		//shape_ = Shape::I;
+		
 		switch (shape_)
 		{
 		case Shape::I:
