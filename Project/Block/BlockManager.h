@@ -9,12 +9,14 @@
 
 
 enum class Shape {
-	I,	//I字ブロック
-	T,	//T字ブロック
-	S,	//S字ブロック
-	O,	//O字ブロック
-	J,	//J字ブロック
-	L,	//L字ブロック
+	shape_I,	//I字ブロック
+	shape_T,	//T字ブロック
+	shape_S,	//S字ブロック
+	shape_O,	//O字ブロック
+	shape_J,	//J字ブロック
+	shape_L,	//L字ブロック
+	shape_ten,	//一つのブロック
+	shape_side	//横に連なるブロック
 };
 
 
@@ -40,7 +42,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update(Vector3 velocity);
+	void Update();
 
 	/// <summary>
 	/// 描画
@@ -78,10 +80,15 @@ public: // メンバ関数
 	void Shape_L(Vector3 velocity);
 
 	/// <summary>
-	/// ブロックの選別
+	/// 一つのブロック
 	/// </summary>
-	void Shape_rand();
+	void Shape_Ten(Vector3 velocity);
 
+	/// <summary>
+	/// 横に連なるブロック
+	/// </summary>
+	/// <param name="velocity"></param>
+	void shape_side(Vector3 velocity);
 private:
 	//Input
 	Input* input_ = nullptr;
@@ -102,7 +109,8 @@ private:
 	float width = 2.0f;
 
 	//フェーズ
-	Shape shape_ = Shape::I;
+	Shape shape_ = Shape::shape_I;
+	Shape ChangeShape_[3];
 	//int num = rand();
 
 	//3Dモデル

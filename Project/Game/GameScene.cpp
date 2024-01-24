@@ -22,7 +22,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
-	worldTransform_.translation_.y = 5.0f;
 	worldTransform_.UpdateMatrix();
 	// 自機
 	player_ = new Player();
@@ -51,16 +50,11 @@ void GameScene::Update(GameManager* gameManager) {
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
-	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-		worldTransform_.translation_.x += 2.00f;
-	}
-	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-		worldTransform_.translation_.x -= 2.00f;
-	}
+	
 	// 自機
 	player_->Update();
 
-	blockManager_->Update(worldTransform_.translation_);
+	blockManager_->Update();
 
 	// 当たり判定
 	collisionManager_->CheckAllCollisions();
