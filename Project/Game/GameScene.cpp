@@ -73,6 +73,9 @@ void GameScene::Update(GameManager* gameManager) {
 		collisionManager_->SetColliderList(newBlock_);
 	}
 
+	// 当たり判定
+	collisionManager_->CheckAllCollisions();
+
 	if (input_->IsPushKeyEnter(DIK_C)) {
 		/*audio_->StopAudio(SceneSoundHandle_);*/
 		gameManager->ChangeScene(new GameClearScene);
@@ -82,8 +85,6 @@ void GameScene::Update(GameManager* gameManager) {
 		gameManager->ChangeScene(new GameOverScene);
 	}
 
-	// 当たり判定
-	collisionManager_->CheckAllCollisions();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
