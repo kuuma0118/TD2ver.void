@@ -133,6 +133,12 @@
     <Filter Include="ヘッダー ファイル\Project\Player">
       <UniqueIdentifier>{08976c55-26dd-48f6-b249-8b150ffbdac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\UI">
+      <UniqueIdentifier>{756a30ed-20e6-4ed6-bcb6-c27404d7aae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\UI">
+      <UniqueIdentifier>{dc5aa846-574d-438a-8490-451f221ee594}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -260,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="Project\Game\ClearScene\ClearScene.cpp">
       <Filter>ソース ファイル\Project\Game\ClearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\UIEffect.cpp">
+      <Filter>ソース ファイル\Project\GameObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="Project\Game\ClearScene\ClearScene.h">
       <Filter>ヘッダー ファイル\Project\Game\ClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\UIEffect.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

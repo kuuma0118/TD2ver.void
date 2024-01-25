@@ -83,10 +83,18 @@ private:// メンバ変数
 	//タイトルのテクスチャ
 	uint32_t titleTextureHandle_ = 0;
 
-	//テストUIのスプライト
-	std::unique_ptr<Sprite>  TestUISprite_ = nullptr;
-	//テストUIのテクスチャ
-	uint32_t TestUITextureHandle_ = 0;
+	//タイトルUIのスプライト
+	std::unique_ptr<Sprite>  TitleUISprite_ = nullptr;
+	//タイトルUIのテクスチャ
+	uint32_t TitleUITextureHandle_ = 0;
+
+	//モデル
+	std::unique_ptr<Model> model_ = nullptr;
+	//UIのスケール
+	Vector3 UIScale_ = { 1.0f,1.0f,1.0f };
+
+	//ボス
+	std::unique_ptr<UIEffect> uieffect_ = nullptr;
 
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_ = nullptr;

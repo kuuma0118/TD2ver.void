@@ -4,6 +4,7 @@
 #include "ClearScene.h"
 #include "Engine/Base/TextureManager.h"
 #include <cassert>
+#include <Project/GameObject/UIEffect.h>
 
 GameTitleScene::GameTitleScene() {};
 
@@ -16,6 +17,10 @@ GameTitleScene::~GameTitleScene() {
 
 void GameTitleScene::Initialize(GameManager* gameManager) {
 	
+	//モデルの作成
+	model_.reset(Model::CreateFromOBJ("Resources/UIobj", "untitled.obj"));
+	model_->GetDirectionalLight()->SetEnableLighting(false);
+
 	//TextureManagerのインスタンスを取得
 	textureManager_ = TextureManager::GetInstance();
 	//Inputのインスタンスを取得
@@ -47,9 +52,13 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
-    TestUITextureHandle_ = TextureManager::Load("Resources/Pictures/TestUI.png");
-	TestUISprite_.reset(Sprite::Create(TestUITextureHandle_,
+    TitleUITextureHandle_ = TextureManager::Load("Resources/Pictures/TitleUI_pressA.png");
+	TitleUISprite_.reset(Sprite::Create(TitleUITextureHandle_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f - 500.0f * 0.5f , 550.0f }));
+
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
@@ -58,39 +67,6 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 };
 
 void GameTitleScene::Update(GameManager* gameManager) {
-	//// 自機が死んだらシーンを切り替える
-	//if (player_->GetIsAlive()) {
-
-	//}
-	//// 自機
-	//player_->Update();
-	//worldTransform_.UpdateMatrix();
-	//viewProjection_.UpdateMatrix();
-
-	//for (Block* block_ : blocks_) {
-	//	block_->Update();
-	//}
-
-	//if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-	//	worldTransform_.translation_.x += 2.00f;
-	//}
-	//else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-	//	worldTransform_.translation_.x -= 2.00f;
-	//}
-
-	//if (input_->IsPushKeyEnter(DIK_SPACE)) {
-	//	// 落下速度
-	//	const float kBulletSpeed = 1.0f;
-	//	Vector3 velocity(0, kBulletSpeed, 0);
-	//	// 実体生成
-	//	Block* newBlock_ = new Block();
-	//	// 初期化
-	//	newBlock_->Initialize(worldTransform_);
-	//	//リストに登録
-	//	blocks_.push_back(newBlock_);
-	//	// 当たり判定に追加
-	//	collisionManager_->SetColliderList(newBlock_);
-	//}
 
 	if (input_->IsPushKeyEnter(DIK_G))
 	{
@@ -145,6 +121,9 @@ void GameTitleScene::Draw(GameManager* gameManager) {
 
 	Model::PreDraw();
 
+	//uieffectの描画
+	uieffect_->Draw(viewProjection_);
+
 	Model::PostDraw();
 
 #pragma endregion
@@ -155,7 +134,7 @@ void GameTitleScene::Draw(GameManager* gameManager) {
 
 	titleSprite_->Draw();
 
-	TestUISprite_->Draw();
+	TitleUISprite_->Draw();
 
 	transitionSprite_->Draw();
 
