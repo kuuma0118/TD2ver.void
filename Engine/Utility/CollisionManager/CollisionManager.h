@@ -21,6 +21,11 @@ public:
 	/// </summary>
 	void CheckAllCollisions();
 
+	/// <summary>
+	/// isDeleteがtrueかを確認
+	/// </summary>
+	void CheckDeleteColliderList();
+
 private:
 	/// <summary>
 	/// コライダー2つの衝突判定と応答

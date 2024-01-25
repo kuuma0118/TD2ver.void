@@ -38,21 +38,28 @@ public: // メンバ関数
 	/// User Method
 	/// 
 
-	// 純粋仮想関数
+	/// 純粋仮想関数
+	// 衝突応答
 	void OnCollision(Collider* collider) override;
-
-	/// <summary>
-	/// ワールド座標を取得
-	/// </summary>
-	/// <returns></returns>
+	// ワールド座標を取得
 	Vector3 GetWorldPosition() override;
 
 	// ImGui
 	void AdjustmentParameter();
-	//void OnCollision();
+ 
+	/// Getter
+	// ワールド座標を取得
 	Vector3 GetworldTransform_() { return worldTransform_.translation_; }
+	// 生存フラグを取得
+	bool GetIsAlive() { return isAlive_; }
+	// 落ちている最中かを取得
+	bool GetFoolFlag() { return foolflag; }
 
+	/// Setter
+	// ワールド座標を設定
 	void SetworldTransform_(Vector3 worldTransform) {this->worldTransform_.translation_ = worldTransform;}
+	// 生存フラグを設定
+	void SetIsAlive(bool isAlive) { isAlive_ = isAlive; }
 
 private: // メンバ変数
 	WorldTransform worldTransform_;
@@ -70,6 +77,8 @@ private: // メンバ変数
 
 	//落ちるフラグ
 	bool foolflag = false;
+	// 生存フラグ
+	bool isAlive_;
 
 	//速度
 	float foolSpeed_ = 0.2f;

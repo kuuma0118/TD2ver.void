@@ -16,9 +16,12 @@
 // GameObject
 #include "Project/Player/Player.h"
 #include "Project/Block/Block.h"
+#include "Project/Block/BlockManager.h"
 #include "Project/GoalLine/GoalLine.h"
 #include "Project/DeadLine/DeadLine.h"
-#include "Project//Block/BlockManager.h"
+#include "Project/FollowCamera/FollowCamera.h"
+
+#include <memory>
 
 class GameScene : public IScene {
 public:
@@ -72,12 +75,12 @@ private:// メンバ変数
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
 
-	//ブロック
-	//std::list<Block*> blocks_;
-	BlockManager* blockManager_;
-
+	// 自機に追従するカメラ
+	std::unique_ptr<FollowCamera> followCamera_;
 	// 自機
 	Player* player_;
+	//ブロック
+	BlockManager* blockManager_;
 	// ゴールライン
 	std::unique_ptr<GoalLine> goalLine_;
 	// デッドライン

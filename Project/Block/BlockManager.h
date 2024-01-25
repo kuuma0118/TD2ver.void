@@ -1,11 +1,8 @@
 #pragma once
 #include "Project/Block/Block.h"
 #include "Engine/Components/Input.h"
-
-
 // Utility
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
-
 
 enum class Shape {
 	I,	//I字ブロック
@@ -16,11 +13,12 @@ enum class Shape {
 	L,	//L字ブロック
 };
 
-
 class BlockManager{
-	
-
 public: // メンバ関数
+	///
+	/// Default Method
+	/// 
+
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -46,6 +44,10 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 	
+	///
+	/// User Method
+	/// 
+
 	/// <summary>
 	/// I字ブロック
 	/// </summary>
@@ -76,6 +78,32 @@ public: // メンバ関数
 	/// </summary>
 	void Shape_L(Vector3 velocity);
 
+	/// <summary>
+	/// 横一列に並んだらブロックが消える
+	/// </summary>
+	void CheckAndClearRow();
+
+	/// Getter
+
+	/// <summary>
+	/// ブロックが消えるかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsDelete() { return isDelete_; }
+
+	/// Setter
+
+	/// <summary>
+	/// ブロックが消えるかを設定
+	/// </summary>
+	/// <param name="isDelete"></param>
+	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
+
+private:// 定数
+	// マップの横幅
+	const float kMapLeftBottom = -9.0f;
+	// 
+
 private:
 	//Input
 	Input* input_ = nullptr;
@@ -91,7 +119,7 @@ private:
 	CollisionManager* collisionManager_ = nullptr;
 
 	//ブロックの間隔
-	float width = 2.001f;
+	float width = 2.00f;
 
 	//フェーズ
 	Shape shape_ = Shape::I;
@@ -102,5 +130,10 @@ private:
 
 	//テクスチャハンドル
 	uint32_t texHandle_ = 0;
+	// 
+	Vector2 clearBlock_[10];
+
+	// ブロックが消えるフラグ
+	bool isDelete_;
 };
 

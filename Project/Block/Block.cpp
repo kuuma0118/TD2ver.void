@@ -7,6 +7,7 @@ Block::Block(){
 }
 
 Block::~Block() {
+	//delete model_;
 }
 
 void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model) {
@@ -22,14 +23,17 @@ void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model*
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 
-	foolflag = false;
+	foolflag = true;
+
+	// 生存フラグ
+	isAlive_ = true;
 
 	// 当たり判定の形状を設定
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = {
-		{-0.9999f,-0.9999f,-0.9999f},
-		{0.9999f,0.9999f,0.9999f}
+		{-1.0f,-1.0f,-1.0f},
+		{1.0f,1.0f,1.0f}
 	};
 	SetAABB(aabb);
 }
@@ -44,6 +48,7 @@ void Block::Update() {
 	if (worldTransform_.translation_.y <= -5) {
 		float floor = worldTransform_.translation_.y - (-5);
 		worldTransform_.translation_.y -= floor;
+		foolflag = false;
 	}
 	worldTransform_.UpdateMatrix();
 }
@@ -75,7 +80,12 @@ void Block::OnCollision(Collider* collider) {
 		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 		worldTransform_.translation_.y += extrusion;
 		worldTransform_.UpdateMatrix();
+		foolflag = false;
 	}
+	else {
+		foolflag = true;
+	}
+
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {	
 		worldTransform_.UpdateMatrix();
@@ -89,12 +99,18 @@ void Block::OnCollision(Collider* collider) {
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
+		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+			SetIsRightHitAABB(true);
+		}
 	}
 	// 左
 	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();
+		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+			SetIsLeftHitAABB(true);
+		}
 	}
 }
 

@@ -18,12 +18,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
 
-	// カメラ
-	worldTransform_.Initialize();
-	viewProjection_.Initialize();
-	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
-	worldTransform_.translation_.y = 5.0f;
-	worldTransform_.UpdateMatrix();
 	// 自機
 	player_ = new Player();
 	player_->Initialize();
@@ -43,13 +37,32 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// ゲームオブジェクトをコライダーのリストに登録
 	collisionManager_->SetColliderList(player_);
 
+	// ブロックマネージャ
 	blockManager_ = new BlockManager();
 	blockManager_->Initialize(collisionManager_);
+	// ブロックの発生位置
+	worldTransform_.Initialize();
+	worldTransform_.translation_.y = 5.0f;
+	worldTransform_.UpdateMatrix();
+
+	// カメラ
+	viewProjection_.Initialize();
+	//viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
+	// 追従カメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+	followCamera_->SetTarget(&player_->GetWorldTransform());
 };
 
 void GameScene::Update(GameManager* gameManager) {
 	worldTransform_.UpdateMatrix();
+
 	viewProjection_.UpdateMatrix();
+	// カメラ
+	followCamera_->Update();
+	viewProjection_.matView_ = followCamera_->GetViewProjection().matView_;
+	viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
+	viewProjection_.TransferMatrix();
 
 	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
 		worldTransform_.translation_.x += 2.00f;
@@ -62,14 +75,21 @@ void GameScene::Update(GameManager* gameManager) {
 
 	blockManager_->Update(worldTransform_.translation_);
 
-	// 当たり判定
-	collisionManager_->CheckAllCollisions();
-
 	// ゴールライン
-	goalLine_->Update(viewProjection_);
+	goalLine_->Update(followCamera_->GetViewProjection());
 
 	// デッドライン
-	deadLine_->Update(viewProjection_);
+	deadLine_->Update(followCamera_->GetViewProjection());
+
+	// ブロックが消えていた場合
+	if (blockManager_->GetIsDelete()) {
+		// 自機をコライダーにセット
+		collisionManager_->SetColliderList(player_);
+		// ブロックの消えるフラグをfalse
+		blockManager_->SetIsDelete(false);
+	}
+	// 当たり判定
+	collisionManager_->CheckAllCollisions();
 
 	// 自機が死んだらゲームオーバー
 	if (player_->GetIsAlive()) {
@@ -79,6 +99,10 @@ void GameScene::Update(GameManager* gameManager) {
 	if (goalLine_->GetIsGoal()) {
 
 	}
+
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.001f, -100, 100);
+	ImGui::End();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -99,16 +123,16 @@ void GameScene::Draw(GameManager* gameManager) {
 	Model::PreDraw();
 
 	// 自機
-	player_->Draw(viewProjection_);
+	player_->Draw(followCamera_->GetViewProjection());
 
 	//ブロックの描画
-	blockManager_->Draw(viewProjection_);
+	blockManager_->Draw(followCamera_->GetViewProjection());
 
 	// ゴールライン
-	goalLine_->Draw3DLine(viewProjection_);
+	goalLine_->Draw3DLine(followCamera_->GetViewProjection());
 
 	// デッドライン
-	deadLine_->Draw3DLine(viewProjection_);
+	deadLine_->Draw3DLine(followCamera_->GetViewProjection());
 
 	Model::PostDraw();
 

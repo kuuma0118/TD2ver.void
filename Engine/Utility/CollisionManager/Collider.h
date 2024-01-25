@@ -100,6 +100,34 @@ public:
 	/// <param name="isActive"></param>
 	void SetIsTopHitAABB(bool isActive) { isTopHitAABB_ = isActive; }
 
+	/// <summary>
+	/// AABBの右面部分に当たったかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsRightHitAABB() { return isRightHitAABB_; }
+
+	/// <summary>
+	/// AABBの右面部分に当たったかを設定
+	/// </summary>
+	/// <param name="isActive"></param>
+	void SetIsRightHitAABB(bool isActive) { isRightHitAABB_ = isActive; }
+
+	/// <summary>
+	/// AABBの左面部分に当たったかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsLeftHitAABB() { return isLeftHitAABB_; }
+
+	/// <summary>
+	/// AABBの左面部分に当たったかを設定
+	/// </summary>
+	/// <param name="isActive"></param>
+	void SetIsLeftHitAABB(bool isActive) { isLeftHitAABB_ = isActive; }
+
+	bool GetIsDelete() { return isDelete_; }
+
+	void SetIsDelete(bool isActive) { isDelete_ = isActive; }
+
 private:
 	//衝突半径
 	float radius_ = 1.0f;
@@ -116,4 +144,11 @@ private:
 
 	// 上方向に当たってる
 	bool isTopHitAABB_ = false;
+	// 右方向に当たってる
+	bool isRightHitAABB_ = false;
+	// 左方向に当たってる
+	bool isLeftHitAABB_ = false;
+
+	// 解放処理をしてもよいか
+	bool isDelete_ = false;
 };
