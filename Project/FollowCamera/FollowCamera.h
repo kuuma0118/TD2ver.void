@@ -52,16 +52,6 @@ private:// 定数
 	const int kMaxEase = 3;
 
 private:
-	// イージングに必要な構造体
-	struct CameraEase {
-		// 現在のフレーム
-		float frame_;
-		// 進行度(1になったら終了)
-		float t_;
-		// 回数
-		int count_;
-	};
-
 	ViewProjection viewProjection_;
 	const WorldTransform* target_ = nullptr;
 	// 追従対象からカメラまでのオフセット

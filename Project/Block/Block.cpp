@@ -7,7 +7,6 @@ Block::Block(){
 }
 
 Block::~Block() {
-	//delete model_;
 }
 
 void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model) {
@@ -66,6 +65,7 @@ void Block::AdjustmentParameter()
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f, -6.28f, 6.28f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f, 0, 10);
 		ImGui::Text("isTopHit:%d", GetIsTopHitAABB());
+		ImGui::Text("isFool:%d", foolflag);
 		ImGui::TreePop();
 	}
 	ImGui::End();

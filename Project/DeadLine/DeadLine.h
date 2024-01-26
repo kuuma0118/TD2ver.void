@@ -55,6 +55,9 @@ public:
 	// 自機のアドレスを取得
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// ブロックが消えているかをアドレスで取得
+	void SetIsBlockDelete(bool isDelete) { isBlockDelete_ = isDelete; }
+
 private:// プライベートな関数
 	// デッドラインの点滅処理
 	void FlashUpdate();
@@ -87,9 +90,14 @@ private:
 	// ワールド座標
 	WorldTransform worldTransform_;
 
+	// ブロックが消えたかのフラグ
+	bool isBlockDelete_;
+
 private:// 定数
 	// デッドラインの上昇速度
 	const float kSpeed_ = 0.001f;
+	// デッドラインの下がる大きさ
+	const float kDownValue = 0.5f;
 
 	// デッドラインの開始位置
 	const float kStartDeadLine_ = -5;

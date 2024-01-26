@@ -100,9 +100,16 @@ public: // メンバ関数
 	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
 
 private:// 定数
-	// マップの横幅
-	const float kMapLeftBottom = -9.0f;
-	// 
+	// マップの左端
+	const float kMapLeftPos = 0.0f;
+	// マップの最底辺
+	const float kMapBottomPos = -5.0f;
+
+	/// 判定をとるブロックの数
+	// 横(ブロックが消えるのに必要な数)
+	const int kBlockNumX = 13;
+	// 縦
+	const int kBlockNumY = 20;
 
 private:
 	//Input
@@ -111,6 +118,10 @@ private:
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
+	// 壁
+	WorldTransform wallWorld_[2];
+	// 床
+	WorldTransform floorWorld_;
 
 	//ブロック
 	std::list<Block*> blocks_;
@@ -126,12 +137,16 @@ private:
 	//int num = rand();
 
 	//3Dモデル
+	// ブロック
 	std::unique_ptr<Model> model_{};
-
+	// 壁
+	std::unique_ptr<Model> wall_[2];
+	// 床
+	std::unique_ptr<Model> floor_;
 	//テクスチャハンドル
 	uint32_t texHandle_ = 0;
 	// 
-	Vector2 clearBlock_[10];
+	Vector2 clearBlock_[20];
 
 	// ブロックが消えるフラグ
 	bool isDelete_;

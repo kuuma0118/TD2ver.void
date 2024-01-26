@@ -22,16 +22,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_ = new Player();
 	player_->Initialize();
 
-	// ゴールライン
-	goalLine_ = std::make_unique<GoalLine>();
-	goalLine_->Initialize();
-	goalLine_->SetPlayer(player_);
-
-	// デッドライン
-	deadLine_ = std::make_unique<DeadLine>();
-	deadLine_->Initialize();
-	deadLine_->SetPlayer(player_);
-
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -52,6 +42,17 @@ void GameScene::Initialize(GameManager* gameManager) {
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 	followCamera_->SetTarget(&player_->GetWorldTransform());
+
+	// ゴールライン
+	goalLine_ = std::make_unique<GoalLine>();
+	goalLine_->Initialize();
+	goalLine_->SetPlayer(player_);
+
+	// デッドライン
+	deadLine_ = std::make_unique<DeadLine>();
+	deadLine_->Initialize();
+	deadLine_->SetPlayer(player_);
+	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -73,12 +74,14 @@ void GameScene::Update(GameManager* gameManager) {
 	// 自機
 	player_->Update();
 
+	// ブロックの形状、処理を管理
 	blockManager_->Update(worldTransform_.translation_);
 
 	// ゴールライン
 	goalLine_->Update(followCamera_->GetViewProjection());
 
 	// デッドライン
+	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
 	deadLine_->Update(followCamera_->GetViewProjection());
 
 	// ブロックが消えていた場合

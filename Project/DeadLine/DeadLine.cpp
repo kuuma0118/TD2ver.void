@@ -21,6 +21,8 @@ void DeadLine::Initialize() {
 	worldTransform_.translation_ = { 0,kStartDeadLine_,0 };
 	worldTransform_.scale_ = { 100,0.1f,1 };
 	worldTransform_.UpdateMatrix();
+
+	isBlockDelete_ = false;
 }
 
 void DeadLine::Update(const ViewProjection& viewProjection) {
@@ -32,6 +34,11 @@ void DeadLine::Update(const ViewProjection& viewProjection) {
 	// 上昇処理
 	worldTransform_.translation_.y += kSpeed_;
 	worldTransform_.UpdateMatrix();
+
+	// ブロックが消されたらデッドラインを下げる
+	if (isBlockDelete_) {
+		worldTransform_.translation_.y -= kDownValue;
+	}
 
 	// 3Dデッドラインからスクリーン座標を算出
 	WorldToScreenConversion(viewProjection);
