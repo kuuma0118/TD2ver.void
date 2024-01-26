@@ -28,8 +28,8 @@ void HeadBlock::Initialize(WorldTransform worldTransform, uint32_t texHandle, Mo
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = {
-		{-0.9999f,-1.0f,-0.9999f},
-		{0.9999f,1.0f,0.9999f}
+		{-1.0f,-1.0f,-1.0f},
+		{1.0f,1.0f,1.0f}
 	};
 	SetAABB(aabb);
 }
@@ -39,11 +39,16 @@ void HeadBlock::Update(){
 
 	AdjustmentParameter();
 
-	worldTransform_.translation_.y -= foolSpeed_;
+	// 一度着地したら動かないようにする
+	if (foolflag) {
+		worldTransform_.translation_.y -= foolSpeed_;
+	}
 
+	// ブロックの行ける最低地点
 	if (worldTransform_.translation_.y <= -5) {
 		float floor = worldTransform_.translation_.y - (-5);
 		worldTransform_.translation_.y -= floor;
+		foolflag = false;
 	}
 	worldTransform_.UpdateMatrix();
 }
@@ -73,6 +78,7 @@ void HeadBlock::OnCollision(Collider* collider){
 		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 		worldTransform_.translation_.y += extrusion;
 		worldTransform_.UpdateMatrix();
+		foolflag = false;
 	}
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {

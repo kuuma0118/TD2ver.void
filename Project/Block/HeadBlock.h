@@ -49,19 +49,23 @@ public: // メンバ関数
 
 	// ImGui
 	void AdjustmentParameter();
-	//void OnCollision();
-	Vector3 GetworldTransform_() { return worldTransform_.translation_; }
 
+	/// Getter
+	// ワールド座標を取得
+	Vector3 GetworldTransform_() { return worldTransform_.translation_; }
+	// 落ちている最中かを取得
+	bool GetFoolFlag() { return foolflag; }
+
+	/// Setter
+	// ワールド座標を設定
 	void SetworldTransform_(Vector3 worldTransform) { this->worldTransform_.translation_ = worldTransform; }
 
 private: // メンバ変数
-
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
 	//3Dモデル
 	Model* model_{};
-
 
 	//キーボード入力
 	Input* input_ = nullptr;

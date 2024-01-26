@@ -140,7 +140,6 @@ private:
 	std::list<Block*> blocks_;
 	std::list<HeadBlock*> headblocks_;
 
-
 	// 当たり判定
 	CollisionManager* collisionManager_ = nullptr;
 
