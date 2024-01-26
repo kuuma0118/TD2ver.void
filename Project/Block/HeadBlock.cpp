@@ -22,7 +22,7 @@ void HeadBlock::Initialize(WorldTransform worldTransform, uint32_t texHandle, Mo
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 
-	foolflag = false;
+	foolflag = true;
 
 	// 当たり判定の形状を設定
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
