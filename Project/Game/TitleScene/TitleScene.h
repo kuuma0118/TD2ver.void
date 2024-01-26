@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameTitleScene();
+	~GameTitleScene() override;
 
 	/// <summary>
 	/// 初期化

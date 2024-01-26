@@ -24,7 +24,7 @@ void GoalLine::Initialize() {
 
 void GoalLine::Update(const ViewProjection& viewProjection) {
 	// ゴールラインより自機が上に行ったらクリア
-	if (player_->GetWorldPosition().y <= worldTransform_.translation_.y) {
+	if (player_->GetWorldPosition().y >= worldTransform_.translation_.y) {
 		isGoal_ = true;
 	}
 

@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameClearScene();
+	~GameClearScene() override;
 
 	/// <summary>
 	/// 初期化

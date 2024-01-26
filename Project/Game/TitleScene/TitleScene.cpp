@@ -36,8 +36,8 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 	worldTransform_.translation_.y = 5.0f;
 
 	// 自機
-	player_ = new Player();
-	player_->Initialize();
+	//player_ = new Player();
+	//player_->Initialize();
 
 	//タイトル
 	titleTextureHandle_ = TextureManager::Load("Resources/Pictures/title.png");
@@ -48,46 +48,12 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
 	// 当たり判定のインスタンスを生成
-	collisionManager_ = new CollisionManager();
+	//collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
-	collisionManager_->SetColliderList(player_);
+	//collisionManager_->SetColliderList(player_);
 };
 
 void GameTitleScene::Update(GameManager* gameManager) {
-	//// 自機が死んだらシーンを切り替える
-	//if (player_->GetIsAlive()) {
-
-	//}
-	//// 自機
-	//player_->Update();
-	//worldTransform_.UpdateMatrix();
-	//viewProjection_.UpdateMatrix();
-
-	//for (Block* block_ : blocks_) {
-	//	block_->Update();
-	//}
-
-	//if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-	//	worldTransform_.translation_.x += 2.00f;
-	//}
-	//else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-	//	worldTransform_.translation_.x -= 2.00f;
-	//}
-
-	//if (input_->IsPushKeyEnter(DIK_SPACE)) {
-	//	// 落下速度
-	//	const float kBulletSpeed = 1.0f;
-	//	Vector3 velocity(0, kBulletSpeed, 0);
-	//	// 実体生成
-	//	Block* newBlock_ = new Block();
-	//	// 初期化
-	//	newBlock_->Initialize(worldTransform_);
-	//	//リストに登録
-	//	blocks_.push_back(newBlock_);
-	//	// 当たり判定に追加
-	//	collisionManager_->SetColliderList(newBlock_);
-	//}
-
 	if (input_->IsPushKeyEnter(DIK_G))
 	{
 		if (isTransitionEnd_) {

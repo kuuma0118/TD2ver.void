@@ -3,13 +3,13 @@
 #include <math.h>
 #include <cassert>
 
-HeadBlock::HeadBlock(){
+HeadBlock::HeadBlock() {
 }
 
-HeadBlock::~HeadBlock(){
+HeadBlock::~HeadBlock() {
 }
 
-void HeadBlock::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model){
+void HeadBlock::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model) {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	worldTransform_.translation_ = worldTransform.translation_;
@@ -34,7 +34,7 @@ void HeadBlock::Initialize(WorldTransform worldTransform, uint32_t texHandle, Mo
 	SetAABB(aabb);
 }
 
-void HeadBlock::Update(){
+void HeadBlock::Update() {
 	viewProjection_.UpdateMatrix();
 
 	AdjustmentParameter();
@@ -53,11 +53,11 @@ void HeadBlock::Update(){
 	worldTransform_.UpdateMatrix();
 }
 
-void HeadBlock::Draw(ViewProjection viewProjection_){
+void HeadBlock::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, texHandle_);
 }
 
-void HeadBlock::AdjustmentParameter(){
+void HeadBlock::AdjustmentParameter() {
 #ifdef _DEBUG
 	ImGui::Begin("Block");
 	if (ImGui::TreeNode("worldTransform")) {
@@ -70,7 +70,7 @@ void HeadBlock::AdjustmentParameter(){
 #endif // DEBUG
 }
 
-void HeadBlock::OnCollision(Collider* collider){
+void HeadBlock::OnCollision(Collider* collider) {
 	float theta = atan2(worldTransform_.translation_.y - collider->GetWorldPosition().y, worldTransform_.translation_.x - collider->GetWorldPosition().x);
 
 	// 下
@@ -80,6 +80,7 @@ void HeadBlock::OnCollision(Collider* collider){
 		worldTransform_.UpdateMatrix();
 		foolflag = false;
 	}
+
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {
 		worldTransform_.UpdateMatrix();
@@ -93,16 +94,22 @@ void HeadBlock::OnCollision(Collider* collider){
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
+		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+			SetIsRightHitAABB(true);
+		}
 	}
 	// 左
 	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();
+		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+			SetIsLeftHitAABB(true);
+		}
 	}
 }
 
-Vector3 HeadBlock::GetWorldPosition(){
+Vector3 HeadBlock::GetWorldPosition() {
 	Vector3 result = {
 		worldTransform_.matWorld_.m[3][0],
 		worldTransform_.matWorld_.m[3][1],

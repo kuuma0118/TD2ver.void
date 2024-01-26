@@ -8,9 +8,8 @@
 GameScene::GameScene() {};
 
 GameScene::~GameScene() {
-	delete player_;
-	delete blockManager_;
-	
+	//delete player_;
+	//delete blockManager_;
 };
 
 void GameScene::Initialize(GameManager* gameManager) {
@@ -27,17 +26,17 @@ void GameScene::Initialize(GameManager* gameManager) {
 	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
 	worldTransform_.UpdateMatrix();
 	// 自機
-	player_ = new Player();
+	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
 	// 当たり判定のインスタンスを生成
-	collisionManager_ = new CollisionManager();
+	collisionManager_ = std::make_unique<CollisionManager>();
 	// ゲームオブジェクトをコライダーのリストに登録
-	collisionManager_->SetColliderList(player_);
+	collisionManager_->SetColliderList(player_.get());
 
 	// ブロックマネージャ
-	blockManager_ = new BlockManager();
-	blockManager_->Initialize(collisionManager_);
+	blockManager_ = std::make_unique<BlockManager>();
+	blockManager_->Initialize(collisionManager_.get());
 	// ブロックの発生位置
 	worldTransform_.Initialize();
 	worldTransform_.translation_.y = 5.0f;
@@ -54,12 +53,12 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// ゴールライン
 	goalLine_ = std::make_unique<GoalLine>();
 	goalLine_->Initialize();
-	goalLine_->SetPlayer(player_);
+	goalLine_->SetPlayer(player_.get());
 
 	// デッドライン
 	deadLine_ = std::make_unique<DeadLine>();
 	deadLine_->Initialize();
-	deadLine_->SetPlayer(player_);
+	deadLine_->SetPlayer(player_.get());
 	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
 };
 
@@ -73,7 +72,6 @@ void GameScene::Update(GameManager* gameManager) {
 	viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
 	viewProjection_.TransferMatrix();
 
-	
 	// 自機
 	player_->Update();
 
@@ -89,7 +87,7 @@ void GameScene::Update(GameManager* gameManager) {
 	// ブロックが消えていた場合
 	if (blockManager_->GetIsDelete()) {
 		// 自機をコライダーにセット
-		collisionManager_->SetColliderList(player_);
+		collisionManager_->SetColliderList(player_.get());
 		// ブロックの消えるフラグをfalse
 		blockManager_->SetIsDelete(false);
 	}
@@ -97,44 +95,18 @@ void GameScene::Update(GameManager* gameManager) {
 	collisionManager_->CheckAllCollisions();
 
 	// 自機が死んだらゲームオーバー
-	if (player_->GetIsAlive()) {
-
-	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-		worldTransform_.translation_.x += 2.00f;
-	}
-	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-		worldTransform_.translation_.x -= 2.00f;
-	}
-	// ゴールラインに達したらクリア
-	if (goalLine_->GetIsGoal()) {
-
-	if (input_->IsPushKeyEnter(DIK_SPACE)) {
-		// 落下速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, kBulletSpeed, 0);
-		// 実体生成
-		Block* newBlock_ = new Block();
-		// 初期化
-		newBlock_->Initialize(worldTransform_);
-		//リストに登録
-		blocks_.push_back(newBlock_);
-		// 当たり判定に追加
-		collisionManager_->SetColliderList(newBlock_);
-	}
-
-
-	if (input_->IsPushKeyEnter(DIK_C)) {
-		/*audio_->StopAudio(SceneSoundHandle_);*/
-		gameManager->ChangeScene(new GameClearScene);
-	}
-	else if (input_->IsPushKeyEnter(DIK_O)) {
-	/*	audio_->StopAudio(SceneSoundHandle_);*/
+	if (!player_->GetIsAlive()) {
 		gameManager->ChangeScene(new GameOverScene);
 	}
-
+	// ゴールラインに達したらクリア
+	else if (goalLine_->GetIsGoal()) {
+		gameManager->ChangeScene(new GameClearScene);
+	}
+#ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.001f, -100, 100);
 	ImGui::End();
+#endif
 };
 
 void GameScene::Draw(GameManager* gameManager) {

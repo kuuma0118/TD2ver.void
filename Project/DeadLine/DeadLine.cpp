@@ -27,7 +27,7 @@ void DeadLine::Initialize() {
 
 void DeadLine::Update(const ViewProjection& viewProjection) {
 	// 敗北条件
-	if (player_->GetWorldPosition().y + player_->GetAABB().max.y <= worldTransform_.translation_.y) {
+	if (player_->GetWorldPosition().y + player_->GetAABB().max.y + 0.25f <= worldTransform_.translation_.y) {
 		player_->SetIsAlive(false);
 	}
 
