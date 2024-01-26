@@ -18,6 +18,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
 
+	// カメラ
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
+	worldTransform_.UpdateMatrix();
 	// 自機
 	player_ = new Player();
 	player_->Initialize();
@@ -65,17 +70,11 @@ void GameScene::Update(GameManager* gameManager) {
 	viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
 	viewProjection_.TransferMatrix();
 
-	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
-		worldTransform_.translation_.x += 2.00f;
-	}
-	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
-		worldTransform_.translation_.x -= 2.00f;
-	}
+	
 	// 自機
 	player_->Update();
 
-	// ブロックの形状、処理を管理
-	blockManager_->Update(worldTransform_.translation_);
+	blockManager_->Update();
 
 	// ゴールライン
 	goalLine_->Update(followCamera_->GetViewProjection());

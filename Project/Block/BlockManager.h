@@ -1,16 +1,19 @@
 #pragma once
 #include "Project/Block/Block.h"
+#include "Project/Block/HeadBlock.h"
 #include "Engine/Components/Input.h"
 // Utility
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
 
 enum class Shape {
-	I,	//I字ブロック
-	T,	//T字ブロック
-	S,	//S字ブロック
-	O,	//O字ブロック
-	J,	//J字ブロック
-	L,	//L字ブロック
+	shape_I,	//I字ブロック
+	shape_T,	//T字ブロック
+	shape_S,	//S字ブロック
+	shape_O,	//O字ブロック
+	shape_J,	//J字ブロック
+	shape_L,	//L字ブロック
+	shape_ten,	//一つのブロック
+	shape_side	//横に連なるブロック
 };
 
 class BlockManager{
@@ -37,7 +40,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update(Vector3 velocity);
+	void Update();
 
 	/// <summary>
 	/// 描画
@@ -78,6 +81,16 @@ public: // メンバ関数
 	/// </summary>
 	void Shape_L(Vector3 velocity);
 
+	/// <summary>
+	/// 一つのブロック
+	/// </summary>
+	void Shape_Ten(Vector3 velocity);
+
+	/// <summary>
+	/// 横に連なるブロック
+	/// </summary>
+	/// <param name="velocity"></param>
+	void shape_side(Vector3 velocity);
 	/// <summary>
 	/// 横一列に並んだらブロックが消える
 	/// </summary>
@@ -125,15 +138,18 @@ private:
 
 	//ブロック
 	std::list<Block*> blocks_;
+	std::list<HeadBlock*> headblocks_;
+
 
 	// 当たり判定
 	CollisionManager* collisionManager_ = nullptr;
 
 	//ブロックの間隔
-	float width = 2.00f;
+	float width = 2.0f;
 
 	//フェーズ
-	Shape shape_ = Shape::I;
+	Shape shape_ = Shape::shape_I;
+	Shape ChangeShape_[3];
 	//int num = rand();
 
 	//3Dモデル
@@ -144,7 +160,9 @@ private:
 	// 床
 	std::unique_ptr<Model> floor_;
 	//テクスチャハンドル
-	uint32_t texHandle_ = 0;
+	uint32_t BlockTexHandle_ = 0;
+	uint32_t hardBlockTexHandle_ = 0;
+
 	// 
 	Vector2 clearBlock_[20];
 
