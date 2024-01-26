@@ -1,53 +1,101 @@
 #include "TitleScene.h"
-#include "SelectScene.h"
 #include "GameManager.h"
 #include "GameScene.h"
-#include "Components/PostProcess.h"
+#include "ClearScene.h"
+#include "Engine/Base/TextureManager.h"
 #include <cassert>
-#include <algorithm>
 
 GameTitleScene::GameTitleScene() {};
 
-GameTitleScene::~GameTitleScene() {};
+GameTitleScene::~GameTitleScene() {
+	//delete player_;
+	//for (Block* block_ : blocks_) {
+	//	delete block_;
+	//}
+};
 
-void GameTitleScene::Initialize(GameManager* gameManager)
-{
+void GameTitleScene::Initialize(GameManager* gameManager) {
+	
 	//TextureManagerのインスタンスを取得
 	textureManager_ = TextureManager::GetInstance();
-	//Audioのインスタンスを取得
-	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+	//オーディオクラスのインスタンスを取得
+	audio_ = Audio::GetInstance();
+	//ポストプロセスのインスタンスを取得
+	postProcess_ = PostProcess::GetInstance();
 
 	titleSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Title.wav");
 
-	viewProjection_.UpdateMatrix();
-
 	audio_->SoundPlayWave(titleSoundHandle_, true);
 
-	//ポストプロセスの有効化
-	PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	PostProcess::GetInstance()->SetIsBloomActive(true);
+	// カメラ
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
+	worldTransform_.translation_.y = 5.0f;
 
-	//パーティクルモデルの作成
-	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
-	particleSystem_ = std::make_unique<ParticleSystem>();
-	particleSystem_->Initialize();
-	textureHandle_ = TextureManager::Load("Resources/Particle.png");
+	// 自機
+	player_ = new Player();
+	player_->Initialize();
+
+	//タイトル
+	titleTextureHandle_ = TextureManager::Load("Resources/Pictures/title.png");
+	titleSprite_.reset(Sprite::Create(titleTextureHandle_, { 0.0f,0.0f }));
+	//スプライトの生成
+	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
+	transitionSprite_->SetColor(transitionColor_);
+	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
+
+	// 当たり判定のインスタンスを生成
+	collisionManager_ = new CollisionManager();
+	// ゲームオブジェクトをコライダーのリストに登録
+	collisionManager_->SetColliderList(player_);
 };
 
-void GameTitleScene::Update(GameManager* gameManager)
-{
-	Input::GetInstance()->GetJoystickState(joyState_);
+void GameTitleScene::Update(GameManager* gameManager) {
+	//// 自機が死んだらシーンを切り替える
+	//if (player_->GetIsAlive()) {
 
-	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	//}
+	//// 自機
+	//player_->Update();
+	//worldTransform_.UpdateMatrix();
+	//viewProjection_.UpdateMatrix();
+
+	//for (Block* block_ : blocks_) {
+	//	block_->Update();
+	//}
+
+	//if (input_->IsPushKeyEnter(DIK_RIGHT)) {
+	//	worldTransform_.translation_.x += 2.00f;
+	//}
+	//else if (input_->IsPushKeyEnter(DIK_LEFT)) {
+	//	worldTransform_.translation_.x -= 2.00f;
+	//}
+
+	//if (input_->IsPushKeyEnter(DIK_SPACE)) {
+	//	// 落下速度
+	//	const float kBulletSpeed = 1.0f;
+	//	Vector3 velocity(0, kBulletSpeed, 0);
+	//	// 実体生成
+	//	Block* newBlock_ = new Block();
+	//	// 初期化
+	//	newBlock_->Initialize(worldTransform_);
+	//	//リストに登録
+	//	blocks_.push_back(newBlock_);
+	//	// 当たり判定に追加
+	//	collisionManager_->SetColliderList(newBlock_);
+	//}
+
+	if (input_->IsPushKeyEnter(DIK_G))
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				audio_->SoundPlayWave(soundHandle_, false);
+				/*audio_->SoundPlayWave(SelectsoundHandle_, false);*/
 			}
 		}
 	}
@@ -74,98 +122,38 @@ void GameTitleScene::Update(GameManager* gameManager)
 
 		}
 	}
-
-	if (input_->IsPushKeyEnter(DIK_P)) {
-		////設定したい項目だけ.Setを呼び出す
-		//ParticleEmitter* newParticleEmitter = EmitterBuilder()
-		//	.SetParticleType(ParticleEmitter::ParticleType::kScale)
-		//	.SetTranslation({ 0.0f,0.0f,0.0f })
-		//	.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-		//	.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-		//	.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
-		//	.SetAzimuth(0.0f, 360.0f)
-		//	.SetElevation(0.0f, 0.0f)
-		//	.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
-		//	.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
-		//	.SetLifeTime(0.1f, 1.0f)
-		//	.SetCount(100)
-		//	.SetFrequency(4.0f)
-		//	.SetDeleteTime(3.0f)
-		//	.Build();
-		//particleSystem_->AddParticleEmitter(newParticleEmitter);
-
-		ParticleEmitter* newParticleEmitter = EmitterBuilder()
-			.SetParticleType(ParticleEmitter::ParticleType::kScale)
-			.SetTranslation({ 0.0f,0.0f,0.0f })
-			.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-			.SetScale({ 0.2f, 0.2f,0.2f }, { 0.25f ,0.25f ,0.25f })
-			.SetAzimuth(0.0f, 360.0f)
-			.SetElevation(0.0f, 0.0f)
-			.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
-			.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
-			.SetLifeTime(0.1f, 1.0f)
-			.SetCount(100)
-			.SetFrequency(4.0f)
-			.SetDeleteTime(3.0f)
-			.Build();
-		particleSystem_->AddParticleEmitter(newParticleEmitter);
-
-		////火花
-		//ParticleEmitter* particleEmitter = EmitterBuilder()
-		//	.SetTranslation({0.0f,0.0f,0.0f})
-		//	.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-		//	.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-		//	.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
-		//	.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
-		//	.SetAzimuth(250.0f/* - (involvedCount_ * 5)*/, 290.0f/* + (involvedCount_ * 5)*/)
-		//	.SetElevation(0.0f, 0.0f)
-		//	.SetVelocity({ 0.2f,0.2f,0.2f }, { 0.4f,0.4f,0.4f })
-		//	.SetLifeTime(0.4f, 0.6f)
-		//	.SetCount(50/* + (involvedCount_ * 50)*/)
-		//	.SetFrequency(2.0f)
-		//	.SetDeleteTime(1.0f)
-		//	.Build();
-		//particleSystem_->AddParticleEmitter(particleEmitter);
-	}
-
-	particleSystem_->Update();
-
-	playerWorldTransform_.UpdateMatrix();
-	weaponWorldTransform_.UpdateMatrix();
-
-	viewProjection_.UpdateMatrix();
 };
 
-void GameTitleScene::Draw(GameManager* gameManager)
-{
-	//背景スプライトの描画
+void GameTitleScene::Draw(GameManager* gameManager) {
+
+#pragma region 背景スプライトの描画
+
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	Sprite::PostDraw();
 
+#pragma endregion
+
+	//深度バッファのクリア
 	FCS::GetInstance()->ClearDepthBuffer();
 
-	PostProcess::GetInstance()->PreDraw();
+#pragma region モデルの描画
 
-	//モデルの描画
 	Model::PreDraw();
 
 	Model::PostDraw();
 
-	//パーティクルの描画
-	ParticleModel::PreDraw();
+#pragma endregion
 
-	particleModel_->Draw(particleSystem_.get(), viewProjection_, textureHandle_);
+#pragma region スプライトの描画
 
-	ParticleModel::PostDraw();
-
-	PostProcess::GetInstance()->PostDraw();
-
-	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	titleSprite_->Draw();
 
 	transitionSprite_->Draw();
 
 	Sprite::PostDraw();
+
+#pragma endregion
 };

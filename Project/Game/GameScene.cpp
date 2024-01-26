@@ -1,4 +1,7 @@
 #include "GameScene.h"
+#include "GameManager.h"
+#include "ClearScene.h"
+#include "OverScene.h"
 #include "Engine/Base/TextureManager.h"
 #include <cassert>
 
@@ -96,10 +99,37 @@ void GameScene::Update(GameManager* gameManager) {
 	// 自機が死んだらゲームオーバー
 	if (player_->GetIsAlive()) {
 
+	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
+		worldTransform_.translation_.x += 2.00f;
+	}
+	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
+		worldTransform_.translation_.x -= 2.00f;
 	}
 	// ゴールラインに達したらクリア
 	if (goalLine_->GetIsGoal()) {
 
+	if (input_->IsPushKeyEnter(DIK_SPACE)) {
+		// 落下速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, kBulletSpeed, 0);
+		// 実体生成
+		Block* newBlock_ = new Block();
+		// 初期化
+		newBlock_->Initialize(worldTransform_);
+		//リストに登録
+		blocks_.push_back(newBlock_);
+		// 当たり判定に追加
+		collisionManager_->SetColliderList(newBlock_);
+	}
+
+
+	if (input_->IsPushKeyEnter(DIK_C)) {
+		/*audio_->StopAudio(SceneSoundHandle_);*/
+		gameManager->ChangeScene(new GameClearScene);
+	}
+	else if (input_->IsPushKeyEnter(DIK_O)) {
+	/*	audio_->StopAudio(SceneSoundHandle_);*/
+		gameManager->ChangeScene(new GameOverScene);
 	}
 
 	ImGui::Begin("Camera");
