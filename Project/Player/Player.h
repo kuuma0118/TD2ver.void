@@ -143,5 +143,5 @@ private:
 	uint32_t hitCounter_;
 private:// 定数
 	// 移動量
-	const float kSpeed = 0.02f;
+	const float kSpeed = 0.04f;
 };

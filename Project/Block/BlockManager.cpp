@@ -141,11 +141,12 @@ void BlockManager::Update() {
 
 	}
 
-	for (Block* block_ : blocks_) {
-		block_->Update();
-	}
+
 	for (HeadBlock* headblock_ : headblocks_) {
 		headblock_->Update();
+	}
+	for (Block* block_ : blocks_) {
+		block_->Update();
 	}
 
 	// 消せるブロックがあるかをチェックしあれば消す
@@ -799,9 +800,9 @@ void BlockManager::CheckAndClearRow() {
 		// 落下するブロック
 		for (Block* block : blocks_) {
 			if (!block->GetFoolFlag()) {
-				if ((int)clearBlock_[i].y == (int)block->GetWorldPosition().y) {
+				if ((int)clearBlock_[i].y == static_cast<int>(std::round(block->GetWorldPosition().y))) {
 					for (int j = 0; j < kBlockNumX; j++) {
-						if ((int)clearBlock_[j].x == (int)block->GetWorldPosition().x) {
+						if ((int)clearBlock_[j].x == static_cast<int>(std::round(block->GetWorldPosition().x))) {
 							count++;
 							block->SetIsAlive(false);
 						}
@@ -812,9 +813,9 @@ void BlockManager::CheckAndClearRow() {
 		// 消えないブロック
 		for (HeadBlock* headBlock : headblocks_) {
 			if (!headBlock->GetFoolFlag()) {
-				if ((int)clearBlock_[i].y == (int)headBlock->GetWorldPosition().y) {
+				if ((int)clearBlock_[i].y == static_cast<int>(std::round(headBlock->GetWorldPosition().y))) {
 					for (int j = 0; j < kBlockNumX; j++) {
-						if ((int)clearBlock_[j].x == (int)headBlock->GetWorldPosition().x) {
+						if ((int)clearBlock_[j].x == static_cast<int>(std::round(headBlock->GetWorldPosition().x))) {
 							count++;
 						}
 					}

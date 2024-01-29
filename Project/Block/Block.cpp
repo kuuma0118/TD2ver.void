@@ -31,8 +31,8 @@ void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model*
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = {
-		{-1.0f,-1.0f,-1.0f},
-		{1.0f,1.0f,1.0f}
+		{-0.99999f,-1.0f,-0.99999f},
+		{0.99999f,1.0f,0.99999f}
 	};
 	SetAABB(aabb);
 }
@@ -79,11 +79,13 @@ void Block::OnCollision(Collider* collider) {
 	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
 		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 		worldTransform_.translation_.y += extrusion;
+		int y = static_cast<int>(std::round(worldTransform_.translation_.y));
+		worldTransform_.translation_.y = y;
 		worldTransform_.UpdateMatrix();
 		foolflag = false;
 	}
 	else {
-		foolflag = true;
+		//foolflag = true;
 	}
 
 	// 上

@@ -9,7 +9,6 @@
 #include "Engine/Components/Input.h"
 #include "Engine/Components/Audio.h"
 #include "Engine/Components/PostProcess.h"
-#include "Project/Components/GamePad.h"
 #include <memory>
 
 class GameManager {
@@ -48,8 +47,6 @@ private:
 	ImGuiManager* imguiManager_ = nullptr;
 	//入力クラス
 	Input* input_ = nullptr;
-	// ゲームパッドクラス
-	GamePad* gamePad_ = nullptr;
 	//オーディオクラス
 	Audio* audio_ = nullptr;
 	//ポストプロセス

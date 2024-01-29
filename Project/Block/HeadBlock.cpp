@@ -28,8 +28,8 @@ void HeadBlock::Initialize(WorldTransform worldTransform, uint32_t texHandle, Mo
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = {
-		{-1.0f,-1.0f,-1.0f},
-		{1.0f,1.0f,1.0f}
+		{-0.99999f,-1.0f,-0.99999f},
+		{0.99999f,1.0f,0.99999f}
 	};
 	SetAABB(aabb);
 }
@@ -59,11 +59,13 @@ void HeadBlock::Draw(ViewProjection viewProjection_) {
 
 void HeadBlock::AdjustmentParameter() {
 #ifdef _DEBUG
-	ImGui::Begin("Block");
+	ImGui::Begin("HeadBlock");
 	if (ImGui::TreeNode("worldTransform")) {
 		ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f, 100, 100);
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f, -6.28f, 6.28f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f, 0, 10);
+		ImGui::Text("isTopHit:%d", GetIsTopHitAABB());
+		ImGui::Text("isFool:%d", foolflag);
 		ImGui::TreePop();
 	}
 	ImGui::End();
@@ -77,6 +79,8 @@ void HeadBlock::OnCollision(Collider* collider) {
 	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
 		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 		worldTransform_.translation_.y += extrusion;
+		int y = static_cast<int>(std::round(worldTransform_.translation_.y));
+		worldTransform_.translation_.y = y;
 		worldTransform_.UpdateMatrix();
 		foolflag = false;
 	}
@@ -84,9 +88,9 @@ void HeadBlock::OnCollision(Collider* collider) {
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {
 		worldTransform_.UpdateMatrix();
-		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+		//if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 			SetIsTopHitAABB(true);
-		}
+		//}
 	}
 
 	// 右
@@ -94,18 +98,18 @@ void HeadBlock::OnCollision(Collider* collider) {
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
-		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+		//if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 			SetIsRightHitAABB(true);
-		}
+		//}
 	}
 	// 左
 	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();
-		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+		//if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 			SetIsLeftHitAABB(true);
-		}
+		//}
 	}
 }
 

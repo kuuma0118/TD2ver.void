@@ -1,9 +1,5 @@
 #include "GameManager.h"
 #include "GameScene.h"
-#include "TitleScene.h"
-#include "OverScene.h"
-#include "ClearScene.h"
-#include "SelectScene.h"
 #include "Engine/Utility/GlobalVariables.h"
 
 GameManager::GameManager() {
@@ -27,9 +23,6 @@ GameManager::GameManager() {
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
-	// ゲームパッドクラスの初期化
-	gamePad_ = GamePad::GetInstance();
-
 	//オーディオクラスの初期化
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
@@ -48,7 +41,7 @@ GameManager::GameManager() {
 	GlobalVariables::GetInstance()->LoadFiles();
 
 	//シーンの初期化
-	currentScene_ = new	GameTitleScene();
+	currentScene_ = new GameScene();
 	currentScene_->Initialize(this);
 }
 
@@ -62,6 +55,16 @@ GameManager::~GameManager() {
 	Model::Release();
 	//ポストプロセスの解放
 	PostProcess::DeleteInstance();
+	//オーディオの解放
+	audio_->Finalize();
+	//ImGuiの解放
+	imguiManager_->ShutDown();
+	//TextureManagerの解放
+	TextureManager::DeleteInstnace();
+	//DirectXCommonの解放
+	FCS::DeleteInstance();
+	//ゲームウィンドウを閉じる
+	winApp_->CloseGameWindow();
 }
 
 void GameManager::ChangeScene(IScene* newScene) {
@@ -82,8 +85,6 @@ void GameManager::run() {
 		imguiManager_->Begin();
 		//入力クラスの更新
 		input_->Update();
-		// ゲームパッドクラスの更新
-		gamePad_->Update();
 		//グローバル変数の更新
 		GlobalVariables::GetInstance()->Update();
 		//ゲームシーンの更新
@@ -102,10 +103,4 @@ void GameManager::run() {
 		//描画終了
 		dxCommon_->PostDraw();
 	}
-	//ImGuiの解放処理
-	imguiManager_->ShutDown();
-	//Audioの解放処理
-	audio_->Finalize();
-	//ゲームウィンドウ削除
-	winApp_->CloseGameWindow();
 }
