@@ -47,6 +47,14 @@ void GameOverScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
+	RestartUITextureHandle_ = TextureManager::Load("Resources/Pictures/RestartUI.png");
+	RestartUISprite_.reset(Sprite::Create(RestartUITextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 550.0f * 0.5f , 500.0f }));
+
+	ReturnTitleUITextureHandle_ = TextureManager::Load("Resources/Pictures/ReturnTitleUI.png");
+	ReturnTitleUISprite_.reset(Sprite::Create(ReturnTitleUITextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 490.0f * 0.5f , 570.0f }));
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -150,6 +158,10 @@ void GameOverScene::Draw(GameManager* gameManager) {
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	overSprite_->Draw();
+
+	RestartUISprite_->Draw();
+
+	ReturnTitleUISprite_->Draw();
 
 	transitionSprite_->Draw();
 

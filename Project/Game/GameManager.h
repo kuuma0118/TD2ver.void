@@ -37,7 +37,7 @@ public:
 
 private:
 	//リークチェッカー
-	D3DResourceLeakChecker leakCheck;
+	//D3DResourceLeakChecker leakCheck;
 	//ウィンドウズアプリケーション
 	WinApp* winApp_ = nullptr;
 	//DirectX基盤クラス

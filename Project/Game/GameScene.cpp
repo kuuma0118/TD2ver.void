@@ -32,6 +32,14 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_ = new Player();
 	player_->Initialize();
 
+	dropUITextureHandle_ = TextureManager::Load("Resources/Pictures/dropUI.png");
+	dropUISprite_.reset(Sprite::Create(dropUITextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 55.0f }));
+
+	moovUITextureHandle_ = TextureManager::Load("Resources/Pictures/moovUI.png");
+	moovUISprite_.reset(Sprite::Create(moovUITextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -119,6 +127,10 @@ void GameScene::Draw(GameManager* gameManager) {
 #pragma region スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	dropUISprite_->Draw();
+
+	moovUISprite_->Draw();
 
 	Sprite::PostDraw();
 

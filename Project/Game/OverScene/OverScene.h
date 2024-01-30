@@ -82,6 +82,14 @@ private:// メンバ変数
 	std::unique_ptr<Sprite>  overSprite_ = nullptr;
 	//タイトルのテクスチャ
 	uint32_t overTextureHandle_ = 0;
+	//リスタートUIのスプライト
+	std::unique_ptr<Sprite>  RestartUISprite_ = nullptr;
+	//リスタートUIのテクスチャ
+	uint32_t RestartUITextureHandle_ = 0;
+	//リターンタイトルUIのスプライト
+	std::unique_ptr<Sprite>  ReturnTitleUISprite_ = nullptr;
+	//リターンタイトルUIのテクスチャ
+	uint32_t ReturnTitleUITextureHandle_ = 0;
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_ = nullptr;
 	//トランジションのテクスチャ
