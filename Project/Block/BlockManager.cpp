@@ -142,9 +142,9 @@ void BlockManager::Update() {
 	}
 
 
-	for (HeadBlock* headblock_ : headblocks_) {
-		headblock_->Update();
-	}
+	//for (HeadBlock* headblock_ : headblocks_) {
+	//	headblock_->Update();
+	//}
 	for (Block* block_ : blocks_) {
 		block_->Update();
 	}
@@ -186,13 +186,14 @@ void BlockManager::Shape_I(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -207,13 +208,14 @@ void BlockManager::Shape_I(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 
@@ -228,13 +230,14 @@ void BlockManager::Shape_I(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_3);
 	}
 	else {
-		HeadBlock* newheadBlock_3 = new HeadBlock();
-		newheadBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_3->SetworldTransform_({ velocity.x,velocity.y + width * 2,velocity.z });
+		Block* newBlock_3 = new Block();
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->SetIsHardBlock(true);
+		newBlock_3->SetworldTransform_({ velocity.x,velocity.y + width * 2,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_3);
+		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
 	}
 #pragma endregion
 
@@ -249,13 +252,14 @@ void BlockManager::Shape_I(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_4);
 	}
 	else {
-		HeadBlock* newheadBlock_4 = new HeadBlock();
-		newheadBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_4->SetworldTransform_({ velocity.x,velocity.y + width * 3 ,velocity.z });
+		Block* newBlock_4 = new Block();
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->SetIsHardBlock(true);
+		newBlock_4->SetworldTransform_({ velocity.x,velocity.y + width * 3 ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_4);
+		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
 	}
 #pragma endregion
 }
@@ -278,13 +282,14 @@ void BlockManager::Shape_T(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -299,13 +304,14 @@ void BlockManager::Shape_T(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 
@@ -320,13 +326,14 @@ void BlockManager::Shape_T(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_3);
 	}
 	else {
-		HeadBlock* newheadBlock_3 = new HeadBlock();
-		newheadBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_3->SetworldTransform_({ velocity.x + width,velocity.y + width,velocity.z });
+		Block* newBlock_3 = new Block();
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->SetIsHardBlock(true);
+		newBlock_3->SetworldTransform_({ velocity.x + width,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_3);
+		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
 	}
 #pragma endregion
 
@@ -341,13 +348,14 @@ void BlockManager::Shape_T(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_4);
 	}
 	else {
-		HeadBlock* newheadBlock_4 = new HeadBlock();
-		newheadBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_4->SetworldTransform_({ velocity.x - width,velocity.y + width  ,velocity.z });
+		Block* newBlock_4 = new Block();
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->SetIsHardBlock(true);
+		newBlock_4->SetworldTransform_({ velocity.x - width,velocity.y + width  ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_4);
+		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
 	}
 #pragma endregion
 }
@@ -370,13 +378,14 @@ void BlockManager::Shape_S(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -391,13 +400,14 @@ void BlockManager::Shape_S(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 
@@ -412,13 +422,14 @@ void BlockManager::Shape_S(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_3);
 	}
 	else {
-		HeadBlock* newheadBlock_3 = new HeadBlock();
-		newheadBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
+		Block* newBlock_3 = new Block();
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->SetIsHardBlock(true);
+		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_3);
+		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
 	}
 #pragma endregion
 
@@ -433,13 +444,14 @@ void BlockManager::Shape_S(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_4);
 	}
 	else {
-		HeadBlock* newheadBlock_4 = new HeadBlock();
-		newheadBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_4->SetworldTransform_({ velocity.x + width,velocity.y + width  ,velocity.z });
+		Block* newBlock_4 = new Block();
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->SetIsHardBlock(true);
+		newBlock_4->SetworldTransform_({ velocity.x + width,velocity.y + width  ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_4);
+		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
 	}
 #pragma endregion
 }
@@ -462,13 +474,14 @@ void BlockManager::Shape_O(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -483,13 +496,14 @@ void BlockManager::Shape_O(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 
@@ -504,13 +518,14 @@ void BlockManager::Shape_O(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_3);
 	}
 	else {
-		HeadBlock* newheadBlock_3 = new HeadBlock();
-		newheadBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
+		Block* newBlock_3 = new Block();
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->SetIsHardBlock(true);
+		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_3);
+		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
 	}
 #pragma endregion
 
@@ -525,13 +540,14 @@ void BlockManager::Shape_O(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_4);
 	}
 	else {
-		HeadBlock* newheadBlock_4 = new HeadBlock();
-		newheadBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_4->SetworldTransform_({ velocity.x + width,velocity.y + width  ,velocity.z });
+		Block* newBlock_4 = new Block();
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->SetIsHardBlock(true);
+		newBlock_4->SetworldTransform_({ velocity.x + width,velocity.y + width  ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_4);
+		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
 	}
 }
 
@@ -553,13 +569,14 @@ void BlockManager::Shape_J(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -574,13 +591,14 @@ void BlockManager::Shape_J(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 
@@ -595,13 +613,14 @@ void BlockManager::Shape_J(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_3);
 	}
 	else {
-		HeadBlock* newheadBlock_3 = new HeadBlock();
-		newheadBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
+		Block* newBlock_3 = new Block();
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->SetIsHardBlock(true);
+		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_3);
+		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
 	}
 #pragma endregion
 
@@ -616,13 +635,14 @@ void BlockManager::Shape_J(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_4);
 	}
 	else {
-		HeadBlock* newheadBlock_4 = new HeadBlock();
-		newheadBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_4->SetworldTransform_({ velocity.x ,velocity.y + width * 2 ,velocity.z });
+		Block* newBlock_4 = new Block();
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->SetIsHardBlock(true);
+		newBlock_4->SetworldTransform_({ velocity.x ,velocity.y + width * 2 ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_4);
+		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
 	}
 }
 
@@ -644,13 +664,14 @@ void BlockManager::Shape_L(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -665,13 +686,14 @@ void BlockManager::Shape_L(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 
@@ -686,13 +708,14 @@ void BlockManager::Shape_L(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_3);
 	}
 	else {
-		HeadBlock* newheadBlock_3 = new HeadBlock();
-		newheadBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
+		Block* newBlock_3 = new Block();
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->SetIsHardBlock(true);
+		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + width,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_3);
+		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
 	}
 #pragma endregion
 
@@ -707,13 +730,14 @@ void BlockManager::Shape_L(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_4);
 	}
 	else {
-		HeadBlock* newheadBlock_4 = new HeadBlock();
-		newheadBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_4->SetworldTransform_({ velocity.x ,velocity.y + width * 2 ,velocity.z });
+		Block* newBlock_4 = new Block();
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->SetIsHardBlock(true);
+		newBlock_4->SetworldTransform_({ velocity.x ,velocity.y + width * 2 ,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_4);
+		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
 	}
 }
 
@@ -734,13 +758,14 @@ void BlockManager::Shape_Ten(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 }
@@ -762,13 +787,14 @@ void BlockManager::shape_side(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_1);
 	}
 	else {
-		HeadBlock* newheadBlock_1 = new HeadBlock();
-		newheadBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		Block* newBlock_1 = new Block();
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->SetIsHardBlock(true);
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_1);
+		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
 	}
 #pragma endregion
 
@@ -782,13 +808,14 @@ void BlockManager::shape_side(Vector3 velocity) {
 		collisionManager_->SetColliderList(newBlock_2);
 	}
 	else {
-		HeadBlock* newheadBlock_2 = new HeadBlock();
-		newheadBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
-		newheadBlock_2->SetworldTransform_({ velocity.x + width,velocity.y,velocity.z });
+		Block* newBlock_2 = new Block();
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->SetIsHardBlock(true);
+		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y,velocity.z });
 		//リストに登録
-		headblocks_.push_back(newheadBlock_2);
+		blocks_.push_back(newBlock_2);
 		// 当たり判定に追加
-		collisionManager_->SetColliderList(newheadBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
 	}
 #pragma endregion
 }
@@ -809,23 +836,24 @@ void BlockManager::CheckAndClearRow() {
 					}
 				}
 			}
+
 		}
-		// 消えないブロック
-		for (HeadBlock* headBlock : headblocks_) {
-			if (!headBlock->GetFoolFlag()) {
-				if ((int)clearBlock_[i].y == static_cast<int>(std::round(headBlock->GetWorldPosition().y))) {
-					for (int j = 0; j < kBlockNumX; j++) {
-						if ((int)clearBlock_[j].x == static_cast<int>(std::round(headBlock->GetWorldPosition().x))) {
-							count++;
-						}
-					}
-				}
-			}
-		}
+		//// 消えないブロック
+		//for (HeadBlock* headBlock : headblocks_) {
+		//	if (!headBlock->GetFoolFlag()) {
+		//		if ((int)clearBlock_[i].y == static_cast<int>(std::round(headBlock->GetWorldPosition().y))) {
+		//			for (int j = 0; j < kBlockNumX; j++) {
+		//				if ((int)clearBlock_[j].x == static_cast<int>(std::round(headBlock->GetWorldPosition().x))) {
+		//					count++;
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
 
 		if (count >= kBlockNumX) {
 			blocks_.remove_if([](Block* block) {
-				if (!block->GetIsAlive()) {
+				if (!block->GetIsAlive() && !block->GetIsHardBlock()) {
 					delete block;
 					return true;
 				}
@@ -838,10 +866,10 @@ void BlockManager::CheckAndClearRow() {
 			for (Block* block : blocks_) {
 				collisionManager_->SetColliderList(block);
 			}
-			// 動かないブロック
-			for (HeadBlock* headBlock : headblocks_) {
-				collisionManager_->SetColliderList(headBlock);
-			}
+			//// 動かないブロック
+			//for (HeadBlock* headBlock : headblocks_) {
+			//	collisionManager_->SetColliderList(headBlock);
+			//}
 			// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
 			isDelete_ = true;
 		}

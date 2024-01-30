@@ -40,9 +40,9 @@ void HeadBlock::Update() {
 	AdjustmentParameter();
 
 	// 一度着地したら動かないようにする
-	if (foolflag) {
+	//if (foolflag) {
 		worldTransform_.translation_.y -= foolSpeed_;
-	}
+	//}
 
 	// ブロックの行ける最低地点
 	if (worldTransform_.translation_.y <= -5) {
@@ -83,7 +83,9 @@ void HeadBlock::OnCollision(Collider* collider) {
 		worldTransform_.translation_.y = y;
 		worldTransform_.UpdateMatrix();
 		foolflag = false;
+
 	}
+	
 
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {

@@ -54,12 +54,16 @@ public: // メンバ関数
 	bool GetIsAlive() { return isAlive_; }
 	// 落ちている最中かを取得
 	bool GetFoolFlag() { return foolflag; }
+	// 消えないブロックを取得
+	inline bool GetIsHardBlock() { return isHardBlock_; }
 
 	/// Setter
 	// ワールド座標を設定
 	void SetworldTransform_(Vector3 worldTransform) {this->worldTransform_.translation_ = worldTransform;}
 	// 生存フラグを設定
 	void SetIsAlive(bool isAlive) { isAlive_ = isAlive; }
+	// 消えないブロックを設定
+	inline void SetIsHardBlock(bool isActive) { isHardBlock_ = isActive; }
 
 private: // メンバ変数
 	WorldTransform worldTransform_;
@@ -82,5 +86,8 @@ private: // メンバ変数
 
 	//速度
 	float foolSpeed_ = 0.2f;
+
+	// 消えないブロック
+	bool isHardBlock_;
 };
 

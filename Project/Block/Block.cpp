@@ -27,6 +27,9 @@ void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model*
 	// 生存フラグ
 	isAlive_ = true;
 
+	// 
+	isHardBlock_ = false;
+
 	// 当たり判定の形状を設定
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
@@ -91,9 +94,12 @@ void Block::OnCollision(Collider* collider) {
 	// 上
 	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {	
 		worldTransform_.UpdateMatrix();
-		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+		//if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 			SetIsTopHitAABB(true);
-		}
+		//}
+	}
+	else {
+		SetIsTopHitAABB(false);
 	}
 
 	// 右
