@@ -73,6 +73,10 @@ void Player::Update() {
 		velocity_.y = 0;
 	}
 
+	if (worldTransform_.translation_.x <= -12 || worldTransform_.translation_.x >= 12) {
+		inverseVelSignal_ = true;
+	}
+
 	/// ふるまい
 	// 初期化
 	B_Init();
