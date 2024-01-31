@@ -48,6 +48,7 @@ void Player::Initialize() {
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 	// 衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
+
 	AABB aabb = {
 	{-0.8f,-0.8f,-0.8f},
 	{0.8f,0.8f,0.8f}
@@ -113,7 +114,7 @@ void Player::OnCollision(Collider* collider) {
 		hitCounter_++;
 	}
 	// 左
-	if (theta < M_PI / 5 && theta > -(M_PI / 5)) {
+	if (theta < M_PI / 6.0f && theta > -(M_PI / 6.0f)) {
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
@@ -125,7 +126,7 @@ void Player::OnCollision(Collider* collider) {
 		}
 	}
 	// 右
-	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
+	if (theta > M_PI - (M_PI / 6.0f) || theta < -M_PI + (M_PI / 6.0f)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();

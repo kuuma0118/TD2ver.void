@@ -86,8 +86,15 @@ void GameScene::Update(GameManager* gameManager) {
 
 	// ブロックが消えていた場合
 	if (blockManager_->GetIsDelete()) {
+		AABB aabb = {
+			{-0.8f,-0.8f,-0.8f},
+			{0.8f,0.8f,0.8f}
+		};
+		player_->SetAABB(aabb);
 		// 自機をコライダーにセット
 		collisionManager_->SetColliderList(player_.get());
+		player_->SetCollisionAttribute(kCollisionAttributePlayer);
+		player_->SetCollisionPrimitive(kCollisionPrimitiveAABB);
 		// ブロックの消えるフラグをfalse
 		blockManager_->SetIsDelete(false);
 	}

@@ -145,6 +145,7 @@ private:
 
 	//ブロックの間隔
 	float width = 2.0f;
+	float height = 2.2f;
 
 	//フェーズ
 	Shape shape_ = Shape::shape_I;
