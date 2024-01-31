@@ -14,8 +14,11 @@ BlockManager::~BlockManager() {
 	}
 }
 
-void BlockManager::Initialize(CollisionManager* collisionManager) {
-	// コリジョンマネージャーを取得
+void BlockManager::Initialize(CollisionManager* collisionManager){
+	worldTransform_.Initialize();
+	for (int i = 0; i < 4; i++) {
+		NextworldTransform_[i].Initialize();
+	}
 	collisionManager_ = collisionManager;
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
@@ -27,13 +30,22 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 
 	// ブロック
 	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
+	for (int i = 0; i < 4; i++) {
+
+		Nextmodel_[i].reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
+	}
 
 	worldTransform_.translation_.y = 8.0f;
 
 	for (int i = 0; i < 3; i++) {
 		ChangeShape_[i] = Shape(0);
 	}
+	for (int i = 0; i < 3; i++) {
+		Changeindex_[i] = rand() % 4;
+	}
+
 	shape_ = ChangeShape_[0];
+	index_ = Changeindex_[0];
 
 	assert(model_);
 	// 壁
@@ -84,101 +96,519 @@ void BlockManager::Update() {
 	}
 	floorWorld_.UpdateMatrix();
 
+	for (int i = 0; i < 4; i++) {
+		NextworldTransform_[i].UpdateMatrix();
+	}
 	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
 		worldTransform_.translation_.x += 2.00f;
+		for (int i = 0; i < 4; i++) {
+			NextworldTransform_[i].translation_.x += 2.00f;
+		}
 	}
 	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
 		worldTransform_.translation_.x -= 2.00f;
+		for (int i = 0; i < 4; i++) {
+			NextworldTransform_[i].translation_.x -= 2.00f;
+		}
 	}
 
 
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
-		shape_ = ChangeShape_[0];
+		//形状をランダムにする
+	//	shape_ = Shape::shape_side;
 		ChangeShape_[0] = ChangeShape_[1];
 		ChangeShape_[1] = ChangeShape_[2];
 		ChangeShape_[2] = Shape(rand() % 8);
 
-
-		//shape_ = ChangeShape_[0];
-
-		//形状をランダムにする
-	//	shape_ = Shape( rand() % 8);
-	//	shape_ = Shape::shape_side;
-
-
-		switch (shape_)
-		{
-		case Shape::shape_I:
-			Shape_I(worldTransform_.translation_);
-			break;
-
-		case Shape::shape_T:
-			Shape_T(worldTransform_.translation_);
-			break;
-
-		case Shape::shape_S:
-			Shape_S(worldTransform_.translation_);
-			break;
-
-		case Shape::shape_O:
-			Shape_O(worldTransform_.translation_);
-			break;
-
-		case Shape::shape_J:
-			Shape_J(worldTransform_.translation_);
-			break;
-
-		case Shape::shape_L:
-			Shape_L(worldTransform_.translation_);
-			break;
-		case Shape::shape_ten:
-			Shape_Ten(worldTransform_.translation_);
-			break;
-		case Shape::shape_side:
-			shape_side(worldTransform_.translation_);
-			break;
-		}
-
+		//２つのブロックの確率変動
+		index_ = Changeindex_[0];
+		Changeindex_[0] = Changeindex_[1];
+		Changeindex_[1] = Changeindex_[2];
+		Changeindex_[2] = rand() % 4;
+		ShapeManagement();
 	}
+	shape_ = ChangeShape_[0];
 
-
-	//for (HeadBlock* headblock_ : headblocks_) {
-	//	headblock_->Update();
-	//}
-	for (Block* block : blocks_) {
-		//for (int i = 0; i < 20; i++) {
-			//if (clearBlock_[i].y + block->GetAABB().max.y >= block->GetWorldPosition().y && clearBlock_[i].y + block->GetAABB().min.y <= block->GetWorldPosition().y) {
-				block->Update();
-			//}
-		//}
+	for (Block* block_ : blocks_) {
+		block_->Update();
 	}
-
-	// 消せるブロックがあるかをチェックしあれば消す
-	CheckAndClearRow();
+	for (HeadBlock* headblock_ : headblocks_) {
+		headblock_->Update();
+	}
+	ImGui::Begin("shape");
+	if (ImGui::TreeNode("worldTransform")) {
+		ImGui::DragFloat3("translate", &NextworldTransform_[0].translation_.x, 0.1f, 100, 100);
+		ImGui::DragFloat3("rotate", &NextworldTransform_[0].rotation_.x, 0.01f, -6.28f, 6.28f);
+		ImGui::DragFloat3("scale", &NextworldTransform_[0].scale_.x, 0.01f, 0, 10);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("worldTransform")) {
+		ImGui::DragFloat3("translate", &NextworldTransform_[1].translation_.x, 0.1f, 100, 100);
+		ImGui::DragFloat3("rotate", &NextworldTransform_[1].rotation_.x, 0.01f, -6.28f, 6.28f);
+		ImGui::DragFloat3("scale", &NextworldTransform_[1].scale_.x, 0.01f, 0, 10);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("worldTransform")) {
+		ImGui::DragFloat3("translate", &NextworldTransform_[2].translation_.x, 0.1f, 100, 100);
+		ImGui::DragFloat3("rotate", &NextworldTransform_[2].rotation_.x, 0.01f, -6.28f, 6.28f);
+		ImGui::DragFloat3("scale", &NextworldTransform_[2].scale_.x, 0.01f, 0, 10);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("worldTransform")) {
+		ImGui::DragFloat3("translate", &NextworldTransform_[3].translation_.x, 0.1f, 100, 100);
+		ImGui::DragFloat3("rotate", &NextworldTransform_[3].rotation_.x, 0.01f, -6.28f, 6.28f);
+		ImGui::DragFloat3("scale", &NextworldTransform_[3].scale_.x, 0.01f, 0, 10);
+		ImGui::TreePop();
+	}
+	ImGui::End();
 }
 
-void BlockManager::Draw(ViewProjection viewProjection_) {
+void BlockManager::Draw(ViewProjection viewProjection_){
+	Shape_one(viewProjection_);
+
 	for (Block* block_ : blocks_) {
 		block_->Draw(viewProjection_);
-	}
+	} 
 	for (HeadBlock* headblock_ : headblocks_) {
 		headblock_->Draw(viewProjection_);
 	}
-	model_->Draw(worldTransform_, viewProjection_, BlockTexHandle_);
-	// 壁
-	for (int i = 0; i < 2; i++) {
-		wall_[i]->Draw(wallWorld_[i], viewProjection_);
+	
+} 
+
+void BlockManager::Shape_one(ViewProjection viewProjection_) {
+	
+
+	switch (shape_)
+	{
+	case Shape::shape_I:
+#pragma region ブロックの１番
+		if (Changeindex_[0] != 0) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] != 1) {
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの３番
+		if (Changeindex_[0] != 2) {
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width * 2;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width * 2;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの４番
+		if (Changeindex_[0] != 3) {
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 3;
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 3;
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+		break;
+
+	case Shape::shape_T:
+#pragma region ブロックの１番
+		if (Changeindex_[0] != 0) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] != 1) {
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの３番
+		if (Changeindex_[0] != 2) {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの４番
+		if (Changeindex_[0] != 3) {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+		break;
+
+	case Shape::shape_S:
+#pragma region ブロックの１番
+		if (Changeindex_[0] != 0) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] != 1) {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの３番
+		if (Changeindex_[0] != 2) {
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの４番
+		if (Changeindex_[0] != 3) {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+		break;
+
+	case Shape::shape_O:
+
+#pragma region ブロックの１番
+		if (Changeindex_[0] != 0) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] != 1) {
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの３番
+		if (Changeindex_[0] != 2) {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y+ width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの４番
+		if (Changeindex_[0] != 3) {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+		break;
+
+	case Shape::shape_J:
+#pragma region ブロックの１番
+		if (Changeindex_[0] != 0) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] != 1) {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+
+#pragma endregion
+
+#pragma region ブロックの３番
+		if (Changeindex_[0] != 2) {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x ;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの４番
+		if (Changeindex_[0] != 3) {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width*2;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 2;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+		break;
+
+	case Shape::shape_L:
+#pragma region ブロックの１番
+		if (Changeindex_[0] != 0) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] != 1) {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+
+#pragma endregion
+
+#pragma region ブロックの３番
+		if (Changeindex_[0] != 2) {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+
+#pragma region ブロックの４番
+		if (Changeindex_[0] != 3) {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 2;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 2;
+			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
+		}
+#pragma endregion
+		break;
+	case Shape::shape_ten:
+#pragma region ブロックの１番
+		NextworldTransform_[1].translation_ = worldTransform_.translation_;
+		NextworldTransform_[2].translation_ = worldTransform_.translation_;
+		NextworldTransform_[3].translation_ = worldTransform_.translation_;
+
+		if (Changeindex_[0] == 0 || Changeindex_[0] == 1) {
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+		
+#pragma endregion
+
+		break;
+	case Shape::shape_side:
+#pragma region ブロックの１番
+
+		NextworldTransform_[2].translation_ = worldTransform_.translation_;
+		NextworldTransform_[3].translation_ = worldTransform_.translation_;
+
+		if (Changeindex_[0] == 0 || Changeindex_[0] == 1) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
+		}
+		
+#pragma endregion
+
+#pragma region ブロックの２番
+		if (Changeindex_[0] == 2 || Changeindex_[0] == 3) {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
+		}
+		else {
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
+		}
+
+#pragma endregion
+		
+
+		break;
 	}
-	// 床
-	floor_->Draw(floorWorld_, viewProjection_);
 }
+void BlockManager::Shape_Second(ViewProjection viewProjection_) {
+	///画像で予測ブロックを表示する（次のブロック）
+	shape_ = ChangeShape_[1];
+	switch (shape_) {
+	case Shape::shape_I:
+		break;
+	case Shape::shape_T:
+		break;
+	case Shape::shape_S:
+		break;
+	case Shape::shape_O:
+		break;
+	case Shape::shape_J:
+		break;
+	case Shape::shape_L:
+		break;
+	case Shape::shape_ten:
+		break;
+	case Shape::shape_side:
+		break;
+	}
+}
+
+
+void BlockManager::ShapeManagement(){
+	switch (shape_)
+	{
+	case Shape::shape_I:
+		Shape_I(worldTransform_.translation_, index_);
+		break;
+
+	case Shape::shape_T:
+		Shape_T(worldTransform_.translation_, index_);
+		break;
+
+	case Shape::shape_S:
+		Shape_S(worldTransform_.translation_, index_);
+		break;
+
+	case Shape::shape_O:
+		Shape_O(worldTransform_.translation_, index_);
+		break;
+
+	case Shape::shape_J:
+		Shape_J(worldTransform_.translation_, index_);
+		break;
+
+	case Shape::shape_L:
+		Shape_L(worldTransform_.translation_, index_);
+		break;
+	case Shape::shape_ten:
+		Shape_Ten(worldTransform_.translation_, index_);
+		break;
+	case Shape::shape_side:
+		shape_side(worldTransform_.translation_, index_);
+		break;
+	}
+}
+
 /// <summary>
 /// I字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_I(Vector3 velocity) {
-
-	int index = rand() % 4;
+void BlockManager::Shape_I(Vector3 velocity,int index){
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -272,9 +702,8 @@ void BlockManager::Shape_I(Vector3 velocity) {
 /// T字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_T(Vector3 velocity) {
+void BlockManager::Shape_T(Vector3 velocity, int index){
 
-	int index = rand() % 4;
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -368,9 +797,8 @@ void BlockManager::Shape_T(Vector3 velocity) {
 /// S字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_S(Vector3 velocity) {
+void BlockManager::Shape_S(Vector3 velocity, int index){
 
-	int index = rand() % 4;
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -464,9 +892,8 @@ void BlockManager::Shape_S(Vector3 velocity) {
 /// O字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_O(Vector3 velocity) {
+void BlockManager::Shape_O(Vector3 velocity, int index){
 
-	int index = rand() % 4;
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -559,9 +986,8 @@ void BlockManager::Shape_O(Vector3 velocity) {
 /// J字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_J(Vector3 velocity) {
+void BlockManager::Shape_J(Vector3 velocity, int index){
 
-	int index = rand() % 4;
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -654,9 +1080,8 @@ void BlockManager::Shape_J(Vector3 velocity) {
 ///L字ブロック 
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_L(Vector3 velocity) {
+void BlockManager::Shape_L(Vector3 velocity, int index){
 
-	int index = rand() % 4;
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -749,11 +1174,9 @@ void BlockManager::Shape_L(Vector3 velocity) {
 /// 
 /// </summary>
 /// /// <param name="velocity"></param>
-void BlockManager::Shape_Ten(Vector3 velocity) {
-	int index = rand() % 6;
-
+void BlockManager::Shape_Ten(Vector3 velocity, int index){
 #pragma region ブロックの１番
-	if (index == 0 || index == 1 || index == 2 || index == 3) {
+	if (index == 0 || index == 1 ) {
 		Block* newBlock_1 = new Block();
 		// 初期化
 		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
@@ -778,11 +1201,10 @@ void BlockManager::Shape_Ten(Vector3 velocity) {
 /// 横に連なるブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::shape_side(Vector3 velocity) {
-	int index = rand() % 6;
+void BlockManager::shape_side(Vector3 velocity, int index){
 
 #pragma region ブロックの１番
-	if (index == 0 || index == 1 || index == 2 || index == 3) {
+	if (index == 0 || index == 1 ) {
 		Block* newBlock_1 = new Block();
 		// 初期化
 		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
@@ -803,7 +1225,7 @@ void BlockManager::shape_side(Vector3 velocity) {
 #pragma endregion
 
 #pragma region ブロックの２番
-	if (index == 0 || index == 1 || index == 2 || index == 3) {
+	if (index == 2 || index == 3) {
 		Block* newBlock_2 = new Block();
 		// 初期化
 		newBlock_2->Initialize(worldTransform_, BlockTexHandle_, model_.get());

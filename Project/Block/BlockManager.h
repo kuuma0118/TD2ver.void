@@ -52,45 +52,60 @@ public: // メンバ関数
 	/// 
 
 	/// <summary>
+	/// 予測ブロックの１番目
+	/// </summary>
+	void Shape_one(ViewProjection viewProjection_);
+	/// <summary>
+	/// 予測ブロックの２番目
+	/// </summary>
+	void Shape_Second(ViewProjection viewProjection_);
+
+	/// <summary>
+	/// 形状の保管
+	/// </summary>
+	void ShapeManagement();
+
+
+	/// <summary>
 	/// I字ブロック
 	/// </summary>
-	void Shape_I(Vector3 velocity);
+	void Shape_I(Vector3 velocity, int index);
 
 	/// <summary>
 	/// T字ブロック
 	/// </summary>
-	void Shape_T(Vector3 velocity);
+	void Shape_T(Vector3 velocity, int index);
 
 	/// <summary>
 	/// S字ブロック
 	/// </summary>
-	void Shape_S(Vector3 velocity);
+	void Shape_S(Vector3 velocity, int index);
 
 	/// <summary>
 	/// O字ブロック
 	/// </summary>
-	void Shape_O(Vector3 velocity);
+	void Shape_O(Vector3 velocity, int index);
 
 	/// <summary>
 	/// J字ブロック
 	/// </summary>
-	void Shape_J(Vector3 velocity);
+	void Shape_J(Vector3 velocity, int index);
 
 	/// <summary>
 	/// L字ブロック
 	/// </summary>
-	void Shape_L(Vector3 velocity);
+	void Shape_L(Vector3 velocity, int index);
 
 	/// <summary>
 	/// 一つのブロック
 	/// </summary>
-	void Shape_Ten(Vector3 velocity);
+	void Shape_Ten(Vector3 velocity, int index);
 
 	/// <summary>
 	/// 横に連なるブロック
 	/// </summary>
 	/// <param name="velocity"></param>
-	void shape_side(Vector3 velocity);
+	void shape_side(Vector3 velocity, int index);
 	/// <summary>
 	/// 横一列に並んだらブロックが消える
 	/// </summary>
@@ -131,6 +146,7 @@ private:
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
+	WorldTransform NextworldTransform_[4];
 	// 壁
 	WorldTransform wallWorld_[2];
 	// 床
@@ -148,13 +164,17 @@ private:
 	float height = 2.2f;
 
 	//フェーズ
-	Shape shape_ = Shape::shape_I;
+	Shape shape_;
 	Shape ChangeShape_[3];
-	//int num = rand();
+
+	int index_ = rand() % 4;
+	int Changeindex_[3] ;
 
 	//3Dモデル
 	// ブロック
 	std::unique_ptr<Model> model_{};
+	// ブロック
+	std::unique_ptr<Model> Nextmodel_[4]{};
 	// 壁
 	std::unique_ptr<Model> wall_[2];
 	// 床
