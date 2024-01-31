@@ -14,8 +14,6 @@ BlockManager::~BlockManager() {
 	}
 }
 
-void BlockManager::Initialize(CollisionManager* collisionManager) {
-	// コリジョンマネージャーを取得
 void BlockManager::Initialize(CollisionManager* collisionManager){
 	worldTransform_.Initialize();
 	for (int i = 0; i < 4; i++) {
@@ -610,9 +608,7 @@ void BlockManager::ShapeManagement(){
 /// I字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_I(Vector3 velocity){
-
-	int index = rand()%4;
+void BlockManager::Shape_I(Vector3 velocity,int index){
 
 #pragma region ブロックの１番
 	if (index != 0) {

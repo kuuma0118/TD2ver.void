@@ -105,7 +105,7 @@ public: // メンバ関数
 	/// 横に連なるブロック
 	/// </summary>
 	/// <param name="velocity"></param>
-	void shape_side(Vector3 velocity);
+	void shape_side(Vector3 velocity, int index);
 	/// <summary>
 	/// 横一列に並んだらブロックが消える
 	/// </summary>
@@ -146,6 +146,7 @@ private:
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
+	WorldTransform NextworldTransform_[4];
 	// 壁
 	WorldTransform wallWorld_[2];
 	// 床
@@ -172,6 +173,8 @@ private:
 	//3Dモデル
 	// ブロック
 	std::unique_ptr<Model> model_{};
+	// ブロック
+	std::unique_ptr<Model> Nextmodel_[4]{};
 	// 壁
 	std::unique_ptr<Model> wall_[2];
 	// 床
