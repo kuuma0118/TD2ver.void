@@ -16,9 +16,12 @@
 // GameObject
 #include "Project/Player/Player.h"
 #include "Project/Block/Block.h"
+#include "Project/Block/BlockManager.h"
 #include "Project/GoalLine/GoalLine.h"
 #include "Project/DeadLine/DeadLine.h"
-#include "Project//Block/BlockManager.h"
+#include "Project/FollowCamera/FollowCamera.h"
+
+#include <memory>
 
 class GameScene : public IScene {
 public:
@@ -30,7 +33,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameScene();
+	~GameScene() override;
 
 	/// <summary>
 	/// 初期化
@@ -47,10 +50,6 @@ public:
 	/// </summary>
 	void Draw(GameManager* gameManager) override;
 
-private:// プライベートな関数
-	// ブロックリストを取得
-//	const std::list<Block*>& Getblocks_()const { return blocks_; }
-
 private:// メンバ変数
 #pragma region エンジンの基本機能
 
@@ -61,7 +60,7 @@ private:// メンバ変数
 	//ポストプロセス
 	PostProcess* postProcess_ = nullptr;
 	// 当たり判定
-	CollisionManager* collisionManager_ = nullptr;
+	std::unique_ptr<CollisionManager> collisionManager_;
 
 #pragma endregion
 
@@ -72,12 +71,12 @@ private:// メンバ変数
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
 
-	//ブロック
-	//std::list<Block*> blocks_;
-	BlockManager* blockManager_;
-
+	// 自機に追従するカメラ
+	std::unique_ptr<FollowCamera> followCamera_;
 	// 自機
-	Player* player_;
+	std::unique_ptr<Player> player_;
+	//ブロック
+	std::unique_ptr<BlockManager> blockManager_;
 	// ゴールライン
 	std::unique_ptr<GoalLine> goalLine_;
 	// デッドライン

@@ -87,7 +87,7 @@ public:
 	// 座標
 	Vector3 GetPosition() { return worldTransform_.translation_; }
 	// ワールドトランスフォーム
-	WorldTransform GetWorldTransform() { return worldTransform_; }
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 	// ワールド座標
 	Vector3 GetWorldPosition()override;
 	

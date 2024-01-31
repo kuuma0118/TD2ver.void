@@ -21,17 +21,24 @@ void DeadLine::Initialize() {
 	worldTransform_.translation_ = { 0,kStartDeadLine_,0 };
 	worldTransform_.scale_ = { 100,0.1f,1 };
 	worldTransform_.UpdateMatrix();
+
+	isBlockDelete_ = false;
 }
 
 void DeadLine::Update(const ViewProjection& viewProjection) {
 	// 敗北条件
-	if (player_->GetWorldPosition().y + player_->GetAABB().max.y <= worldTransform_.translation_.y) {
+	if (player_->GetWorldPosition().y + player_->GetAABB().max.y + 0.25f <= worldTransform_.translation_.y) {
 		player_->SetIsAlive(false);
 	}
 
 	// 上昇処理
 	worldTransform_.translation_.y += kSpeed_;
 	worldTransform_.UpdateMatrix();
+
+	// ブロックが消されたらデッドラインを下げる
+	if (isBlockDelete_) {
+		worldTransform_.translation_.y -= kDownValue;
+	}
 
 	// 3Dデッドラインからスクリーン座標を算出
 	WorldToScreenConversion(viewProjection);

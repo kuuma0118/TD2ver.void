@@ -2,11 +2,8 @@
 #include "Project/Block/Block.h"
 #include "Project/Block/HeadBlock.h"
 #include "Engine/Components/Input.h"
-
-
 // Utility
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
-
 
 enum class Shape {
 	shape_I,	//I字ブロック
@@ -19,11 +16,12 @@ enum class Shape {
 	shape_side	//横に連なるブロック
 };
 
-
 class BlockManager{
-	
-
 public: // メンバ関数
+	///
+	/// Default Method
+	/// 
+
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -49,6 +47,10 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 	
+	///
+	/// User Method
+	/// 
+
 	/// <summary>
 	/// 予測ブロックの１番目
 	/// </summary>
@@ -103,7 +105,40 @@ public: // メンバ関数
 	/// 横に連なるブロック
 	/// </summary>
 	/// <param name="velocity"></param>
-	void shape_side(Vector3 velocity, int index);
+	void shape_side(Vector3 velocity);
+	/// <summary>
+	/// 横一列に並んだらブロックが消える
+	/// </summary>
+	void CheckAndClearRow();
+
+	/// Getter
+
+	/// <summary>
+	/// ブロックが消えるかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsDelete() { return isDelete_; }
+
+	/// Setter
+
+	/// <summary>
+	/// ブロックが消えるかを設定
+	/// </summary>
+	/// <param name="isDelete"></param>
+	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
+
+private:// 定数
+	// マップの左端
+	const float kMapLeftPos = 0.0f;
+	// マップの最底辺
+	const float kMapBottomPos = -5.0f;
+
+	/// 判定をとるブロックの数
+	// 横(ブロックが消えるのに必要な数)
+	const int kBlockNumX = 13;
+	// 縦
+	const int kBlockNumY = 20;
+
 private:
 	//Input
 	Input* input_ = nullptr;
@@ -111,18 +146,21 @@ private:
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
-	WorldTransform NextworldTransform_[4];
+	// 壁
+	WorldTransform wallWorld_[2];
+	// 床
+	WorldTransform floorWorld_;
 
 	//ブロック
 	std::list<Block*> blocks_;
 	std::list<HeadBlock*> headblocks_;
-
 
 	// 当たり判定
 	CollisionManager* collisionManager_ = nullptr;
 
 	//ブロックの間隔
 	float width = 2.0f;
+	float height = 2.2f;
 
 	//フェーズ
 	Shape shape_;
@@ -132,16 +170,20 @@ private:
 	int Changeindex_[3] ;
 
 	//3Dモデル
+	// ブロック
 	std::unique_ptr<Model> model_{};
-	std::unique_ptr<Model> Nextmodel_[4]{};
-
-
-
-
+	// 壁
+	std::unique_ptr<Model> wall_[2];
+	// 床
+	std::unique_ptr<Model> floor_;
 	//テクスチャハンドル
 	uint32_t BlockTexHandle_ = 0;
 	uint32_t hardBlockTexHandle_ = 0;
 
+	// 
+	Vector2 clearBlock_[20];
 
+	// ブロックが消えるフラグ
+	bool isDelete_;
 };
 

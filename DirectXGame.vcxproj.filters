@@ -133,12 +133,6 @@
     <Filter Include="ヘッダー ファイル\Project\Player">
       <UniqueIdentifier>{08976c55-26dd-48f6-b249-8b150ffbdac1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Project\Camera">
-      <UniqueIdentifier>{9a33d6e1-a628-4ada-b153-0b097df8ad0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Project\Camera">
-      <UniqueIdentifier>{18794fe8-0518-4904-8e49-dd31bc520c1f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Project\Components">
       <UniqueIdentifier>{9c1fe96f-fc1d-4cfe-a8bc-2501d56d667d}</UniqueIdentifier>
     </Filter>
@@ -162,6 +156,12 @@
     </Filter>
     <Filter Include="ソース ファイル\Project\GoalLine">
       <UniqueIdentifier>{e83aa152-f2f5-4ddb-9323-1c1a05f0bafd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\FollowCamera">
+      <UniqueIdentifier>{9a33d6e1-a628-4ada-b153-0b097df8ad0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\FollowCamera">
+      <UniqueIdentifier>{18794fe8-0518-4904-8e49-dd31bc520c1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -282,8 +282,8 @@
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>ソース ファイル\Project\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Camera\Camera.cpp">
-      <Filter>ソース ファイル\Project\Camera</Filter>
+    <ClCompile Include="Project\FollowCamera\FollowCamera.cpp">
+      <Filter>ソース ファイル\Project\FollowCamera</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\Block.cpp">
       <Filter>ソース ファイル\Project\Block</Filter>
@@ -298,10 +298,13 @@
       <Filter>ソース ファイル\Project\GoalLine</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\BlockManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Project\Block</Filter>
     </ClCompile>
     <ClCompile Include="Project\Block\HeadBlock.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\ClearScene\ClearScene.cpp">
+      <Filter>ソース ファイル\Project\Game\ClearScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,8 +440,8 @@
     <ClInclude Include="Project\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Camera\Camera.h">
-      <Filter>ヘッダー ファイル\Project\Camera</Filter>
+    <ClInclude Include="Project\FollowCamera\FollowCamera.h">
+      <Filter>ヘッダー ファイル\Project\FollowCamera</Filter>
     </ClInclude>
     <ClInclude Include="Project\DeadLine\DeadLine.h">
       <Filter>ヘッダー ファイル\Project\DeadLine</Filter>
@@ -457,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="Project\Block\HeadBlock.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\ClearScene\ClearScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\ClearScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

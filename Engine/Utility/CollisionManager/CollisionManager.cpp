@@ -68,7 +68,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			posA.y + aabbA.min.y <= posB.y + aabbB.max.y && posA.y + aabbA.max.y >= posB.y + aabbB.min.y &&
 			posA.z + aabbA.min.z <= posB.z + aabbB.max.z && posA.z + aabbA.max.z >= posB.z + aabbB.min.z) {
 			//コライダーAの衝突時コールバックを呼び出す
- 			colliderA->OnCollision(colliderB);
+			colliderA->OnCollision(colliderB);
 			//コライダーBの衝突時コールバックを呼び出す
 			colliderB->OnCollision(colliderA);
 		}
@@ -76,7 +76,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 
 	//球とAABBの判定
 	if (((colliderA->GetCollisionPrimitive() & kCollisionPrimitiveSphere) != 0 && (colliderB->GetCollisionPrimitive() & kCollisionPrimitiveAABB) != 0) ||
-		((colliderA->GetCollisionPrimitive() & kCollisionPrimitiveAABB) != 0 &&	(colliderB->GetCollisionPrimitive() & kCollisionPrimitiveSphere) != 0)) {
+		((colliderA->GetCollisionPrimitive() & kCollisionPrimitiveAABB) != 0 && (colliderB->GetCollisionPrimitive() & kCollisionPrimitiveSphere) != 0)) {
 		//コライダーAのワールド座標を取得
 		Vector3 posA = colliderA->GetWorldPosition();
 		//コライダーBのワールド座標を取得
@@ -103,7 +103,7 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 				colliderB->OnCollision(colliderA);
 			}
 		}
-		else if(colliderB->GetCollisionPrimitive() & kCollisionPrimitiveSphere){
+		else if (colliderB->GetCollisionPrimitive() & kCollisionPrimitiveSphere) {
 			//最近接点を求める
 			Vector3 closestPoint{
 				std::clamp(posB.x,posA.x + aabbA.min.x,posA.x + aabbA.max.x),
@@ -120,4 +120,14 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			}
 		}
 	}
+}
+
+void CollisionManager::CheckDeleteColliderList() {
+	colliders_.remove_if([](Collider* collider) {
+		if (collider->GetIsDelete()) {
+			delete collider;
+			return true;
+		}
+		return false;
+		});
 }

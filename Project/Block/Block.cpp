@@ -22,14 +22,22 @@ void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model*
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 
-	foolflag = false;
+	foolflag = true;
+
+	// 生存フラグ
+	isAlive_ = true;
+
+	// 
+	isHardBlock_ = false;
 
 	// 当たり判定の形状を設定
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
+	SetCollisionAttribute(kCollisionAttributeBlock);
+
 	AABB aabb = {
-		{-0.9999f,-1.0f,-0.9999f},
-		{0.9999f,1.0f,0.9999f}
+		{-0.99999f,-1.0f,-0.99999f},
+		{0.99999f,1.0f,0.99999f}
 	};
 	SetAABB(aabb);
 }
@@ -44,6 +52,7 @@ void Block::Update() {
 	if (worldTransform_.translation_.y <= -5) {
 		float floor = worldTransform_.translation_.y - (-5);
 		worldTransform_.translation_.y -= floor;
+		foolflag = false;
 	}
 	worldTransform_.UpdateMatrix();
 }
@@ -61,6 +70,7 @@ void Block::AdjustmentParameter()
 		ImGui::DragFloat3("rotate", &worldTransform_.rotation_.x, 0.01f, -6.28f, 6.28f);
 		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.01f, 0, 10);
 		ImGui::Text("isTopHit:%d", GetIsTopHitAABB());
+		ImGui::Text("isFool:%d", foolflag);
 		ImGui::TreePop();
 	}
 	ImGui::End();
@@ -70,32 +80,51 @@ void Block::AdjustmentParameter()
 void Block::OnCollision(Collider* collider) {	 
 	float theta = atan2(worldTransform_.translation_.y - collider->GetWorldPosition().y, worldTransform_.translation_.x - collider->GetWorldPosition().x);
 
+	if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 	// 下
-	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
-		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
-		worldTransform_.translation_.y += extrusion;
-		worldTransform_.UpdateMatrix();
+	if (theta >= (M_PI / 6.0f) && theta <= M_PI - (M_PI / 6.0f)) {
+		
+			float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
+			worldTransform_.translation_.y += extrusion;
+			int y = static_cast<int>(std::round(worldTransform_.translation_.y));
+			worldTransform_.translation_.y = y;
+			worldTransform_.UpdateMatrix();
+			foolflag = false;
 	}
+	else {
+		//foolflag = true;
+	}
+
 	// 上
-	if (theta <= -(M_PI / 4) && theta >= -M_PI + (M_PI / 4)) {	
+	if (theta <= -(M_PI / 5) && theta >= -M_PI + (M_PI / 5)) {	
 		worldTransform_.UpdateMatrix();
 		if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 			SetIsTopHitAABB(true);
 		}
 	}
+	else {
+		SetIsTopHitAABB(false);
+	}
 
-	// 右
-	if (theta < M_PI / 5 && theta > -(M_PI / 5)) {
-		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
-		worldTransform_.translation_.x += extrusion;
-		worldTransform_.UpdateMatrix();
-	}
-	// 左
-	if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
-		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
-		worldTransform_.translation_.x -= extrusion;
-		worldTransform_.UpdateMatrix();
-	}
+	//// 右
+	//if (theta < M_PI / 5 && theta > -(M_PI / 5)) {
+	//	float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
+	//	worldTransform_.translation_.x += extrusion;
+	//	worldTransform_.UpdateMatrix();
+	//	if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+	//		SetIsRightHitAABB(true);
+	//	}
+	//}
+	//// 左
+	//if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
+	//	float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
+	//	worldTransform_.translation_.x -= extrusion;
+	//	worldTransform_.UpdateMatrix();
+	//	if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
+	//		SetIsLeftHitAABB(true);
+	//	}
+	//}
+}
 }
 
 Vector3 Block::GetWorldPosition() {
