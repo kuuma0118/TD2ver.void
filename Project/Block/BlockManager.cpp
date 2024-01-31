@@ -173,6 +173,11 @@ void BlockManager::Draw(ViewProjection viewProjection_){
 		headblock_->Draw(viewProjection_);
 	}
 	
+	for (int i = 0; i < 2; i++) {
+		wall_[i]->Draw(wallWorld_[i], viewProjection_);
+	}
+
+	floor_->Draw(floorWorld_, viewProjection_);
 } 
 
 void BlockManager::Shape_one(ViewProjection viewProjection_) {
