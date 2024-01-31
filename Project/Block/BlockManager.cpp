@@ -69,7 +69,6 @@ void BlockManager::Update(){
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
 		//形状をランダムにする
 	//	shape_ = Shape::shape_side;
-		shape_ = ChangeShape_[0];
 		ChangeShape_[0] = ChangeShape_[1];
 		ChangeShape_[1] = ChangeShape_[2];
 		ChangeShape_[2] = Shape(rand() % 8);
@@ -81,7 +80,7 @@ void BlockManager::Update(){
 		Changeindex_[2] = rand() % 4;
 		ShapeManagement();
 	}
-
+	shape_ = ChangeShape_[0];
 
 	for (Block* block_ : blocks_) {
 		block_->Update();
@@ -126,14 +125,11 @@ void BlockManager::Draw(ViewProjection viewProjection_){
 	for (HeadBlock* headblock_ : headblocks_) {
 		headblock_->Draw(viewProjection_);
 	}
-	//model_->Draw(worldTransform_, viewProjection_, BlockTexHandle_);
 	
 } 
 
 void BlockManager::Shape_one(ViewProjection viewProjection_) {
-	for (int i = 0; i < 4; i++) {
-		//NextworldTransform_[i] = worldTransform_;
-	}
+	
 
 	switch (shape_)
 	{
@@ -152,10 +148,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの２番
 		if (Changeindex_[0] != 1) {
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
 		}
 #pragma endregion
@@ -163,10 +161,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの３番
 		if (Changeindex_[0] != 2) {
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width * 2;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width * 2;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
 		}
 #pragma endregion
@@ -174,10 +174,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの４番
 		if (Changeindex_[0] != 3) {
 			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 3;
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 3;
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
 		}
 #pragma endregion
@@ -198,10 +200,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの２番
 		if (Changeindex_[0] != 1) {
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
 		}
 #pragma endregion
@@ -261,10 +265,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの３番
 		if (Changeindex_[0] != 2) {
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
 		}
 #pragma endregion
@@ -351,10 +357,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの２番
 		if (Changeindex_[0] != 1) {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
 		}
 
@@ -402,10 +410,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの２番
 		if (Changeindex_[0] != 1) {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
 		}
 
@@ -460,9 +470,11 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		NextworldTransform_[3].translation_ = worldTransform_.translation_;
 
 		if (Changeindex_[0] == 0 || Changeindex_[0] == 1) {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
 			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
 		}
 		else {
+			NextworldTransform_[0].translation_ = worldTransform_.translation_;
 			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
 		}
 		
@@ -471,10 +483,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの２番
 		if (Changeindex_[0] == 2 || Changeindex_[0] == 3) {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
+			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
 		}
 
