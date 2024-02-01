@@ -153,6 +153,8 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
+
+	blockManager_->Shape_Second();
 	// ゴールライン
 	goalLine_->Draw2DLine();
 

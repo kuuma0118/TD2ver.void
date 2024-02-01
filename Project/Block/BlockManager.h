@@ -58,7 +58,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 予測ブロックの２番目
 	/// </summary>
-	void Shape_Second(ViewProjection viewProjection_);
+	void Shape_Second();
 
 	/// <summary>
 	/// 形状の保管

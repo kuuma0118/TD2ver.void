@@ -545,7 +545,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		break;
 	}
 }
-void BlockManager::Shape_Second(ViewProjection viewProjection_) {
+void BlockManager::Shape_Second() {
 	///画像で予測ブロックを表示する（次のブロック）
 	shape_ = ChangeShape_[1];
 	switch (shape_) {
