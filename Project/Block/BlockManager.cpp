@@ -41,7 +41,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 		ChangeShape_[i] = Shape(rand() % 8);
 	}
 	for (int i = 0; i < 3; i++) {
-		Changeindex_[i] = rand() % 4;
+		Changeindex_[i] = rand() % 10;
 	}
 
 	shape_ = ChangeShape_[0];
@@ -113,7 +113,9 @@ void BlockManager::Update() {
 	}
 
 
-	shape_ = ChangeShape_[0];
+	//shape_ = ChangeShape_[0];
+	shape_ = Shape::shape_I;
+
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
 		//形状をランダムにする
 		ChangeShape_[0] = ChangeShape_[1];
@@ -124,7 +126,7 @@ void BlockManager::Update() {
 		index_ = Changeindex_[0];
 		Changeindex_[0] = Changeindex_[1];
 		Changeindex_[1] = Changeindex_[2];
-		Changeindex_[2] = rand() % 4;
+		Changeindex_[2] = rand() % 10;
 		ShapeManagement();
 	}
 
@@ -607,18 +609,9 @@ void BlockManager::ShapeManagement(){
 /// I字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_I(Vector3 velocity,int index){
-
-#pragma region ブロックの１番
-	if (index != 0) {
-		Block* newBlock_1 = new Block();
-		// 初期化
-		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_1->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
-		blocks_.push_back(newBlock_1);
-		collisionManager_->SetColliderList(newBlock_1);
-	}
-	else {
+void BlockManager::Shape_I(Vector3 velocity, int index) {
+	if (index == 0||index==1|| index == 2){
+#pragma region ブロックの1番
 		Block* newBlock_1 = new Block();
 		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_1->SetIsHardBlock(true);
@@ -627,20 +620,9 @@ void BlockManager::Shape_I(Vector3 velocity,int index){
 		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
 		collisionManager_->SetColliderList(newBlock_1);
-	}
 #pragma endregion
+#pragma region ブロックの2番
 
-#pragma region ブロックの２番
-	if (index != 1) {
-		// 実体生成
-		Block* newBlock_2 = new Block();
-		// 初期化
-		newBlock_2->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_2->SetworldTransform_({ velocity.x,velocity.y + height,velocity.z });
-		blocks_.push_back(newBlock_2);
-		collisionManager_->SetColliderList(newBlock_2);
-	}
-	else {
 		Block* newBlock_2 = new Block();
 		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_2->SetIsHardBlock(true);
@@ -649,20 +631,8 @@ void BlockManager::Shape_I(Vector3 velocity,int index){
 		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
 		collisionManager_->SetColliderList(newBlock_2);
-	}
 #pragma endregion
-
-#pragma region ブロックの３番
-	if (index != 2) {
-		// 実体生成
-		Block* newBlock_3 = new Block();
-		// 初期化
-		newBlock_3->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_3->SetworldTransform_({ velocity.x,velocity.y + height * 2,velocity.z });
-		blocks_.push_back(newBlock_3);
-		collisionManager_->SetColliderList(newBlock_3);
-	}
-	else {
+#pragma region ブロックの3番
 		Block* newBlock_3 = new Block();
 		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_3->SetIsHardBlock(true);
@@ -671,20 +641,8 @@ void BlockManager::Shape_I(Vector3 velocity,int index){
 		blocks_.push_back(newBlock_3);
 		// 当たり判定に追加
 		collisionManager_->SetColliderList(newBlock_3);
-	}
 #pragma endregion
-
-#pragma region ブロックの４番
-	if (index != 3) {
-		// 実体生成
-		Block* newBlock_4 = new Block();
-		// 初期化
-		newBlock_4->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_4->SetworldTransform_({ velocity.x,velocity.y + height * 3,velocity.z });
-		blocks_.push_back(newBlock_4);
-		collisionManager_->SetColliderList(newBlock_4);
-	}
-	else {
+#pragma region ブロックの4番
 		Block* newBlock_4 = new Block();
 		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_4->SetIsHardBlock(true);
@@ -693,8 +651,48 @@ void BlockManager::Shape_I(Vector3 velocity,int index){
 		blocks_.push_back(newBlock_4);
 		// 当たり判定に追加
 		collisionManager_->SetColliderList(newBlock_4);
-	}
 #pragma endregion
+
+	}
+	else {
+#pragma region ブロックの１番
+		Block* newBlock_1 = new Block();
+		// 初期化
+		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
+		newBlock_1->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
+		blocks_.push_back(newBlock_1);
+		collisionManager_->SetColliderList(newBlock_1);
+#pragma endregion
+#pragma region ブロックの2番
+		Block* newBlock_2 = new Block();
+		// 初期化
+		newBlock_2->Initialize(worldTransform_, BlockTexHandle_, model_.get());
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y + height,velocity.z });
+		blocks_.push_back(newBlock_2);
+		collisionManager_->SetColliderList(newBlock_2);
+#pragma endregion
+#pragma region ブロックの3番
+		// 実体生成
+		Block* newBlock_3 = new Block();
+		// 初期化
+		newBlock_3->Initialize(worldTransform_, BlockTexHandle_, model_.get());
+		newBlock_3->SetworldTransform_({ velocity.x,velocity.y + height * 2,velocity.z });
+		blocks_.push_back(newBlock_3);
+		collisionManager_->SetColliderList(newBlock_3);
+#pragma endregion
+#pragma region ブロックの4番
+
+		// 実体生成
+		Block* newBlock_4 = new Block();
+		// 初期化
+		newBlock_4->Initialize(worldTransform_, BlockTexHandle_, model_.get());
+		newBlock_4->SetworldTransform_({ velocity.x,velocity.y + height * 3,velocity.z });
+		blocks_.push_back(newBlock_4);
+		collisionManager_->SetColliderList(newBlock_4);
+#pragma endregion
+
+	}
+	
 }
 
 /// <summary>
