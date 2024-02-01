@@ -38,7 +38,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 	worldTransform_.translation_.y = 8.0f;
 
 	for (int i = 0; i < 3; i++) {
-		ChangeShape_[i] = Shape(0);
+		ChangeShape_[i] = Shape(rand() % 8);
 	}
 	for (int i = 0; i < 3; i++) {
 		Changeindex_[i] = rand() % 4;
@@ -113,9 +113,9 @@ void BlockManager::Update() {
 	}
 
 
+	shape_ = ChangeShape_[0];
 	if (input_->IsPushKeyEnter(DIK_SPACE)) {
 		//形状をランダムにする
-	//	shape_ = Shape::shape_side;
 		ChangeShape_[0] = ChangeShape_[1];
 		ChangeShape_[1] = ChangeShape_[2];
 		ChangeShape_[2] = Shape(rand() % 8);
@@ -127,7 +127,6 @@ void BlockManager::Update() {
 		Changeindex_[2] = rand() % 4;
 		ShapeManagement();
 	}
-	shape_ = ChangeShape_[0];
 
 	for (Block* block_ : blocks_) {
 		block_->Update();
