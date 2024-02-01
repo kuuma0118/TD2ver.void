@@ -23,6 +23,8 @@ GameManager::GameManager() {
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
+	gamePad_ = GamePad::GetInstance();
+
 	//オーディオクラスの初期化
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
@@ -85,6 +87,8 @@ void GameManager::run() {
 		imguiManager_->Begin();
 		//入力クラスの更新
 		input_->Update();
+		// ゲームパッドの更新
+		gamePad_->Update();
 		//グローバル変数の更新
 		GlobalVariables::GetInstance()->Update();
 		//ゲームシーンの更新

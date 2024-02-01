@@ -87,8 +87,8 @@ void GameScene::Update(GameManager* gameManager) {
 	// ブロックが消えていた場合
 	if (blockManager_->GetIsDelete()) {
 		AABB aabb = {
-			{-0.8f,-0.8f,-0.8f},
-			{0.8f,0.8f,0.8f}
+			{-0.8f,-1.0f,-0.8f},
+			{0.8f,1.0f,0.8f}
 		};
 		player_->SetAABB(aabb);
 		// 自機をコライダーにセット
@@ -103,11 +103,11 @@ void GameScene::Update(GameManager* gameManager) {
 
 	// 自機が死んだらゲームオーバー
 	if (!player_->GetIsAlive()) {
-		gameManager->ChangeScene(new GameOverScene);
+		//gameManager->ChangeScene(new GameOverScene);
 	}
 	// ゴールラインに達したらクリア
 	else if (goalLine_->GetIsGoal()) {
-		gameManager->ChangeScene(new GameClearScene);
+		//gameManager->ChangeScene(new GameClearScene);
 	}
 #ifdef _DEBUG
 	ImGui::Begin("Camera");

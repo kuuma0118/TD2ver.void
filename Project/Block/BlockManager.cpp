@@ -22,6 +22,8 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 	collisionManager_ = collisionManager;
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+	// ゲームパッドのインスタンスを生成
+	gamePad_ = GamePad::GetInstance();
 
 	BlockTexHandle_ = TextureManager::Load("Resources/uvChecker.png");
 	hardBlockTexHandle_ = TextureManager::Load("Resources/cube.jpg");
@@ -37,11 +39,12 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 
 	worldTransform_.translation_.y = 8.0f;
 
+	srand((unsigned int)time(nullptr));
 	for (int i = 0; i < 3; i++) {
-		ChangeShape_[i] = Shape(0);
+		ChangeShape_[i] = Shape(rand() % 8);
 	}
 	for (int i = 0; i < 3; i++) {
-		Changeindex_[i] = rand() % 4;
+		Changeindex_[i] = rand() % 10;
 	}
 
 	shape_ = ChangeShape_[0];
@@ -99,13 +102,13 @@ void BlockManager::Update() {
 	for (int i = 0; i < 4; i++) {
 		NextworldTransform_[i].UpdateMatrix();
 	}
-	if (input_->IsPushKeyEnter(DIK_RIGHT)) {
+	if (input_->IsPushKeyEnter(DIK_RIGHT) || gamePad_->TriggerButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
 		worldTransform_.translation_.x += 2.00f;
 		for (int i = 0; i < 4; i++) {
 			NextworldTransform_[i].translation_.x += 2.00f;
 		}
 	}
-	else if (input_->IsPushKeyEnter(DIK_LEFT)) {
+	else if (input_->IsPushKeyEnter(DIK_LEFT) || gamePad_->TriggerButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
 		worldTransform_.translation_.x -= 2.00f;
 		for (int i = 0; i < 4; i++) {
 			NextworldTransform_[i].translation_.x -= 2.00f;
@@ -113,7 +116,7 @@ void BlockManager::Update() {
 	}
 
 
-	if (input_->IsPushKeyEnter(DIK_SPACE)) {
+	if (input_->IsPushKeyEnter(DIK_SPACE) || gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		//形状をランダムにする
 	//	shape_ = Shape::shape_side;
 		ChangeShape_[0] = ChangeShape_[1];
@@ -124,7 +127,7 @@ void BlockManager::Update() {
 		index_ = Changeindex_[0];
 		Changeindex_[0] = Changeindex_[1];
 		Changeindex_[1] = Changeindex_[2];
-		Changeindex_[2] = rand() % 4;
+		Changeindex_[2] = rand() % 10;
 		ShapeManagement();
 	}
 	shape_ = ChangeShape_[0];
@@ -135,6 +138,9 @@ void BlockManager::Update() {
 	for (HeadBlock* headblock_ : headblocks_) {
 		headblock_->Update();
 	}
+
+	CheckAndClearRow();
+
 	ImGui::Begin("shape");
 	if (ImGui::TreeNode("worldTransform")) {
 		ImGui::DragFloat3("translate", &NextworldTransform_[0].translation_.x, 0.1f, 100, 100);
@@ -1255,6 +1261,7 @@ void BlockManager::CheckAndClearRow() {
 	for (int i = 0; i < kBlockNumY; i++) {
 		// その列にブロックがいくつあるかの確認
 		int count = 0;
+		int hardBlockCount = 0;
 		// 落下するブロック
 		for (Block* block : blocks_) {
 			if (!block->GetFoolFlag()) {
@@ -1264,6 +1271,9 @@ void BlockManager::CheckAndClearRow() {
 							count++;
 							if (!block->GetIsHardBlock()) {
 								block->SetIsAlive(false);
+							}
+							else if(block->GetIsHardBlock()) {
+								hardBlockCount++;
 							}
 						}
 					}
@@ -1284,39 +1294,42 @@ void BlockManager::CheckAndClearRow() {
 		//	}
 		//}
 
+		
 		if (count >= kBlockNumX) {	
-			/*for (Block* block : blocks_) {
-				if (!block->GetIsAlive() && !block->GetIsHardBlock()) {
-					block->SetIsDelete(true);
-				}
-			}*/
-			//collisionManager_->CheckDeleteColliderList();
-			blocks_.remove_if([](Block* block) {
-				if (!block->GetIsAlive()) {
-					delete block;
-					return true;
-				}
-				return false;
-				});
-			;
+			if (hardBlockCount <= kBlockNumX - 1) {
+				/*for (Block* block : blocks_) {
+					if (!block->GetIsAlive() && !block->GetIsHardBlock()) {
+						block->SetIsDelete(true);
+					}
+				}*/
+				//collisionManager_->CheckDeleteColliderList();
+				blocks_.remove_if([](Block* block) {
+					if (!block->GetIsAlive()) {
+						delete block;
+						return true;
+					}
+					return false;
+					});
+				;
 
-			// コライダーをすべてクリア
-			collisionManager_->ClearColliderList();
-			AABB aabb = {
-				{-0.99999f,-1.0f,-0.99999f},
-				{0.99999f,1.0f,0.99999f}
-			};
-			// すでに生成されているブロックをコライダーに登録
-			// 落下するブロック
-			for (Block* block : blocks_) {
-				// 当たり判定の形状を設定
-				block->SetCollisionPrimitive(kCollisionPrimitiveAABB);
-				block->SetCollisionAttribute(kCollisionAttributeBlock);
-				block->SetAABB(aabb);
-				collisionManager_->SetColliderList(block);
+				// コライダーをすべてクリア
+				collisionManager_->ClearColliderList();
+				AABB aabb = {
+					{-0.99999f,-1.0f,-0.99999f},
+					{0.99999f,1.0f,0.99999f}
+				};
+				// すでに生成されているブロックをコライダーに登録
+				// 落下するブロック
+				for (Block* block : blocks_) {
+					// 当たり判定の形状を設定
+					block->SetCollisionPrimitive(kCollisionPrimitiveAABB);
+					block->SetCollisionAttribute(kCollisionAttributeBlock);
+					block->SetAABB(aabb);
+					collisionManager_->SetColliderList(block);
+				}
+				// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
+				isDelete_ = true;
 			}
-			// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
-			isDelete_ = true;
 		}
 		else {
 			for (Block* block : blocks_) {

@@ -2,8 +2,10 @@
 #include "Project/Block/Block.h"
 #include "Project/Block/HeadBlock.h"
 #include "Engine/Components/Input.h"
-// Utility
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
+
+// Project
+#include "Project/Components/GamePad.h"
 
 enum class Shape {
 	shape_I,	//I字ブロック
@@ -142,6 +144,8 @@ private:// 定数
 private:
 	//Input
 	Input* input_ = nullptr;
+	// GamePad
+	GamePad* gamePad_ = nullptr;
 	//ビュープロジェクション(カメラ)
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)

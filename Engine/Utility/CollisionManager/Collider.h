@@ -88,6 +88,19 @@ public:
 	/// <param name="damage"></param>
 	void SetDamage(float damage) { damage_ = damage; };
 
+
+	/// <summary>
+	/// AABBの下面部分に当たったかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsBottomHitAABB() { return isBottomHitAABB_; }
+
+	/// <summary>
+	/// AABBの下面部分に当たったかを設定
+	/// </summary>
+	/// <param name="isActive"></param>
+	void SetIsBottomHitAABB(bool isActive) { isBottomHitAABB_ = isActive; }
+
 	/// <summary>
 	/// AABBの上面部分に当たったかを取得
 	/// </summary>
@@ -142,6 +155,8 @@ private:
 	//ダメージ
 	float damage_ = 1.0f;
 
+	// 下方向に当たってる
+	bool isBottomHitAABB_ = false;
 	// 上方向に当たってる
 	bool isTopHitAABB_ = false;
 	// 右方向に当たってる

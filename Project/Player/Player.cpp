@@ -60,10 +60,10 @@ void Player::Initialize() {
 
 void Player::Update() {
 #ifdef _DEBUG
-	if (gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
+	/*if (gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		Log("Trigger\n");
 		isJump_ = true;
-	}
+	}*/
 #endif // _DEBUG
 	// 重力を速度に足す
 	velocity_.y += acceleration_.y;
@@ -71,6 +71,7 @@ void Player::Update() {
 	if (worldTransform_.translation_.y <= -5) {
 		worldTransform_.translation_.y = -5;
 		velocity_.y = 0;
+
 	}
 
 	if (worldTransform_.translation_.x <= -12 || worldTransform_.translation_.x >= 12) {
@@ -123,7 +124,9 @@ void Player::OnCollision(Collider* collider) {
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
 		if (!collider->GetIsTopHitAABB()) {
-			isJump_ = true;
+			if (collider->GetIsBottomHitAABB()) {
+				isJump_ = true;
+			}
 		}
 		else {
 			inverseVelSignal_ = true;
@@ -135,7 +138,9 @@ void Player::OnCollision(Collider* collider) {
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();
 		if (!collider->GetIsTopHitAABB()) {
-			isJump_ = true;
+			if (collider->GetIsBottomHitAABB()) {
+				isJump_ = true;
+			}
 		}
 		else {
 			inverseVelSignal_ = true;

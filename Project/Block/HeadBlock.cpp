@@ -42,15 +42,16 @@ void HeadBlock::Update() {
 	AdjustmentParameter();
 
 	// 一度着地したら動かないようにする
-	//if (foolflag) {
-	worldTransform_.translation_.y -= foolSpeed_;
-	//}
+	if (foolflag) {
+		worldTransform_.translation_.y -= foolSpeed_;
+	}
 
 	// ブロックの行ける最低地点
 	if (worldTransform_.translation_.y <= -5) {
 		float floor = worldTransform_.translation_.y - (-5);
 		worldTransform_.translation_.y -= floor;
 		foolflag = false;
+		SetIsBottomHitAABB(true);
 	}
 	worldTransform_.UpdateMatrix();
 }
@@ -79,18 +80,21 @@ void HeadBlock::OnCollision(Collider* collider) {
 
 	if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 		// 下
-		if (theta >= (M_PI / 5) && theta <= M_PI - (M_PI / 5)) {
+		if (theta >= (M_PI / 3) && theta <= M_PI - (M_PI / 3)) {
 			float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 			worldTransform_.translation_.y += extrusion;
 			int y = static_cast<int>(std::round(worldTransform_.translation_.y));
 			worldTransform_.translation_.y = y - 0.01f;
 			worldTransform_.UpdateMatrix();
 			foolflag = false;
+			SetIsBottomHitAABB(true);
+		}
+		else {
+			//SetIsBottomHitAABB(false);
 		}
 
-
 		// 上
-		if (theta <= -(M_PI / 5) && theta >= -M_PI + (M_PI / 5)) {
+		if (theta <= -(M_PI / 3) && theta >= -M_PI + (M_PI / 3)) {
 			worldTransform_.UpdateMatrix();
 			if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 				SetIsTopHitAABB(true);
