@@ -9,6 +9,8 @@
 #include "Engine/Components/Input.h"
 #include "Engine/Components/Audio.h"
 #include "Engine/Components/PostProcess.h"
+#include "3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
 
 #include "Project/Components/GamePad.h"
 #include <memory>

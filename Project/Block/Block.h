@@ -4,6 +4,8 @@
 #include "Engine/2D/ImGuiManager.h"
 #include "Engine/Base/TextureManager.h"
 #include "Engine/Utility/CollisionManager/Collider.h"
+#include "3D/Model/ParticleModel.h"
+#include "Components/Particle/ParticleSystem.h"
 
 class Block :public Collider
 {
@@ -33,6 +35,8 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
+
+	void DrawParticle(const ViewProjection& viewProjection);
 
 	///
 	/// User Method
@@ -89,5 +93,9 @@ private: // メンバ変数
 
 	// 消えないブロック
 	bool isHardBlock_;
+
+	//パーティクル
+	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 };
 

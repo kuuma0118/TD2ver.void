@@ -36,6 +36,9 @@ GameManager::GameManager() {
 	//モデルの静的初期化
 	Model::StaticInitialize();
 
+	//パーティクルの静的初期化
+	ParticleModel::StaticInitialize();
+
 	//スプライトの静的初期化
 	Sprite::StaticInitialize();
 
@@ -55,6 +58,7 @@ GameManager::~GameManager() {
 	Sprite::Release();
 	//モデルの解放
 	Model::Release();
+	ParticleModel::Release();
 	//ポストプロセスの解放
 	PostProcess::DeleteInstance();
 	//オーディオの解放

@@ -7,6 +7,9 @@
 #include "Engine/Components/PostProcess.h"
 // 3D
 #include "Engine/3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
+#include "3D/Matrix/WorldTransform.h"
+#include "3D/Matrix/ViewProjection.h"
 // 2D
 #include "Engine/2D/Sprite.h"
 // Utility
@@ -70,6 +73,25 @@ private:// メンバ変数
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
+
+	//スプライト
+	std::unique_ptr<Sprite> sprite1_ = nullptr;
+	std::unique_ptr<Sprite> sprite2_ = nullptr;
+	Vector4 spriteColor1_{ 1.0f,1.0f,1.0f,1.0f };
+	Vector4 spriteColor2_{ 1.0f,1.0f,1.0f,1.0f };
+
+	//モデル
+	std::unique_ptr<Model> model1_ = nullptr;
+	std::unique_ptr<Model> model2_ = nullptr;
+	Vector4 modelColor1_{ 1.0f,1.0f,1.0f,1.0f };
+	Vector4 modelColor2_{ 1.0f,1.0f,1.0f,1.0f };
+
+	//ワールドトランスフォーム
+	WorldTransform worldTransform1_{};
+	WorldTransform worldTransform2_{};
+
+	//ブロック
+	std::unique_ptr<Block> block_ = nullptr;
 
 	// 自機に追従するカメラ
 	std::unique_ptr<FollowCamera> followCamera_;

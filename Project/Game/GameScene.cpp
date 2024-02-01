@@ -60,6 +60,8 @@ void GameScene::Initialize(GameManager* gameManager) {
 	deadLine_->Initialize();
 	deadLine_->SetPlayer(player_.get());
 	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -146,6 +148,17 @@ void GameScene::Draw(GameManager* gameManager) {
 	deadLine_->Draw3DLine(followCamera_->GetViewProjection());
 
 	Model::PostDraw();
+
+#pragma endregion
+
+#pragma region パーティクルの描画
+
+	//パーティクルモデルの描画
+	ParticleModel::PreDraw();
+
+	block_->DrawParticle(followCamera_->GetViewProjection());
+
+	ParticleModel::PostDraw();
 
 #pragma endregion
 

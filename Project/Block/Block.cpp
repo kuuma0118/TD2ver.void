@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cassert>
+#include "Utility/GlobalVariables.h"
 
 Block::Block() {
 }
@@ -40,9 +41,59 @@ void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model*
 		{0.99999f,1.0f,0.99999f}
 	};
 	SetAABB(aabb);
+
+	//パーティクルの初期化
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
+
+	//エミッターの作成
+	ParticleEmitter* particleEmitter = EmitterBuilder()
+		.SetArea({ -0.5f,-0.5f,0.0f }, { 0.5f,-0.5f,0.0f })
+		.SetAzimuth(0.0f, 0.0f)
+		.SetColor({ 1.0f,1.0f,1.0f,0.5f }, { 1.0f,1.0f,1.0f,0.5f })
+		.SetCount(10)
+		.SetDeleteTime(60)
+		.SetElevation(0.0f, 0.0f)
+		.SetEmitterName("BlockMove")
+		.SetFrequency(0.1f)
+		.SetLifeTime(0.4f, 0.4f)
+		.SetParticleType(ParticleEmitter::ParticleType::kScale)
+		.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		.SetScale({ 0.2f,0.2f,0.2f }, { 0.2f,0.2f,0.2f })
+		.SetTranslation(worldTransform_.translation_)
+		.SetVelocity({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		.Build();
+	particleSystem_->AddParticleEmitter(particleEmitter);
 }
 
 void Block::Update() {
+
+	//エミッターが消えていたら再生成
+	if (particleSystem_->GetParticleEmitter("BlockMove") == nullptr) {
+		//エミッターの作成
+		ParticleEmitter* particleEmitter = EmitterBuilder()
+			.SetArea({ -0.5f,-0.5f,0.0f }, { 0.5f,-0.5f,0.0f })
+			.SetAzimuth(180.0f, 180.0f)
+			.SetColor({ 1.0f,1.0f,1.0f,0.5f }, { 1.0f,1.0f,1.0f,0.5f })
+			.SetCount(10)
+			.SetDeleteTime(60)
+			.SetElevation(0.0f, 0.0f)
+			.SetEmitterName("BlockMove")
+			.SetFrequency(0.1f)
+			.SetLifeTime(0.4f, 0.4f)
+			.SetParticleType(ParticleEmitter::ParticleType::kScale)
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.2f,0.2f,0.2f }, { 0.2f,0.2f,0.2f })
+			.SetTranslation(worldTransform_.translation_)
+			.SetVelocity({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+			.Build();
+		particleSystem_->AddParticleEmitter(particleEmitter);
+	}
+
+	//パーティクルを出さないようにする
+	particleSystem_->GetParticleEmitter("BlockMove")->SetPopCount(0);
+
 	viewProjection_.UpdateMatrix();
 
 	AdjustmentParameter();
@@ -50,16 +101,30 @@ void Block::Update() {
 	worldTransform_.translation_.y -= foolSpeed_;
 
 	if (worldTransform_.translation_.y <= -5) {
+
+		particleSystem_->GetParticleEmitter("BlockMove")->SetPopArea({ -1.0f,-0.5f,0.0f }, { -1.0f,-0.5f,0.0f });
+		particleSystem_->GetParticleEmitter("BlockMove")->SetPopAzimuth(90.0f, 90.0f);
+		particleSystem_->GetParticleEmitter("BlockMove")->SetPopCount(10);
+		particleSystem_->GetParticleEmitter("BlockMove")->SetTranslation(worldTransform_.translation_);
+
 		float floor = worldTransform_.translation_.y - (-5);
 		worldTransform_.translation_.y -= floor;
 		foolflag = false;
 		SetIsBottomHitAABB(true);
 	}
 	worldTransform_.UpdateMatrix();
+
+	//パーティクルの更新
+	particleSystem_->Update();
 }
 
 void Block::Draw(ViewProjection viewProjection_) {
 	model_->Draw(worldTransform_, viewProjection_, texHandle_);
+}
+
+void Block::DrawParticle(const ViewProjection& viewProjection_) {
+	//パーティクルモデルの描画
+	particleModel_->Draw(particleSystem_.get(), viewProjection_);
 }
 
 void Block::AdjustmentParameter()
