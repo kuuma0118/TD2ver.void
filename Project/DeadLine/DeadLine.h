@@ -95,7 +95,7 @@ private:
 
 private:// 定数
 	// デッドラインの上昇速度
-	const float kSpeed_ = 0.001f;
+	const float kSpeed_ = 0.002f;
 	// デッドラインの下がる大きさ
 	const float kDownValue = 0.5f;
 
