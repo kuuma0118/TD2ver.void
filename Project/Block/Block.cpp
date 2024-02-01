@@ -87,7 +87,7 @@ void Block::OnCollision(Collider* collider) {
 			float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 			worldTransform_.translation_.y += extrusion;
 			int y = static_cast<int>(std::round(worldTransform_.translation_.y));
-			worldTransform_.translation_.y = y;
+			worldTransform_.translation_.y = (float)y;
 			worldTransform_.UpdateMatrix();
 			foolflag = false;
 	}

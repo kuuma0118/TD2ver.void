@@ -103,11 +103,11 @@ void GameScene::Update(GameManager* gameManager) {
 
 	// 自機が死んだらゲームオーバー
 	if (!player_->GetIsAlive()) {
-		//gameManager->ChangeScene(new GameOverScene);
+		gameManager->ChangeScene(new GameOverScene);
 	}
 	// ゴールラインに達したらクリア
 	else if (goalLine_->GetIsGoal()) {
-		//gameManager->ChangeScene(new GameClearScene);
+		gameManager->ChangeScene(new GameClearScene);
 	}
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
