@@ -7,7 +7,7 @@
 void FollowCamera::Initialize() {
 	viewProjection_.Initialize();
 	// 追従対象からカメラまでのオフセット
-	offset_ = { 0.0f, 2.5f, -40.0f };
+	offset_ = { 0.0f, 6.0f, -50.0f };
 
 	// ゴールした時のカメラ移動フラグ
 	isGoalAngle_ = false;

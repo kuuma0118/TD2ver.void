@@ -95,12 +95,12 @@ private:
 
 private:// 定数
 	// デッドラインの上昇速度
-	const float kSpeed_ = 0.001f;
+	const float kSpeed_ = 0.002f;
 	// デッドラインの下がる大きさ
 	const float kDownValue = 0.5f;
 
 	// デッドラインの開始位置
-	const float kStartDeadLine_ = -5;
+	const float kStartDeadLine_ = -7;
 
 	// デッドラインの点滅速度
 	const float kFlashSpeed_ = 1.0f / 90.0f;
