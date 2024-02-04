@@ -27,6 +27,18 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 
 	BlockTexHandle_ = TextureManager::Load("Resources/uvChecker.png");
 	hardBlockTexHandle_ = TextureManager::Load("Resources/cube.jpg");
+	texHandle_I= TextureManager::Load("Resources/uvChecker.png");
+	texHandle_T = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_S = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_O = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_J = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_L = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_ten = TextureManager::Load("Resources/uvChecker.png");
+	texHandle_sido = TextureManager::Load("Resources/uvChecker.png");
+
+	//UIの初期値
+	//次のグ
+	positie_ = { 1000.0f,50.0f };
 
 #pragma region モデル読み込み
 
@@ -182,7 +194,12 @@ void BlockManager::Draw(ViewProjection viewProjection_){
 	}
 
 	floor_->Draw(floorWorld_, viewProjection_);
-} 
+}
+void BlockManager::UIDraw()
+{
+	Shape_Second();
+}
+
 
 void BlockManager::Shape_one(ViewProjection viewProjection_) {
 
@@ -456,25 +473,42 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		break;
 	}
 }
+
 void BlockManager::Shape_Second() {
 	///画像で予測ブロックを表示する（次のブロック）
 	shape_ = ChangeShape_[1];
 	switch (shape_) {
 	case Shape::shape_I:
+		sprite_.reset(Sprite::Create(texHandle_I, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_T:
+		sprite_.reset(Sprite::Create(texHandle_T, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_S:
+		sprite_.reset(Sprite::Create(texHandle_S, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_O:
+		sprite_.reset(Sprite::Create(texHandle_O, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_J:
+		sprite_.reset(Sprite::Create(texHandle_J, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_L:
+		sprite_.reset(Sprite::Create(texHandle_L, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_ten:
+		sprite_.reset(Sprite::Create(texHandle_ten, { positie_ }));
+		sprite_->Draw();
 		break;
 	case Shape::shape_side:
+		sprite_.reset(Sprite::Create(texHandle_sido, { positie_ }));
+		sprite_->Draw();  
 		break;
 	}
 }

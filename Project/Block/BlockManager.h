@@ -3,7 +3,7 @@
 #include "Project/Block/HeadBlock.h"
 #include "Engine/Components/Input.h"
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
-
+#include "Engine/2D/Sprite.h" 
 // Project
 #include "Project/Components/GamePad.h"
 
@@ -49,6 +49,7 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 	
+	void UIDraw();
 	///
 	/// User Method
 	/// 
@@ -183,9 +184,23 @@ private:
 	std::unique_ptr<Model> wall_[2];
 	// 床
 	std::unique_ptr<Model> floor_;
+
+	//スプライト
+	std::unique_ptr<Sprite> sprite_{};
+	Vector2 positie_={ 1000.0f,50.0f };
+
 	//テクスチャハンドル
 	uint32_t BlockTexHandle_ = 0;
 	uint32_t hardBlockTexHandle_ = 0;
+	uint32_t texHandle_I = 0;
+	uint32_t texHandle_T = 0;
+	uint32_t texHandle_S = 0;
+	uint32_t texHandle_O = 0;
+	uint32_t texHandle_J = 0;
+	uint32_t texHandle_L = 0;
+	uint32_t texHandle_ten = 0;
+	uint32_t texHandle_sido = 0;
+
 
 	// 
 	Vector2 clearBlock_[20];
