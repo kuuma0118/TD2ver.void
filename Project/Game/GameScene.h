@@ -82,5 +82,7 @@ private:// メンバ変数
 	// デッドライン
 	std::unique_ptr<DeadLine> deadLine_;
 
+	bool isOpeningCamera_;
+
 #pragma endregion
 };

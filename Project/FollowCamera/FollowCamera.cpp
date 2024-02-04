@@ -7,7 +7,7 @@
 void FollowCamera::Initialize() {
 	viewProjection_.Initialize();
 	// 追従対象からカメラまでのオフセット
-	offset_ = { 0.0f, 6.0f, -50.0f };
+	offset_ = { 0.0f, 2.0f, -50.0f };
 
 	// ゴールした時のカメラ移動フラグ
 	isGoalAngle_ = false;
@@ -40,8 +40,9 @@ void FollowCamera::Update() {
 
 		// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
 		viewProjection_.translation_ = Add(target_->translation_, offset);
+		viewProjection_.translation_.z -= viewProjection_.translation_.y / 2;
+		viewProjection_.translation_.y = 2.0f;
 		viewProjection_.translation_.x = 0;
-
 	}
 
 	viewProjection_.UpdateMatrix();

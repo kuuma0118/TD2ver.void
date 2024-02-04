@@ -48,7 +48,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
+	followCamera_->SetTarget(&goalLine_->GetWorldTransform());
 	followCamera_->SetTarget(&player_->GetWorldTransform());
+	isOpeningCamera_ = true;
 
 	// ゴールライン
 	goalLine_ = std::make_unique<GoalLine>();
@@ -64,9 +66,8 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 void GameScene::Update(GameManager* gameManager) {
 	worldTransform_.UpdateMatrix();
-
 	viewProjection_.UpdateMatrix();
-	// カメラ
+
 	followCamera_->Update();
 	viewProjection_.matView_ = followCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
@@ -78,11 +79,11 @@ void GameScene::Update(GameManager* gameManager) {
 	blockManager_->Update();
 
 	// ゴールライン
-	goalLine_->Update(followCamera_->GetViewProjection());
+	goalLine_->Update(viewProjection_);
 
 	// デッドライン
 	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
-	deadLine_->Update(followCamera_->GetViewProjection());
+	deadLine_->Update(viewProjection_);
 
 	// ブロックが消えていた場合
 	if (blockManager_->GetIsDelete()) {
@@ -103,15 +104,17 @@ void GameScene::Update(GameManager* gameManager) {
 
 	// 自機が死んだらゲームオーバー
 	if (!player_->GetIsAlive()) {
-		gameManager->ChangeScene(new GameOverScene);
+		//gameManager->ChangeScene(new GameOverScene);
 	}
 	// ゴールラインに達したらクリア
 	else if (goalLine_->GetIsGoal()) {
-		gameManager->ChangeScene(new GameClearScene);
+		//gameManager->ChangeScene(new GameClearScene);
 	}
+
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.001f, -100, 100);
+	ImGui::Checkbox("OpeningCamera", &isOpeningCamera_);
 	ImGui::End();
 #endif
 };
@@ -134,16 +137,16 @@ void GameScene::Draw(GameManager* gameManager) {
 	Model::PreDraw();
 
 	// 自機
-	player_->Draw(followCamera_->GetViewProjection());
+	player_->Draw(viewProjection_);
 
 	//ブロックの描画
-	blockManager_->Draw(followCamera_->GetViewProjection());
+	blockManager_->Draw(viewProjection_);
 
 	// ゴールライン
-	goalLine_->Draw3DLine(followCamera_->GetViewProjection());
+	goalLine_->Draw3DLine(viewProjection_);
 
 	// デッドライン
-	deadLine_->Draw3DLine(followCamera_->GetViewProjection());
+	deadLine_->Draw3DLine(viewProjection_);
 
 	Model::PostDraw();
 

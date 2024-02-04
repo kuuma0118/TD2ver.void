@@ -85,7 +85,7 @@ private: // メンバ変数
 	bool isAlive_;
 
 	//速度
-	float foolSpeed_ = 0.2f;
+	float foolSpeed_ = 0.4f;
 
 	// 消えないブロック
 	bool isHardBlock_;

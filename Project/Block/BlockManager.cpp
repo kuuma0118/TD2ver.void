@@ -14,11 +14,7 @@ BlockManager::~BlockManager() {
 	}
 }
 
-void BlockManager::Initialize(CollisionManager* collisionManager){
-	worldTransform_.Initialize();
-	for (int i = 0; i < 4; i++) {
-		NextworldTransform_[i].Initialize();
-	}
+void BlockManager::Initialize(CollisionManager* collisionManager) {
 	collisionManager_ = collisionManager;
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
@@ -27,30 +23,16 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 
 	BlockTexHandle_ = TextureManager::Load("Resources/uvChecker.png");
 	hardBlockTexHandle_ = TextureManager::Load("Resources/cube.jpg");
+	fallingRangeTexHandle_ = TextureManager::Load("Resources/white.png");
 
 #pragma region モデル読み込み
-
 	// ブロック
 	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
+	assert(model_);
 	for (int i = 0; i < 4; i++) {
-
 		Nextmodel_[i].reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	}
 
-	worldTransform_.translation_.y = 8.0f;
-
-	srand((unsigned int)time(nullptr));
-	for (int i = 0; i < 3; i++) {
-		ChangeShape_[i] = Shape(rand() % 8);
-	}
-	for (int i = 0; i < 3; i++) {
-		Changeindex_[i] = rand() % 10;
-	}
-
-	shape_ = ChangeShape_[0];
-	index_ = Changeindex_[0];
-
-	assert(model_);
 	// 壁
 	for (int i = 0; i < 2; i++) {
 		wall_[i].reset(Model::CreateFromOBJ("Resources", "block.obj"));
@@ -59,13 +41,30 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 	// 床
 	floor_.reset(Model::CreateFromOBJ("Resources/Cube", "block.obj"));
 	assert(floor_);
+	// 落下予測範囲
+	fallingRange_.reset(Model::CreateFromOBJ("Resources/Cube", "block.obj"));
+	assert(fallingRange_);
 
 #pragma endregion
 
 #pragma region ワールド座標の初期化と初期位置を設定
-
 	// ブロックの沸く場所
 	worldTransform_.Initialize();
+	worldTransform_.translation_.y = 20.0f;
+	for (int i = 0; i < 4; i++) {
+		NextworldTransform_[i].Initialize();
+	}
+
+	srand((unsigned int)time(nullptr));
+	for (int i = 0; i < 3; i++) {
+		ChangeShape_[i] = Shape(rand() % 8);
+	}
+	for (int i = 0; i < 3; i++) {
+		Changeindex_[i] = rand() % 10;
+	}
+	shape_ = ChangeShape_[0];
+	index_ = Changeindex_[0];
+
 	// 壁
 	for (int i = 0; i < 2; i++) {
 		wallWorld_[i].Initialize();
@@ -80,6 +79,11 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 	floorWorld_.Initialize();
 	floorWorld_.scale_ = { 100.0f,0.1f,2.0f };
 	floorWorld_.translation_.y = kMapBottomPos - 1.0f;
+	// 落下予測地点
+	for (int i = 0; i < 4; i++) {
+		fallingPoint_[i].Initialize();
+		fallingPoint_[i].scale_ = { 1.0f, 50.0f, 0.001f };
+	}
 
 #pragma endregion
 
@@ -88,8 +92,14 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 		clearBlock_[i].x = (2 * i) - (float)(kBlockNumX - 1);
 		clearBlock_[i].y = (2 * i) + kMapBottomPos;
 	}
+
 	// ブロックが消えるフラグ
 	isDelete_ = false;
+	// 落下予測地点を表示するか
+	isFallingPoint_ = true;
+	// 落下予測範囲を半透明にする
+	fallingRange_->GetMaterial()->SetColor(Vector4{ 1,1,1,0.3f });
+	fallingRange_->GetDirectionalLight()->SetEnableLighting(false);
 }
 
 void BlockManager::Update() {
@@ -115,7 +125,6 @@ void BlockManager::Update() {
 		}
 	}
 
-
 	if (input_->IsPushKeyEnter(DIK_SPACE) || gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
 		//形状をランダムにする
 	//	shape_ = Shape::shape_side;
@@ -131,16 +140,54 @@ void BlockManager::Update() {
 		ShapeManagement();
 	}
 	shape_ = ChangeShape_[0];
+	
+	for (int i = 0; i < 4; i++) {
+		int count = 1;
+		if (i == 0) {
+			fallingPoint_[i].translation_.x = NextworldTransform_[i].translation_.x;
+		}
+		else {
+			for (int j = 0; j < 4; j++) {
+				if (NextworldTransform_[i].translation_.x != NextworldTransform_[i - count].translation_.x) {
+					fallingPoint_[i].translation_.x = NextworldTransform_[i].translation_.x;
+
+				}
+				else {
+					fallingPoint_[i].translation_.x = -100;
+					break;
+				}
+				if (i - count != 0) {
+					count++;
+				}
+				else {
+					break;
+				}
+			}
+		}
+	}
+
+	//int count = 0;
+	//for (int i = 0; i < 4; i++) {
+	//	if (NextworldTransform_[i].translation_.x == NextworldTransform_[count].translation_.x) {
+	//		fallingPoint_[i].translation_.x = NextworldTransform_[i].translation_.x;
+	//		count++;
+	//	}
+	//}
 
 	for (Block* block_ : blocks_) {
 		block_->Update();
 	}
-	for (HeadBlock* headblock_ : headblocks_) {
-		headblock_->Update();
+	//for (HeadBlock* headblock_ : headblocks_) {
+	//	headblock_->Update();
+	//}
+
+	for (int i = 0; i < 4; i++) {
+		fallingPoint_[i].UpdateMatrix();
 	}
 
 	CheckAndClearRow();
 
+#ifdef _DEBUG
 	ImGui::Begin("shape");
 	if (ImGui::TreeNode("worldTransform")) {
 		ImGui::DragFloat3("translate", &NextworldTransform_[0].translation_.x, 0.1f, 100, 100);
@@ -167,27 +214,34 @@ void BlockManager::Update() {
 		ImGui::TreePop();
 	}
 	ImGui::End();
+#endif // _DEBUG
 }
 
-void BlockManager::Draw(ViewProjection viewProjection_){
+void BlockManager::Draw(ViewProjection viewProjection_) {
 	Shape_one(viewProjection_);
-
+	// ブロック
 	for (Block* block_ : blocks_) {
 		block_->Draw(viewProjection_);
-	} 
-	for (HeadBlock* headblock_ : headblocks_) {
-		headblock_->Draw(viewProjection_);
 	}
-	
+	//for (HeadBlock* headblock_ : headblocks_) {
+	//	headblock_->Draw(viewProjection_);
+	//}
+	// 壁
 	for (int i = 0; i < 2; i++) {
 		wall_[i]->Draw(wallWorld_[i], viewProjection_);
 	}
-
+	// 床
 	floor_->Draw(floorWorld_, viewProjection_);
-} 
+	// 落下予測地点
+	if (isFallingPoint_) {
+		for (int i = 0; i < 4; i++) {
+			fallingRange_->Draw(fallingPoint_[i], viewProjection_, fallingRangeTexHandle_);
+		}
+	}
+}
 
 void BlockManager::Shape_one(ViewProjection viewProjection_) {
-	
+
 
 	switch (shape_)
 	{
@@ -381,7 +435,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		}
 		else {
 			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
-			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y+ width;
+			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
 		}
 #pragma endregion
@@ -428,7 +482,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 
 #pragma region ブロックの３番
 		if (Changeindex_[0] != 2) {
-			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x ;
+			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, BlockTexHandle_);
 		}
@@ -442,7 +496,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 #pragma region ブロックの４番
 		if (Changeindex_[0] != 3) {
 			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
-			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width*2;
+			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 2;
 			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
 		}
 		else {
@@ -517,7 +571,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		else {
 			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
 		}
-		
+
 #pragma endregion
 
 		break;
@@ -535,7 +589,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 			NextworldTransform_[0].translation_ = worldTransform_.translation_;
 			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
 		}
-		
+
 #pragma endregion
 
 #pragma region ブロックの２番
@@ -551,7 +605,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		}
 
 #pragma endregion
-		
+
 
 		break;
 	}
@@ -580,7 +634,7 @@ void BlockManager::Shape_Second(ViewProjection viewProjection_) {
 }
 
 
-void BlockManager::ShapeManagement(){
+void BlockManager::ShapeManagement() {
 	switch (shape_)
 	{
 	case Shape::shape_I:
@@ -619,7 +673,7 @@ void BlockManager::ShapeManagement(){
 /// I字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_I(Vector3 velocity,int index){
+void BlockManager::Shape_I(Vector3 velocity, int index) {
 
 #pragma region ブロックの１番
 	if (index != 0) {
@@ -713,7 +767,7 @@ void BlockManager::Shape_I(Vector3 velocity,int index){
 /// T字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_T(Vector3 velocity, int index){
+void BlockManager::Shape_T(Vector3 velocity, int index) {
 
 
 #pragma region ブロックの１番
@@ -808,7 +862,7 @@ void BlockManager::Shape_T(Vector3 velocity, int index){
 /// S字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_S(Vector3 velocity, int index){
+void BlockManager::Shape_S(Vector3 velocity, int index) {
 
 
 #pragma region ブロックの１番
@@ -903,7 +957,7 @@ void BlockManager::Shape_S(Vector3 velocity, int index){
 /// O字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_O(Vector3 velocity, int index){
+void BlockManager::Shape_O(Vector3 velocity, int index) {
 
 
 #pragma region ブロックの１番
@@ -997,7 +1051,7 @@ void BlockManager::Shape_O(Vector3 velocity, int index){
 /// J字ブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_J(Vector3 velocity, int index){
+void BlockManager::Shape_J(Vector3 velocity, int index) {
 
 
 #pragma region ブロックの１番
@@ -1005,7 +1059,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index){
 		Block* newBlock_1 = new Block();
 		// 初期化
 		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_1->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
+		newBlock_1->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
 		blocks_.push_back(newBlock_1);
 		collisionManager_->SetColliderList(newBlock_1);
 	}
@@ -1013,7 +1067,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index){
 		Block* newBlock_1 = new Block();
 		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_1->SetIsHardBlock(true);
-		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		newBlock_1->SetworldTransform_({ velocity.x - width,velocity.y,velocity.z });
 		//リストに登録
 		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
@@ -1027,7 +1081,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index){
 		Block* newBlock_2 = new Block();
 		// 初期化
 		newBlock_2->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
 		blocks_.push_back(newBlock_2);
 		collisionManager_->SetColliderList(newBlock_2);
 	}
@@ -1035,7 +1089,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index){
 		Block* newBlock_2 = new Block();
 		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_2->SetIsHardBlock(true);
-		newBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
 		//リストに登録
 		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
@@ -1091,7 +1145,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index){
 ///L字ブロック 
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::Shape_L(Vector3 velocity, int index){
+void BlockManager::Shape_L(Vector3 velocity, int index) {
 
 
 #pragma region ブロックの１番
@@ -1099,7 +1153,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index){
 		Block* newBlock_1 = new Block();
 		// 初期化
 		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_1->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
+		newBlock_1->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
 		blocks_.push_back(newBlock_1);
 		collisionManager_->SetColliderList(newBlock_1);
 	}
@@ -1107,7 +1161,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index){
 		Block* newBlock_1 = new Block();
 		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_1->SetIsHardBlock(true);
-		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
+		newBlock_1->SetworldTransform_({ velocity.x + width,velocity.y,velocity.z });
 		//リストに登録
 		blocks_.push_back(newBlock_1);
 		// 当たり判定に追加
@@ -1121,7 +1175,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index){
 		Block* newBlock_2 = new Block();
 		// 初期化
 		newBlock_2->Initialize(worldTransform_, BlockTexHandle_, model_.get());
-		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
 		blocks_.push_back(newBlock_2);
 		collisionManager_->SetColliderList(newBlock_2);
 	}
@@ -1129,7 +1183,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index){
 		Block* newBlock_2 = new Block();
 		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_2->SetIsHardBlock(true);
-		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
+		newBlock_2->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
 		//リストに登録
 		blocks_.push_back(newBlock_2);
 		//当たり判定に追加
@@ -1185,9 +1239,9 @@ void BlockManager::Shape_L(Vector3 velocity, int index){
 /// 
 /// </summary>
 /// /// <param name="velocity"></param>
-void BlockManager::Shape_Ten(Vector3 velocity, int index){
+void BlockManager::Shape_Ten(Vector3 velocity, int index) {
 #pragma region ブロックの１番
-	if (index == 0 || index == 1 ) {
+	if (index == 0 || index == 1) {
 		Block* newBlock_1 = new Block();
 		// 初期化
 		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
@@ -1212,10 +1266,10 @@ void BlockManager::Shape_Ten(Vector3 velocity, int index){
 /// 横に連なるブロック
 /// </summary>
 /// <param name="velocity"></param>
-void BlockManager::shape_side(Vector3 velocity, int index){
+void BlockManager::shape_side(Vector3 velocity, int index) {
 
 #pragma region ブロックの１番
-	if (index == 0 || index == 1 ) {
+	if (index == 0 || index == 1) {
 		Block* newBlock_1 = new Block();
 		// 初期化
 		newBlock_1->Initialize(worldTransform_, BlockTexHandle_, model_.get());
@@ -1272,7 +1326,7 @@ void BlockManager::CheckAndClearRow() {
 							if (!block->GetIsHardBlock()) {
 								block->SetIsAlive(false);
 							}
-							else if(block->GetIsHardBlock()) {
+							else if (block->GetIsHardBlock()) {
 								hardBlockCount++;
 							}
 						}
@@ -1294,8 +1348,8 @@ void BlockManager::CheckAndClearRow() {
 		//	}
 		//}
 
-		
-		if (count >= kBlockNumX) {	
+
+		if (count >= kBlockNumX) {
 			if (hardBlockCount <= kBlockNumX - 1) {
 				/*for (Block* block : blocks_) {
 					if (!block->GetIsAlive() && !block->GetIsHardBlock()) {

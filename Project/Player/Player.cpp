@@ -50,8 +50,8 @@ void Player::Initialize() {
 	SetCollisionAttribute(kCollisionAttributePlayer);
 
 	AABB aabb = {
-	{-0.8f,-0.8f,-0.8f},
-	{0.8f,0.8f,0.8f}
+	{-0.8f,-1.0f,-0.8f},
+	{0.8f,1.0f,0.8f}
 	};
 	SetAABB(aabb);
 
@@ -59,19 +59,13 @@ void Player::Initialize() {
 }
 
 void Player::Update() {
-#ifdef _DEBUG
-	/*if (gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
-		Log("Trigger\n");
-		isJump_ = true;
-	}*/
-#endif // _DEBUG
 	// 重力を速度に足す
 	velocity_.y += acceleration_.y;
+
 	// 床の判定
 	if (worldTransform_.translation_.y <= -5) {
 		worldTransform_.translation_.y = -5;
 		velocity_.y = 0;
-
 	}
 
 	if (worldTransform_.translation_.x <= -12 || worldTransform_.translation_.x >= 12) {
@@ -107,7 +101,7 @@ void Player::OnCollision(Collider* collider) {
 		worldTransform_.UpdateMatrix();
 	}
 	// 下
-	if (theta >= (M_PI / 4) && theta <= M_PI - (M_PI / 4)) {
+	if (theta >= (M_PI / 5) && theta <= M_PI - (M_PI / 5)) {
 		float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 		worldTransform_.translation_.y += extrusion;
 		worldTransform_.UpdateMatrix();
@@ -118,8 +112,9 @@ void Player::OnCollision(Collider* collider) {
 		velocity_.y = 0;
 		hitCounter_++;
 	}
+
 	// 左
-	if (theta < M_PI / 6.0f && theta > -(M_PI / 6.0f)) {
+	if (theta < M_PI / 8.0f && theta > -(M_PI / 8.0f)) {
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
@@ -133,7 +128,7 @@ void Player::OnCollision(Collider* collider) {
 		}
 	}
 	// 右
-	if (theta > M_PI - (M_PI / 6.0f) || theta < -M_PI + (M_PI / 6.0f)) {
+	if (theta > M_PI - (M_PI / 8.0f) || theta < -M_PI + (M_PI / 8.0f)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();
@@ -234,7 +229,7 @@ void Player::B_Update() {
 }
 
 void Player::B_NormalInit() {
-
+	velocity_.y = 0;
 }
 void Player::B_NormalUpdate() {
 	if (isJump_) {
@@ -258,7 +253,7 @@ void Player::B_AirInit() {
 }
 void Player::B_AirUpdate() {
 	if (worldTransform_.translation_.y <= -5) {
-		behaviorRequest_ = Behavior::kLanding;		
+		behaviorRequest_ = Behavior::kLanding;
 	}
 }
 

@@ -3,9 +3,12 @@
 #include "Project/Block/HeadBlock.h"
 #include "Engine/Components/Input.h"
 #include "Engine/Utility/CollisionManager/CollisionManager.h"
+#include "Engine/2D/Sprite.h"
 
 // Project
 #include "Project/Components/GamePad.h"
+
+#include <set>
 
 enum class Shape {
 	shape_I,	//I字ブロック
@@ -129,6 +132,13 @@ public: // メンバ関数
 	/// <param name="isDelete"></param>
 	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
 
+private:// プライベートな関数
+	Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
+	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
+	void WorldToScreenConversion(const ViewProjection& viewProjection);
+
 private:// 定数
 	// マップの左端
 	const float kMapLeftPos = 0.0f;
@@ -155,6 +165,8 @@ private:
 	WorldTransform wallWorld_[2];
 	// 床
 	WorldTransform floorWorld_;
+	// 落下予測地点
+	WorldTransform fallingPoint_[4];
 
 	//ブロック
 	std::list<Block*> blocks_;
@@ -183,14 +195,22 @@ private:
 	std::unique_ptr<Model> wall_[2];
 	// 床
 	std::unique_ptr<Model> floor_;
+	// 落下予測
+	std::unique_ptr<Model> fallingRange_;
+	
 	//テクスチャハンドル
 	uint32_t BlockTexHandle_ = 0;
 	uint32_t hardBlockTexHandle_ = 0;
+	uint32_t fallingRangeTexHandle_ = 0;
 
 	// 
 	Vector2 clearBlock_[20];
 
 	// ブロックが消えるフラグ
 	bool isDelete_;
+	// 落下予測地点を表示するか
+	bool isFallingPoint_;
+
+	std::set<int> uniqueValues;
 };
 

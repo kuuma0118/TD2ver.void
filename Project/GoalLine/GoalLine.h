@@ -49,6 +49,8 @@ public:
 
 	// ワールド座標を取得(Vector3)
 	Vector3 GetWorldPosition() { return worldTransform_.translation_; }
+	// ワールドトランスフォームを取得
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 	/// Setter
 	// ゴールラインに達したかを設定
