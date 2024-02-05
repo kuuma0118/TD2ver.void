@@ -140,6 +140,7 @@ void BlockManager::Update() {
 		Changeindex_[2] = rand() % 10;
 		ShapeManagement();
 	}
+	shape_ = ChangeShape_[0];
 
 	for (Block* block_ : blocks_) {
 		block_->Update();
