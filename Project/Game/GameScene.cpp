@@ -76,6 +76,8 @@ void GameScene::Update(GameManager* gameManager) {
 	player_->Update();
 
 	blockManager_->Update();
+	//位置情報の転送
+	blockManager_->SetworldTransform_(player_->GetWorldTransform());
 
 	// ゴールライン
 	goalLine_->Update(followCamera_->GetViewProjection());
@@ -109,6 +111,8 @@ void GameScene::Update(GameManager* gameManager) {
 	else if (goalLine_->GetIsGoal()) {
 		gameManager->ChangeScene(new GameClearScene);
 	}
+
+
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.001f, -100, 100);
@@ -154,7 +158,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 
-	blockManager_->Shape_Second();
+	//blockManager_->UIDraw();
 	// ゴールライン
 	goalLine_->Draw2DLine();
 

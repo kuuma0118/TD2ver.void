@@ -130,6 +130,12 @@ public: // メンバ関数
 	/// <param name="isDelete"></param>
 	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
 
+	/// <summary>
+	/// 座標の設定
+	/// </summary>
+	/// <param name="worldTransform"></param>
+	void SetworldTransform_(WorldTransform worldTransform);
+
 private:// 定数
 	// マップの左端
 	const float kMapLeftPos = 0.0f;

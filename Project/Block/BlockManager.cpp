@@ -49,7 +49,6 @@ void BlockManager::Initialize(CollisionManager* collisionManager){
 		Nextmodel_[i].reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	}
 
-	worldTransform_.translation_.y = 8.0f;
 
 	srand((unsigned int)time(nullptr));
 	for (int i = 0; i < 3; i++) {
@@ -1306,4 +1305,8 @@ void BlockManager::CheckAndClearRow() {
 			}
 		}
 	}
+}
+
+void BlockManager::SetworldTransform_(WorldTransform worldTransform){
+	worldTransform_.translation_.y = worldTransform.translation_.y + 10.0f;
 }
