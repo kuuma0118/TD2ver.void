@@ -7,11 +7,12 @@
 void FollowCamera::Initialize() {
 	viewProjection_.Initialize();
 	// 追従対象からカメラまでのオフセット
-	offset_ = { 0.0f, 2.0f, -50.0f };
+	offset_ = { 0.0f, 8.0f, -60.0f };
 
 	// ゴールした時のカメラ移動フラグ
 	isGoalAngle_ = false;
 	isGoalMove_ = false;
+	isStartCamera_ = false;
 
 	t_ = 0;
 	easeCount_ = 0;
@@ -30,28 +31,45 @@ void FollowCamera::Update() {
 		easeFrame_++;
 	}
 
-	if (target_) {
-		Vector3 offset = offset_;
-		// カメラの角度から回転行列を計算
-		Matrix4x4 rotateMatrix = MakeRotateMatrix(viewProjection_.rotation_);
+	//if (isStartCamera_) {
+		if (nextTarget_) {		
+			Vector3 offset = nextTarget_->translation_;
+			offset.z -= 20;
+			vel_ = Multiply(0.2f, Subtract(offset,viewProjection_.translation_));
+			viewProjection_.translation_ = Add(viewProjection_.translation_, vel_);
+			if (offset.y == viewProjection_.translation_.y) {
+				isStartCamera_ = false;
+			}
+			t_++;
+		}
+	//}
+	else {
+		if (target_) {
+			Vector3 offset = offset_;
+			// カメラの角度から回転行列を計算
+			Matrix4x4 rotateMatrix = MakeRotateMatrix(viewProjection_.rotation_);
 
-		// オフセットをカメラの回転に合わせて回転
-		offset = TransformNormal(offset, rotateMatrix);
+			// オフセットをカメラの回転に合わせて回転
+			offset = TransformNormal(offset, rotateMatrix);
 
-		// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
-		viewProjection_.translation_ = Add(target_->translation_, offset);
-		viewProjection_.translation_.z -= viewProjection_.translation_.y / 2;
-		viewProjection_.translation_.y = 2.0f;
-		viewProjection_.translation_.x = 0;
+			// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
+			viewProjection_.translation_ = Add(target_->translation_, offset);
+			viewProjection_.translation_.z -= viewProjection_.translation_.y / 2;
+			viewProjection_.translation_.y = 2.0f;
+			viewProjection_.translation_.x = 0;
+		}
 	}
 
 	viewProjection_.UpdateMatrix();
 
+#ifdef _DEBUG
 	ImGui::Begin("followCamera");
 	ImGui::DragFloat3("rotate", &viewProjection_.rotation_.x, 0.001f, 0, 10);
+	ImGui::DragFloat3("translation", &viewProjection_.translation_.x, 0.01f, -100, 100);
 	ImGui::DragFloat3("offset", &offset_.x, 0.01f, -100, 100);
-	ImGui::Checkbox("GoalMotion", &isGoalAngle_);
+	ImGui::Checkbox("startCamera", &isStartCamera_);
 	ImGui::End();
+#endif
 }
 
 #pragma region プライベートな関数

@@ -44,13 +44,12 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	// カメラ
 	viewProjection_.Initialize();
-	//viewProjection_.translation_ = { 0.0f,5.0f,-50.0f };
+
 	// 追従カメラ
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
-	followCamera_->SetTarget(&goalLine_->GetWorldTransform());
-	followCamera_->SetTarget(&player_->GetWorldTransform());
 	isOpeningCamera_ = true;
+	currentFrame_ = 0;
 
 	// ゴールライン
 	goalLine_ = std::make_unique<GoalLine>();
@@ -62,9 +61,18 @@ void GameScene::Initialize(GameManager* gameManager) {
 	deadLine_->Initialize();
 	deadLine_->SetPlayer(player_.get());
 	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
+
+	followCamera_->SetTarget(&player_->GetWorldTransform());
 };
 
 void GameScene::Update(GameManager* gameManager) {
+	if (Input::GetInstance()->IsPushKeyEnter(DIK_1)) {
+		followCamera_->SetNextTarget(&goalLine_->GetWorldTransform());
+	}
+	if (Input::GetInstance()->IsPushKeyEnter(DIK_0)) {
+		followCamera_->SetNextTarget(nullptr);
+	}
+
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
@@ -72,43 +80,62 @@ void GameScene::Update(GameManager* gameManager) {
 	viewProjection_.matView_ = followCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
 	viewProjection_.TransferMatrix();
-
-	// 自機
-	player_->Update();
-
-	blockManager_->Update();
-
-	// ゴールライン
-	goalLine_->Update(viewProjection_);
-
-	// デッドライン
-	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
-	deadLine_->Update(viewProjection_);
-
-	// ブロックが消えていた場合
-	if (blockManager_->GetIsDelete()) {
-		AABB aabb = {
-			{-0.8f,-1.0f,-0.8f},
-			{0.8f,1.0f,0.8f}
-		};
-		player_->SetAABB(aabb);
-		// 自機をコライダーにセット
-		collisionManager_->SetColliderList(player_.get());
-		player_->SetCollisionAttribute(kCollisionAttributePlayer);
-		player_->SetCollisionPrimitive(kCollisionPrimitiveAABB);
-		// ブロックの消えるフラグをfalse
-		blockManager_->SetIsDelete(false);
+	if (isOpeningCamera_) {
+		if (currentFrame_ >= 120 && currentFrame_ <= 240) {
+			followCamera_->SetNextTarget(&goalLine_->GetWorldTransform());
+		}
+		else if (currentFrame_ >= 241 && currentFrame_ <= 420) {
+			followCamera_->SetNextTarget(&deadLine_->GetWorldTransform());
+		}
+		else if (currentFrame_ >= 421 && currentFrame_ <= 450) {
+			followCamera_->SetNextTarget(&player_->GetWorldTransform());
+		}
+		else if (currentFrame_ >= 450) {
+			followCamera_->SetNextTarget(nullptr);
+			currentFrame_ = 0;
+			isOpeningCamera_ = false;
+		}
+		currentFrame_++;
 	}
-	// 当たり判定
-	collisionManager_->CheckAllCollisions();
+	if(currentFrame_ <= 1){
 
-	// 自機が死んだらゲームオーバー
-	if (!player_->GetIsAlive()) {
-		//gameManager->ChangeScene(new GameOverScene);
-	}
-	// ゴールラインに達したらクリア
-	else if (goalLine_->GetIsGoal()) {
-		//gameManager->ChangeScene(new GameClearScene);
+		// 自機
+		player_->Update();
+
+		blockManager_->Update();
+
+		// ゴールライン
+		goalLine_->Update(viewProjection_);
+
+		// デッドライン
+		deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
+		deadLine_->Update(viewProjection_);
+
+		// ブロックが消えていた場合
+		if (blockManager_->GetIsDelete()) {
+			AABB aabb = {
+				{-0.8f,-1.0f,-0.8f},
+				{0.8f,1.0f,0.8f}
+			};
+			player_->SetAABB(aabb);
+			// 自機をコライダーにセット
+			collisionManager_->SetColliderList(player_.get());
+			player_->SetCollisionAttribute(kCollisionAttributePlayer);
+			player_->SetCollisionPrimitive(kCollisionPrimitiveAABB);
+			// ブロックの消えるフラグをfalse
+			blockManager_->SetIsDelete(false);
+		}
+		// 当たり判定
+		collisionManager_->CheckAllCollisions();
+
+		// 自機が死んだらゲームオーバー
+		if (!player_->GetIsAlive()) {
+			//gameManager->ChangeScene(new GameOverScene);
+		}
+		// ゴールラインに達したらクリア
+		else if (goalLine_->GetIsGoal()) {
+			//gameManager->ChangeScene(new GameClearScene);
+		}
 	}
 
 #ifdef _DEBUG

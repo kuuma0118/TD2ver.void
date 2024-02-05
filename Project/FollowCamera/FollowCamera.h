@@ -28,6 +28,9 @@ public:
 	// 追従する対象を設定
 	void SetTarget(const WorldTransform* target) { target_ = target; }
 
+	// 次の追従する対象を設定
+	void SetNextTarget(const WorldTransform* target) { nextTarget_ = target; }
+
 	// 追従対象とカメラの距離の設定
 	void SetCameraToTargetDist(Vector3 offset) { offset_ = offset; }
 
@@ -53,14 +56,22 @@ private:// 定数
 
 private:
 	ViewProjection viewProjection_;
+	// 追従対象
 	const WorldTransform* target_ = nullptr;
+	// 次の対象
+	const WorldTransform* nextTarget_ = nullptr;
 	// 追従対象からカメラまでのオフセット
 	Vector3 offset_;
+
+	// カメラの移動速度
+	Vector3 vel_;
 
 	// ゴールした時のカメラ移動フラグ
 	bool isGoalAngle_;
 
 	bool isGoalMove_;
+
+	bool isStartCamera_;
 
 	// イージングフレーム
 	float easeFrame_;

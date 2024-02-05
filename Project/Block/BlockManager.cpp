@@ -166,20 +166,9 @@ void BlockManager::Update() {
 		}
 	}
 
-	//int count = 0;
-	//for (int i = 0; i < 4; i++) {
-	//	if (NextworldTransform_[i].translation_.x == NextworldTransform_[count].translation_.x) {
-	//		fallingPoint_[i].translation_.x = NextworldTransform_[i].translation_.x;
-	//		count++;
-	//	}
-	//}
-
 	for (Block* block_ : blocks_) {
 		block_->Update();
 	}
-	//for (HeadBlock* headblock_ : headblocks_) {
-	//	headblock_->Update();
-	//}
 
 	for (int i = 0; i < 4; i++) {
 		fallingPoint_[i].UpdateMatrix();

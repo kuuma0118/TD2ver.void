@@ -83,6 +83,7 @@ private:// メンバ変数
 	std::unique_ptr<DeadLine> deadLine_;
 
 	bool isOpeningCamera_;
+	int currentFrame_;
 
 #pragma endregion
 };

@@ -50,6 +50,8 @@ public:
 			worldTransform_.matWorld_.m[3][2]};
 		return result;
 	}
+	// ワールドトランスフォームを取得
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 	/// Setter
 	// 自機のアドレスを取得
