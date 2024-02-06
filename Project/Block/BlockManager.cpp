@@ -50,7 +50,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 #pragma region ワールド座標の初期化と初期位置を設定
 	// ブロックの沸く場所
 	worldTransform_.Initialize();
-	worldTransform_.translation_.y = 20.0f;
+	worldTransform_.translation_.y = 15.0f;
 	for (int i = 0; i < 4; i++) {
 		NextworldTransform_[i].Initialize();
 	}
@@ -97,6 +97,8 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	isDelete_ = false;
 	// 落下予測地点を表示するか
 	isFallingPoint_ = true;
+	// 次に落下するブロックがマップ内にあるか
+	isNextBlockInMap_ = true;
 	// 今ブロックを落下できるか
 	isDropBlock_ = true;
 	// ブロックの落下クールタイム
@@ -117,35 +119,69 @@ void BlockManager::Update() {
 	for (int i = 0; i < 4; i++) {
 		NextworldTransform_[i].UpdateMatrix();
 	}
+
+#pragma region 入力処理
 	if (input_->IsPushKeyEnter(DIK_RIGHT) || gamePad_->TriggerButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
-		worldTransform_.translation_.x += 2.00f;
 		for (int i = 0; i < 4; i++) {
-			NextworldTransform_[i].translation_.x += 2.00f;
+			if (NextworldTransform_[i].translation_.x <= wallWorld_[1].translation_.x - 2) {
+				isNextBlockInMap_ = true;
+			}
+			else {
+				isNextBlockInMap_ = false;
+				break;
+			}
+		}
+		if (isNextBlockInMap_) {
+			worldTransform_.translation_.x += 2.00f;
+			for (int i = 0; i < 4; i++) {
+				NextworldTransform_[i].translation_.x += 2.00f;
+			}
 		}
 	}
 	else if (input_->IsPushKeyEnter(DIK_LEFT) || gamePad_->TriggerButton(XINPUT_GAMEPAD_DPAD_LEFT)) {
-		worldTransform_.translation_.x -= 2.00f;
 		for (int i = 0; i < 4; i++) {
-			NextworldTransform_[i].translation_.x -= 2.00f;
+			if (NextworldTransform_[i].translation_.x >= wallWorld_[0].translation_.x + 2) {
+				isNextBlockInMap_ = true;
+			}
+			else {
+				isNextBlockInMap_ = false;
+				break;
+			}
+		}
+		if (isNextBlockInMap_) {
+			worldTransform_.translation_.x -= 2.00f;
+			for (int i = 0; i < 4; i++) {
+				NextworldTransform_[i].translation_.x -= 2.00f;
+			}
 		}
 	}
-
 	if (input_->IsPushKeyEnter(DIK_SPACE) || gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
-		//形状をランダムにする
-	//	shape_ = Shape::shape_side;
-		ChangeShape_[0] = ChangeShape_[1];
-		ChangeShape_[1] = ChangeShape_[2];
-		ChangeShape_[2] = Shape(rand() % 8);
+		if (isDropBlock_) {
+			//形状をランダムにする
+			ChangeShape_[0] = ChangeShape_[1];
+			ChangeShape_[1] = ChangeShape_[2];
+			ChangeShape_[2] = Shape(rand() % 8);
 
-		//２つのブロックの確率変動
-		index_ = Changeindex_[0];
-		Changeindex_[0] = Changeindex_[1];
-		Changeindex_[1] = Changeindex_[2];
-		Changeindex_[2] = rand() % 10;
-		ShapeManagement();
+			//２つのブロックの確率変動
+			index_ = Changeindex_[0];
+			Changeindex_[0] = Changeindex_[1];
+			Changeindex_[1] = Changeindex_[2];
+			Changeindex_[2] = rand() % 10;
+			ShapeManagement();
+			isDropBlock_ = false;
+		}
 	}
 	shape_ = ChangeShape_[0];
-	
+#pragma endregion
+	if (!isDropBlock_) {
+		if (dropCoolTime_ >= 0) {
+			dropCoolTime_--;
+			if (dropCoolTime_ <= 0) {
+				isDropBlock_ = true;
+				dropCoolTime_ = kDropCoolTime;
+			}
+		}
+	}
 	for (int i = 0; i < 4; i++) {
 		int count = 1;
 		if (i == 0) {
@@ -179,7 +215,11 @@ void BlockManager::Update() {
 		fallingPoint_[i].UpdateMatrix();
 	}
 
+	// ブロックが横一列になっていたら消す
 	CheckAndClearRow();
+
+	// ゴールラインより上にあるブロックを消す
+	DeleteBlocksAboveGoalLine();
 
 #ifdef _DEBUG
 	ImGui::Begin("shape");
@@ -1385,4 +1425,41 @@ void BlockManager::CheckAndClearRow() {
 			}
 		}
 	}
+}
+
+void BlockManager::DeleteBlocksAboveGoalLine() {
+	for (Block* block : blocks_) {
+		if (!block->GetFoolFlag()) {
+			if (goalLinePos_.y <= block->GetWorldPosition().y) {
+				block->SetIsAlive(false);
+			}
+		}
+	}
+
+	blocks_.remove_if([](Block* block) {
+		if (!block->GetIsAlive()) {
+			delete block;
+			return true;
+		}
+		return false;
+		});
+	;
+
+	// コライダーをすべてクリア
+	collisionManager_->ClearColliderList();
+	AABB aabb = {
+		{-0.99999f,-1.0f,-0.99999f},
+		{0.99999f,1.0f,0.99999f}
+	};
+	// すでに生成されているブロックをコライダーに登録
+	// 落下するブロック
+	for (Block* block : blocks_) {
+		// 当たり判定の形状を設定
+		block->SetCollisionPrimitive(kCollisionPrimitiveAABB);
+		block->SetCollisionAttribute(kCollisionAttributeBlock);
+		block->SetAABB(aabb);
+		collisionManager_->SetColliderList(block);
+	}
+	// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
+	isDelete_ = true;
 }

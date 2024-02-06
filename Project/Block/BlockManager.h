@@ -116,6 +116,9 @@ public: // メンバ関数
 	/// </summary>
 	void CheckAndClearRow();
 
+	// ゴールラインよりも上のブロックを消す
+	void DeleteBlocksAboveGoalLine();
+
 	/// Getter
 
 	/// <summary>
@@ -131,6 +134,12 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="isDelete"></param>
 	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
+
+	/// <summary>
+	/// ゴールラインの座標を設定
+	/// </summary>
+	/// <param name="goalLine"></param>
+	void SetGoalLinePos(Vector3 goalLine) { goalLinePos_ = goalLine; }
 
 private:// プライベートな関数
 	Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
@@ -213,9 +222,13 @@ private:
 	bool isDelete_;
 	// 落下予測地点を表示するか
 	bool isFallingPoint_;
+	// 次に落下するブロックがマップ内にあるか
+	bool isNextBlockInMap_;
 	// 今ブロックを落下できるか
 	int isDropBlock_;
 	// ブロックの落下クールタイム
 	int dropCoolTime_;
+
+	Vector3 goalLinePos_;
 };
 

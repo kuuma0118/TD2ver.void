@@ -62,7 +62,10 @@ void GameScene::Initialize(GameManager* gameManager) {
 	deadLine_->SetPlayer(player_.get());
 	deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
 
+	// カメラをセット
 	followCamera_->SetTarget(&player_->GetWorldTransform());
+	// ゴールラインをセット
+	blockManager_->SetGoalLinePos(goalLine_->GetWorldPosition());
 };
 
 void GameScene::Update(GameManager* gameManager) {

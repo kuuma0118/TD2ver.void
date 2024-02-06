@@ -102,7 +102,7 @@ private:// 定数
 	const float kDownValue = 0.5f;
 
 	// デッドラインの開始位置
-	const float kStartDeadLine_ = -7;
+	const float kStartDeadLine_ = -10;
 
 	// デッドラインの点滅速度
 	const float kFlashSpeed_ = 1.0f / 90.0f;

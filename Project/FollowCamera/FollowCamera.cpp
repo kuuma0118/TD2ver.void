@@ -7,7 +7,7 @@
 void FollowCamera::Initialize() {
 	viewProjection_.Initialize();
 	// 追従対象からカメラまでのオフセット
-	offset_ = { 0.0f, 8.0f, -60.0f };
+	offset_ = { 0.0f, 8.0f, -65.0f };
 
 	// ゴールした時のカメラ移動フラグ
 	isGoalAngle_ = false;
@@ -19,30 +19,15 @@ void FollowCamera::Initialize() {
 }
 
 void FollowCamera::Update() {
-	// ゴール時のカメラ演出
-	// カメラと追従対象との距離
-	if (isGoalMove_) {
-		//GoalCameraToTargetDist();
-		//easeFrame_++;
-	}
-	if (isGoalAngle_) {
-		// カメラの角度
-		GoalAngle();
-		easeFrame_++;
-	}
-
-	//if (isStartCamera_) {
-		if (nextTarget_) {		
-			Vector3 offset = nextTarget_->translation_;
-			offset.z -= 20;
-			vel_ = Multiply(0.2f, Subtract(offset,viewProjection_.translation_));
-			viewProjection_.translation_ = Add(viewProjection_.translation_, vel_);
-			if (offset.y == viewProjection_.translation_.y) {
-				isStartCamera_ = false;
-			}
-			t_++;
+	if (nextTarget_) {
+		Vector3 offset = nextTarget_->translation_;
+		offset.z -= 20;
+		vel_ = Multiply(0.2f, Subtract(offset, viewProjection_.translation_));
+		viewProjection_.translation_ = Add(viewProjection_.translation_, vel_);
+		if (offset.y == viewProjection_.translation_.y) {
+			isStartCamera_ = false;
 		}
-	//}
+	}
 	else {
 		if (target_) {
 			Vector3 offset = offset_;
@@ -55,7 +40,7 @@ void FollowCamera::Update() {
 			// 座標をコピーしてオフセット分ずらす。ただしx座標はずらさない
 			viewProjection_.translation_ = Add(target_->translation_, offset);
 			viewProjection_.translation_.z -= viewProjection_.translation_.y / 2;
-			viewProjection_.translation_.y = 2.0f;
+			viewProjection_.translation_.y = 6.0f;
 			viewProjection_.translation_.x = 0;
 		}
 	}
