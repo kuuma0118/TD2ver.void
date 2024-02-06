@@ -96,7 +96,7 @@ void Player::OnCollision(Collider* collider) {
 	float theta = atan2(worldTransform_.translation_.y - collider->GetWorldPosition().y, worldTransform_.translation_.x - collider->GetWorldPosition().x);
 
 	// 上
-	if (theta <= -(M_PI / 3.0f) && theta >= -M_PI + (M_PI / 3.0f)) {
+	if (theta <= -(M_PI / 3.5f) && theta >= -M_PI + (M_PI / 3.5f)) {
 		isAlive_ = false;
 		worldTransform_.UpdateMatrix();
 	}

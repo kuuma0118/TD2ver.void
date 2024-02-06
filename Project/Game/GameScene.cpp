@@ -97,14 +97,11 @@ void GameScene::Update(GameManager* gameManager) {
 		}
 		currentFrame_++;
 	}
-	if(currentFrame_ <= 1){
-
+	if (currentFrame_ <= 1) {
 		// 自機
 		player_->Update();
 
-	blockManager_->Update();
-	//位置情報の転送
-	blockManager_->SetworldTransform_(player_->GetWorldTransform());
+		blockManager_->Update();
 
 		// ゴールライン
 		goalLine_->Update(viewProjection_);

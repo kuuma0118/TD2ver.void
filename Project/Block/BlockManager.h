@@ -231,6 +231,7 @@ private:
 	bool isDelete_;
 	// 落下予測地点を表示するか
 	bool isFallingPoint_;
+	bool isNextBlockInMap_;
 
 	std::set<int> uniqueValues;
 };
