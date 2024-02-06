@@ -97,6 +97,11 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	isDelete_ = false;
 	// 落下予測地点を表示するか
 	isFallingPoint_ = true;
+	// 今ブロックを落下できるか
+	isDropBlock_ = true;
+	// ブロックの落下クールタイム
+	dropCoolTime_ = kDropCoolTime;
+
 	// 落下予測範囲を半透明にする
 	fallingRange_->GetMaterial()->SetColor(Vector4{ 1,1,1,0.3f });
 	fallingRange_->GetDirectionalLight()->SetEnableLighting(false);
