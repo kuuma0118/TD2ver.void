@@ -158,6 +158,9 @@ private:// 定数
 	// 縦
 	const int kBlockNumY = 20;
 
+	// ブロックのクールタイム
+	const int kDropCoolTime = 20;
+
 private:
 	//Input
 	Input* input_ = nullptr;
@@ -231,8 +234,11 @@ private:
 	bool isDelete_;
 	// 落下予測地点を表示するか
 	bool isFallingPoint_;
+	// 次に落下するブロックがマップ内にあるか
 	bool isNextBlockInMap_;
-
-	std::set<int> uniqueValues;
+	// 今ブロックを落とせるか
+	bool isDropBlock_;
+	// ブロックの落下クールタイム
+	int dropCoolTime_;
 };
 

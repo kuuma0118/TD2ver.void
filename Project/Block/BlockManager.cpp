@@ -109,6 +109,10 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	// 落下予測地点を表示するか
 	isFallingPoint_ = true;
 	isNextBlockInMap_ = true;
+	// 今ブロックを落下できるか
+	isDropBlock_ = true;
+	// ブロックの落下クールタイム
+	dropCoolTime_ = kDropCoolTime;
 
 	// 落下予測範囲を半透明にする
 	fallingRange_->GetMaterial()->SetColor(Vector4{ 1,1,1,0.3f });
@@ -125,6 +129,8 @@ void BlockManager::Update() {
 	for (int i = 0; i < 4; i++) {
 		NextworldTransform_[i].UpdateMatrix();
 	}
+
+#pragma region 入力処理
 	if (input_->IsPushKeyEnter(DIK_RIGHT) || gamePad_->TriggerButton(XINPUT_GAMEPAD_DPAD_RIGHT)) {
 		for (int i = 0; i < 4; i++) {
 			if (NextworldTransform_[i].translation_.x <= wallWorld_[1].translation_.x - 2) {
@@ -159,22 +165,35 @@ void BlockManager::Update() {
 			}
 		}
 	}
-
 	if (input_->IsPushKeyEnter(DIK_SPACE) || gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
-		//形状をランダムにする
-		ChangeShape_[0] = ChangeShape_[1];
-		ChangeShape_[1] = ChangeShape_[2];
-		ChangeShape_[2] = Shape(rand() % 8);
+		if (isDropBlock_) {
+			//形状をランダムにする
+			ChangeShape_[0] = ChangeShape_[1];
+			ChangeShape_[1] = ChangeShape_[2];
+			ChangeShape_[2] = Shape(rand() % 8);
 
-		//２つのブロックの確率変動
-		index_ = Changeindex_[0];
-		Changeindex_[0] = Changeindex_[1];
-		Changeindex_[1] = Changeindex_[2];
-		Changeindex_[2] = rand() % 10;
-		ShapeManagement();
+			//２つのブロックの確率変動
+			index_ = Changeindex_[0];
+			Changeindex_[0] = Changeindex_[1];
+			Changeindex_[1] = Changeindex_[2];
+			Changeindex_[2] = rand() % 10;
+			ShapeManagement();
+			isDropBlock_ = false;
+		}
 	}
 	shape_ = ChangeShape_[0];
-	
+#pragma endregion
+	if (!isDropBlock_) {
+		if (dropCoolTime_ >= 0) {
+			dropCoolTime_--;
+			if (dropCoolTime_ <= 0) {
+				isDropBlock_ = true;
+				dropCoolTime_ = kDropCoolTime;
+			}
+		}
+	}
+
+#pragma region 落下予測範囲の処理
 	for (int i = 0; i < 4; i++) {
 		int count = 1;
 		if (i == 0) {
@@ -199,6 +218,8 @@ void BlockManager::Update() {
 			}
 		}
 	}
+
+#pragma endregion
 
 	for (Block* block_ : blocks_) {
 		block_->Update();
@@ -261,6 +282,7 @@ void BlockManager::Draw(ViewProjection viewProjection_) {
 		}
 	}
 }
+
 void BlockManager::UIDraw() {
 	Shape_Second();
 }

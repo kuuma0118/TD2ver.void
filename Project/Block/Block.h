@@ -64,9 +64,14 @@ public: // メンバ関数
 	void SetIsAlive(bool isAlive) { isAlive_ = isAlive; }
 	// 消えないブロックを設定
 	inline void SetIsHardBlock(bool isActive) { isHardBlock_ = isActive; }
+	// ペアレント
+	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
 private: // メンバ変数
 	WorldTransform worldTransform_;
+	// ペアレントを外したとき用のワールドトランスフォーム
+	WorldTransform saveWorldTransform_;
+
 	ViewProjection viewProjection_;
 
 	//3Dモデル

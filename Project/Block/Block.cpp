@@ -11,6 +11,7 @@ Block::~Block() {
 
 void Block::Initialize(WorldTransform worldTransform, uint32_t texHandle, Model* model) {
 	worldTransform_.Initialize();
+	saveWorldTransform_.Initialize();
 	viewProjection_.Initialize();
 	worldTransform_.translation_ = worldTransform.translation_;
 	worldTransform_.UpdateMatrix();
