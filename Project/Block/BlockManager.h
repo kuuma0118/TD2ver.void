@@ -52,6 +52,7 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ViewProjection viewProjection_);
 	
+	void UIDraw();
 	///
 	/// User Method
 	/// 
@@ -63,7 +64,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 予測ブロックの２番目
 	/// </summary>
-	void Shape_Second(ViewProjection viewProjection_);
+	void Shape_Second();
 
 	/// <summary>
 	/// 形状の保管
@@ -132,6 +133,12 @@ public: // メンバ関数
 	/// <param name="isDelete"></param>
 	void SetIsDelete(bool isDelete) { isDelete_ = isDelete; }
 
+	/// <summary>
+	/// 座標の設定
+	/// </summary>
+	/// <param name="worldTransform"></param>
+	void SetworldTransform_(WorldTransform worldTransform);
+
 private:// プライベートな関数
 	Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
 
@@ -195,12 +202,26 @@ private:
 	std::unique_ptr<Model> wall_[2];
 	// 床
 	std::unique_ptr<Model> floor_;
+
+	//スプライト
+	std::unique_ptr<Sprite> sprite_{};
+	Vector2 positie_={ 1000.0f,50.0f };
+
 	// 落下予測
 	std::unique_ptr<Model> fallingRange_;
 	
 	//テクスチャハンドル
 	uint32_t BlockTexHandle_ = 0;
 	uint32_t hardBlockTexHandle_ = 0;
+	uint32_t texHandle_I = 0;
+	uint32_t texHandle_T = 0;
+	uint32_t texHandle_S = 0;
+	uint32_t texHandle_O = 0;
+	uint32_t texHandle_J = 0;
+	uint32_t texHandle_L = 0;
+	uint32_t texHandle_ten = 0;
+	uint32_t texHandle_sido = 0;
+
 	uint32_t fallingRangeTexHandle_ = 0;
 
 	// 

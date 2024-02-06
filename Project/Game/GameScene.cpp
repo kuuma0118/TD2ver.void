@@ -102,7 +102,9 @@ void GameScene::Update(GameManager* gameManager) {
 		// 自機
 		player_->Update();
 
-		blockManager_->Update();
+	blockManager_->Update();
+	//位置情報の転送
+	blockManager_->SetworldTransform_(player_->GetWorldTransform());
 
 		// ゴールライン
 		goalLine_->Update(viewProjection_);
@@ -137,6 +139,7 @@ void GameScene::Update(GameManager* gameManager) {
 			//gameManager->ChangeScene(new GameClearScene);
 		}
 	}
+
 
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
@@ -183,6 +186,8 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
+
+	//blockManager_->UIDraw();
 	// ゴールライン
 	goalLine_->Draw2DLine();
 
