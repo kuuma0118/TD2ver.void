@@ -252,13 +252,9 @@ void BlockManager::Draw(ViewProjection viewProjection_) {
 		}
 	}
 }
-}
-void BlockManager::UIDraw()
-{
+void BlockManager::UIDraw() {
 	Shape_Second();
 }
-} 
-
 
 void BlockManager::Shape_one(ViewProjection viewProjection_) {
 
@@ -408,12 +404,12 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
 			//4
-		if (Changeindex_[0] != 3) {
-			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x + width;
-			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
-			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+			if (Changeindex_[0] != 3) {
+				NextworldTransform_[3].translation_.x = worldTransform_.translation_.x + width;
+				NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width;
+				Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
+			}
 		}
-
 		break;
 
 	case Shape::shape_J:
@@ -424,15 +420,15 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 			//2
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x - width;
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
+			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
 			//3
-		else {
 			NextworldTransform_[2].translation_.x = worldTransform_.translation_.x;
 			NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + width;
 			Nextmodel_[2]->Draw(NextworldTransform_[2], viewProjection_, hardBlockTexHandle_);
 			//4
+			NextworldTransform_[3].translation_.x = worldTransform_.translation_.x;
 			NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + width * 2;
 			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, hardBlockTexHandle_);
-			Nextmodel_[3]->Draw(NextworldTransform_[3], viewProjection_, BlockTexHandle_);
 		}
 		else {
 			//1
@@ -514,8 +510,8 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		if (Changeindex_[0] == 0 || Changeindex_[0] == 1 || Changeindex_[0] == 2) {
 			//1
 			NextworldTransform_[0].translation_ = worldTransform_.translation_;
+			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, hardBlockTexHandle_);
 			//2
-		if (Changeindex_[0] == 2 || Changeindex_[0] == 3) {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, hardBlockTexHandle_);
@@ -528,7 +524,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 			NextworldTransform_[1].translation_.x = worldTransform_.translation_.x + width;
 			NextworldTransform_[1].translation_.y = worldTransform_.translation_.y;
 			Nextmodel_[1]->Draw(NextworldTransform_[1], viewProjection_, BlockTexHandle_);
-
+		}
 		break;
 	}
 }
@@ -614,7 +610,7 @@ void BlockManager::ShapeManagement() {
 void BlockManager::Shape_I(Vector3 velocity, int index) {
 	if (index == 0||index==1 || index ==2 ){
 #pragma region ブロックの1番
-	else {
+	//else {
 		Block* newBlock_1 = new Block();
 		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
 		newBlock_1->SetIsHardBlock(true);
