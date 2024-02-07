@@ -35,7 +35,6 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	for (int i = 0; i < 4; i++) {
 		Nextmodel_[i].reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	}
-
 	// 壁
 	for (int i = 0; i < 2; i++) {
 		wall_[i].reset(Model::CreateFromOBJ("Resources", "block.obj"));
@@ -112,6 +111,35 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	// 落下予測範囲を半透明にする
 	fallingRange_->GetMaterial()->SetColor(Vector4{ 1,1,1,0.3f });
 	fallingRange_->GetDirectionalLight()->SetEnableLighting(false);
+
+	// チュートリアル
+	guideBlockWorld_.Initialize();
+	for (int i = 0; i < kBlockNumX; i++) {
+		if (i != 6) {
+			guideBlock_[i] = new Block();
+			guideBlockWorld_.translation_ = { (2 * i) - (float)(kBlockNumX - 1) , -5, 0 };
+			guideBlock_[i]->Initialize(guideBlockWorld_, BlockTexHandle_, model_.get());
+			blocks_.push_back(guideBlock_[i]);
+			collisionManager_->SetColliderList(guideBlock_[i]);
+		}
+		else {
+			guideBlock_[i] = new Block();
+			guideBlockWorld_.translation_ = { (2 * i) - (float)(kBlockNumX - 1) , 15, 0 };
+			guideBlock_[i]->Initialize(guideBlockWorld_, BlockTexHandle_, model_.get());
+			blocks_.push_back(guideBlock_[i]);
+			collisionManager_->SetColliderList(guideBlock_[i]);
+		}
+	}
+
+	worldTransform_.UpdateMatrix();
+	for (int i = 0; i < 2; i++) {
+		wallWorld_[i].UpdateMatrix();
+	}
+	floorWorld_.UpdateMatrix();
+
+	//for (int i = 0; i < 4; i++) {
+	//	NextworldTransform_[i].UpdateMatrix();
+	//}
 }
 
 void BlockManager::Update() {
@@ -277,8 +305,6 @@ void BlockManager::Draw(ViewProjection viewProjection_) {
 }
 
 void BlockManager::Shape_one(ViewProjection viewProjection_) {
-
-
 	switch (shape_)
 	{
 	case Shape::shape_I:
@@ -600,6 +626,9 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		NextworldTransform_[1].translation_ = worldTransform_.translation_;
 		NextworldTransform_[2].translation_ = worldTransform_.translation_;
 		NextworldTransform_[3].translation_ = worldTransform_.translation_;
+		NextworldTransform_[1].translation_.y = worldTransform_.translation_.y + 10;
+		NextworldTransform_[2].translation_.y = worldTransform_.translation_.y + 10;
+		NextworldTransform_[3].translation_.y = worldTransform_.translation_.y + 10;
 
 		if (Changeindex_[0] == 0 || Changeindex_[0] == 1) {
 			Nextmodel_[0]->Draw(NextworldTransform_[0], viewProjection_, BlockTexHandle_);
@@ -646,6 +675,7 @@ void BlockManager::Shape_one(ViewProjection viewProjection_) {
 		break;
 	}
 }
+
 void BlockManager::Shape_Second(ViewProjection viewProjection_) {
 	///画像で予測ブロックを表示する（次のブロック）
 	shape_ = ChangeShape_[1];
@@ -668,7 +698,6 @@ void BlockManager::Shape_Second(ViewProjection viewProjection_) {
 		break;
 	}
 }
-
 
 void BlockManager::ShapeManagement() {
 	switch (shape_)
@@ -899,8 +928,6 @@ void BlockManager::Shape_T(Vector3 velocity, int index) {
 /// </summary>
 /// <param name="velocity"></param>
 void BlockManager::Shape_S(Vector3 velocity, int index) {
-
-
 #pragma region ブロックの１番
 	if (index != 0) {
 		Block* newBlock_1 = new Block();
@@ -994,8 +1021,6 @@ void BlockManager::Shape_S(Vector3 velocity, int index) {
 /// </summary>
 /// <param name="velocity"></param>
 void BlockManager::Shape_O(Vector3 velocity, int index) {
-
-
 #pragma region ブロックの１番
 	if (index != 0) {
 		Block* newBlock_1 = new Block();
@@ -1088,8 +1113,6 @@ void BlockManager::Shape_O(Vector3 velocity, int index) {
 /// </summary>
 /// <param name="velocity"></param>
 void BlockManager::Shape_J(Vector3 velocity, int index) {
-
-
 #pragma region ブロックの１番
 	if (index != 0) {
 		Block* newBlock_1 = new Block();
@@ -1182,8 +1205,6 @@ void BlockManager::Shape_J(Vector3 velocity, int index) {
 /// </summary>
 /// <param name="velocity"></param>
 void BlockManager::Shape_L(Vector3 velocity, int index) {
-
-
 #pragma region ブロックの１番
 	if (index != 0) {
 		Block* newBlock_1 = new Block();
@@ -1303,7 +1324,6 @@ void BlockManager::Shape_Ten(Vector3 velocity, int index) {
 /// </summary>
 /// <param name="velocity"></param>
 void BlockManager::shape_side(Vector3 velocity, int index) {
-
 #pragma region ブロックの１番
 	if (index == 0 || index == 1) {
 		Block* newBlock_1 = new Block();
@@ -1465,4 +1485,13 @@ void BlockManager::DeleteBlocksAboveGoalLine() {
 			collisionManager_->SetColliderList(block);
 		}
 	}
+}
+
+void BlockManager::GuideDeleteBlock() {
+	for (Block* block_ : blocks_) {
+		block_->Update();
+	}
+
+	// ブロックが横一列になっていたら消す
+	CheckAndClearRow();
 }

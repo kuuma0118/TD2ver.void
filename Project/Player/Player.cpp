@@ -20,7 +20,7 @@ void Player::Initialize() {
 	// ワールド座標の初期化
 	worldTransform_.Initialize();
 	// 初期位置
-	worldTransform_.translation_ = { 0,0,0 };
+	worldTransform_.translation_ = { -5,0,0 };
 	// 右向きに設定
 	worldTransform_.rotation_ = { 0,(float)M_PI / 2, 0 };
 	// worldMatrixに反映

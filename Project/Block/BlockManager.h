@@ -119,6 +119,11 @@ public: // メンバ関数
 	// ゴールラインよりも上のブロックを消す
 	void DeleteBlocksAboveGoalLine();
 
+	/// <summary>
+	/// 一列揃えるとブロックが消えることを説明する
+	/// </summary>
+	void GuideDeleteBlock();
+
 	/// Getter
 
 	/// <summary>
@@ -183,6 +188,8 @@ private:
 	//ブロック
 	std::list<Block*> blocks_;
 	std::list<HeadBlock*> headblocks_;
+	Block* guideBlock_[13];
+	WorldTransform guideBlockWorld_;
 
 	// 当たり判定
 	CollisionManager* collisionManager_ = nullptr;
