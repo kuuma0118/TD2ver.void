@@ -30,7 +30,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	SceneSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
 
-	audio_->SoundPlayWave(SceneSoundHandle_, true, 0.5f);
+	audio_->SoundPlayWave(SceneSoundHandle_, true, 0.2f);
 
 	dropUITextureHandle_ = TextureManager::Load("Resources/Pictures/dropUI.png");
 	dropUISprite_.reset(Sprite::Create(dropUITextureHandle_,

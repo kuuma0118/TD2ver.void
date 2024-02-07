@@ -23,9 +23,6 @@ void GameOverScene::Initialize(GameManager* gameManager) {
 	audio_ = Audio::GetInstance();
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
-	//ポストプロセスの有効化
-	PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	PostProcess::GetInstance()->SetIsBloomActive(true);
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/select.wav");
 	overSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/over.wav");
