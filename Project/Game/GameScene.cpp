@@ -194,10 +194,11 @@ void GameScene::Draw(GameManager* gameManager) {
 #pragma region スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+	if (!isOpeningCamera_) {
+		dropUISprite_->Draw();
 
-	dropUISprite_->Draw();
-
-	moovUISprite_->Draw();
+		moovUISprite_->Draw();
+	}
 
 	// ゴールライン
 	//goalLine_->Draw2DLine();
