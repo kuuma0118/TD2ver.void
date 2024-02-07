@@ -34,11 +34,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	dropUITextureHandle_ = TextureManager::Load("Resources/Pictures/dropUI.png");
 	dropUISprite_.reset(Sprite::Create(dropUITextureHandle_,
-		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 55.0f }));
+		{ WinApp::GetInstance()->kClientWidth * 0.5f + 500.0f * 0.5f , 70.0f }));
 
 	moovUITextureHandle_ = TextureManager::Load("Resources/Pictures/moovUI.png");
 	moovUISprite_.reset(Sprite::Create(moovUITextureHandle_,
-		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
+		{ WinApp::GetInstance()->kClientWidth * 0.5f + 610.0f * 0.5f , 0.0f }));
 
 	// チュートリアル用の文字
 	guideGoalLineTexture_ = TextureManager::Load("Resources/Guide/Guide_Climb.png");
@@ -47,11 +47,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	guideDeadLineTexture_ = TextureManager::Load("Resources/Guide/Guide_away.png");
 	guideDeadLineSprite_.reset(Sprite::Create(guideDeadLineTexture_,
-		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 120.0f }));
 
 	guideDeleteTexture_ = TextureManager::Load("Resources/Guide/Guide_block.png");
 	guideDeleteBlockSprite_.reset(Sprite::Create(guideDeleteTexture_,
-		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 480.0f * 0.5f , 320.0f }));
 
 	guideStartTexture_ = TextureManager::Load("Resources/Guide/Guide_Start.png");
 	guideStartSprite_.reset(Sprite::Create(guideStartTexture_,
