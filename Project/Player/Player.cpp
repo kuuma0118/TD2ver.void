@@ -114,7 +114,7 @@ void Player::OnCollision(Collider* collider) {
 	}
 
 	// 左
-	if (theta < M_PI / 8.0f && theta > -(M_PI / 8.0f)) {
+	if (theta < M_PI / 10.0f && theta > -(M_PI / 10.0f)) {
 		float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 		worldTransform_.translation_.x += extrusion;
 		worldTransform_.UpdateMatrix();
@@ -128,7 +128,7 @@ void Player::OnCollision(Collider* collider) {
 		}
 	}
 	// 右
-	if (theta > M_PI - (M_PI / 8.0f) || theta < -M_PI + (M_PI / 8.0f)) {
+	if (theta > M_PI - (M_PI / 10.0f) || theta < -M_PI + (M_PI / 10.0f)) {
 		float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 		worldTransform_.translation_.x -= extrusion;
 		worldTransform_.UpdateMatrix();

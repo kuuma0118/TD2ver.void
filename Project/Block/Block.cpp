@@ -83,11 +83,11 @@ void Block::OnCollision(Collider* collider) {
 
 	if (GetCollisionAttribute() == collider->GetCollisionAttribute()) {
 		// 下
-		if (theta >= (M_PI / 3.0f) && theta <= M_PI - (M_PI / 3.0f)) {
+		if (theta >= (M_PI / 2.5f) && theta <= M_PI - (M_PI / 2.5f)) {
 			float extrusion = (-GetAABB().min.y + collider->GetAABB().max.y) - (worldTransform_.translation_.y - collider->GetWorldPosition().y);
 			worldTransform_.translation_.y += extrusion;
 			int y = static_cast<int>(std::round(worldTransform_.translation_.y));
-			worldTransform_.translation_.y = (float)y;
+			worldTransform_.translation_.y = (float)y - 0.0001f;
 			worldTransform_.UpdateMatrix();
 			foolflag = false;
 			SetIsBottomHitAABB(true);
@@ -109,7 +109,7 @@ void Block::OnCollision(Collider* collider) {
 		}
 
 		// 右
-		if (theta < M_PI / 5 && theta > -(M_PI / 5)) {
+		if (theta < M_PI / 3 && theta > -(M_PI / 3)) {
 			float extrusion = (-GetAABB().min.x + collider->GetAABB().max.x) - (worldTransform_.translation_.x - collider->GetWorldPosition().x);
 			worldTransform_.translation_.x += extrusion;
 			worldTransform_.UpdateMatrix();
@@ -118,7 +118,7 @@ void Block::OnCollision(Collider* collider) {
 			}
 		}
 		// 左
-		if (theta > M_PI - (M_PI / 5) || theta < -M_PI + (M_PI / 5)) {
+		if (theta > M_PI - (M_PI / 3) || theta < -M_PI + (M_PI / 3)) {
 			float extrusion = (GetAABB().max.x + (-collider->GetAABB().min.x)) - (collider->GetWorldPosition().x - worldTransform_.translation_.x);
 			worldTransform_.translation_.x -= extrusion;
 			worldTransform_.UpdateMatrix();
