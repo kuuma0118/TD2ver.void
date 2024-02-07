@@ -8,8 +8,7 @@
 GameScene::GameScene() {};
 
 GameScene::~GameScene() {
-	//delete player_;
-	//delete blockManager_;
+
 };
 
 void GameScene::Initialize(GameManager* gameManager) {
@@ -98,13 +97,13 @@ void GameScene::Update(GameManager* gameManager) {
 		else if (currentFrame_ >= 481 && currentFrame_ <= 530) {
 			followCamera_->SetNextTarget(nullptr);
 		}
-		else if (currentFrame_ >= 531 && currentFrame_ <= 650) {
+		else if (currentFrame_ >= 531 && currentFrame_ <= 700) {
 			blockManager_->GuideDeleteBlock();
 			// デッドライン
 			deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
 			deadLine_->Update(viewProjection_);
 		}
-		else if(currentFrame_ >= 651){
+		else if(currentFrame_ >= 701){
 			currentFrame_ = 0;
 			isOpeningCamera_ = false;
 		}
