@@ -20,6 +20,8 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 	textureManager_ = TextureManager::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+	// ゲームパッドのインスタンスを取得
+	gamePad_ = GamePad::GetInstance();
 	//オーディオクラスのインスタンスを取得
 	audio_ = Audio::GetInstance();
 	//ポストプロセスのインスタンスを取得
@@ -58,7 +60,7 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 };
 
 void GameTitleScene::Update(GameManager* gameManager) {
-	if (input_->IsPushKeyEnter(DIK_G))
+	if (input_->IsPushKeyEnter(DIK_G) || gamePad_->TriggerButton(XINPUT_GAMEPAD_A))
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;

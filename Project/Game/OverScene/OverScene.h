@@ -99,6 +99,8 @@ private:// メンバ変数
 	//トランジションのフラグ
 	bool isTransition_ = false;
 	bool isTransitionEnd_ = false;
+	bool isTransition4Title_ = false;
+	bool isTransition4Game_ = false;
 	//トランジションのタイマー
 	float transitionTimer_ = 0;
 

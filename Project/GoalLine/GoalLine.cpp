@@ -2,7 +2,7 @@
 
 void GoalLine::Initialize() {
 	// 使用するテクスチャを読み込む
-	lineTexture_ = TextureManager::Load("Resources/white.png");
+	lineTexture_ = TextureManager::Load("Resources/goal.png");
 	// 実体を生成
 	line2DSprite_.reset(Sprite::Create(lineTexture_, Vector2{0,0}));
 	// サイズ設定
@@ -35,10 +35,8 @@ void GoalLine::Update(const ViewProjection& viewProjection) {
 }
 
 void GoalLine::Draw3DLine(const ViewProjection& viewProjection) {
-#ifdef _DEBUG
 	// ワールド座標上の3Dライン
 	line3DModel_->Draw(worldTransform_, viewProjection, lineTexture_);
-#endif // _DEBUG
 }
 
 void GoalLine::Draw2DLine() {

@@ -21,14 +21,17 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	// ゲームパッドのインスタンスを生成
 	gamePad_ = GamePad::GetInstance();
 
-	BlockTexHandle_ = TextureManager::Load("Resources/uvChecker.png");
-	hardBlockTexHandle_ = TextureManager::Load("Resources/cube.jpg");
+	BlockTexHandle_ = TextureManager::Load("Resources/white.png");
+	hardBlockTexHandle_ = TextureManager::Load("Resources/gray.png");
 	fallingRangeTexHandle_ = TextureManager::Load("Resources/white.png");
 
 #pragma region モデル読み込み
 	// ブロック
 	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	assert(model_);
+	// 消えないブロック
+	hardBlockModel_.reset(Model::CreateFromOBJ("Resources/HardBlock", "HardBlock.obj"));
+	assert(hardBlockModel_);
 	for (int i = 0; i < 4; i++) {
 		Nextmodel_[i].reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
 	}
@@ -68,8 +71,10 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	// 壁
 	for (int i = 0; i < 2; i++) {
 		wallWorld_[i].Initialize();
+		// 座標
+		wallWorld_[i].translation_.y = 8;
 		// 大きさ
-		wallWorld_[i].scale_ = { 0.1f, 100.0f,2.0f };
+		wallWorld_[i].scale_ = { 0.1f, 14.0f,2.0f };
 	}
 	// 左に配置
 	wallWorld_[0].translation_.x = -(float)kBlockNumX;
@@ -77,7 +82,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	wallWorld_[1].translation_.x = (float)kBlockNumX;
 	// 床
 	floorWorld_.Initialize();
-	floorWorld_.scale_ = { 100.0f,0.1f,2.0f };
+	floorWorld_.scale_ = { 13.0f,0.1f,2.0f };
 	floorWorld_.translation_.y = kMapBottomPos - 1.0f;
 	// 落下予測地点
 	for (int i = 0; i < 4; i++) {
@@ -717,7 +722,7 @@ void BlockManager::Shape_I(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
@@ -739,7 +744,7 @@ void BlockManager::Shape_I(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x,velocity.y + height,velocity.z });
 		//リストに登録
@@ -761,7 +766,7 @@ void BlockManager::Shape_I(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_3 = new Block();
-		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_3->SetIsHardBlock(true);
 		newBlock_3->SetworldTransform_({ velocity.x,velocity.y + height * 2,velocity.z });
 		//リストに登録
@@ -783,7 +788,7 @@ void BlockManager::Shape_I(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_4 = new Block();
-		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_4->SetIsHardBlock(true);
 		newBlock_4->SetworldTransform_({ velocity.x,velocity.y + height * 3 ,velocity.z });
 		//リストに登録
@@ -812,7 +817,7 @@ void BlockManager::Shape_T(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
@@ -834,7 +839,7 @@ void BlockManager::Shape_T(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x,velocity.y + height,velocity.z });
 		//リストに登録
@@ -856,7 +861,7 @@ void BlockManager::Shape_T(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_3 = new Block();
-		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_3->SetIsHardBlock(true);
 		newBlock_3->SetworldTransform_({ velocity.x + width,velocity.y + height,velocity.z });
 		//リストに登録
@@ -878,7 +883,7 @@ void BlockManager::Shape_T(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_4 = new Block();
-		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_4->SetIsHardBlock(true);
 		newBlock_4->SetworldTransform_({ velocity.x - width,velocity.y + height  ,velocity.z });
 		//リストに登録
@@ -907,7 +912,7 @@ void BlockManager::Shape_S(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
@@ -929,7 +934,7 @@ void BlockManager::Shape_S(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x - width,velocity.y ,velocity.z });
 		//リストに登録
@@ -951,7 +956,7 @@ void BlockManager::Shape_S(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_3 = new Block();
-		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_3->SetIsHardBlock(true);
 		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + height,velocity.z });
 		//リストに登録
@@ -973,7 +978,7 @@ void BlockManager::Shape_S(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_4 = new Block();
-		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_4->SetIsHardBlock(true);
 		newBlock_4->SetworldTransform_({ velocity.x + width,velocity.y + height  ,velocity.z });
 		//リストに登録
@@ -1002,7 +1007,7 @@ void BlockManager::Shape_O(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
@@ -1024,7 +1029,7 @@ void BlockManager::Shape_O(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y ,velocity.z });
 		//リストに登録
@@ -1046,7 +1051,7 @@ void BlockManager::Shape_O(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_3 = new Block();
-		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_3->SetIsHardBlock(true);
 		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + height,velocity.z });
 		//リストに登録
@@ -1068,7 +1073,7 @@ void BlockManager::Shape_O(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_4 = new Block();
-		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_4->SetIsHardBlock(true);
 		newBlock_4->SetworldTransform_({ velocity.x + width,velocity.y + height  ,velocity.z });
 		//リストに登録
@@ -1096,7 +1101,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x - width,velocity.y,velocity.z });
 		//リストに登録
@@ -1118,7 +1123,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
 		//リストに登録
@@ -1140,7 +1145,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_3 = new Block();
-		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_3->SetIsHardBlock(true);
 		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + height,velocity.z });
 		//リストに登録
@@ -1162,7 +1167,7 @@ void BlockManager::Shape_J(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_4 = new Block();
-		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_4->SetIsHardBlock(true);
 		newBlock_4->SetworldTransform_({ velocity.x ,velocity.y + height * 2 ,velocity.z });
 		//リストに登録
@@ -1190,7 +1195,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x + width,velocity.y,velocity.z });
 		//リストに登録
@@ -1212,7 +1217,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x,velocity.y ,velocity.z });
 		//リストに登録
@@ -1234,7 +1239,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_3 = new Block();
-		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_3->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_3->SetIsHardBlock(true);
 		newBlock_3->SetworldTransform_({ velocity.x ,velocity.y + height,velocity.z });
 		//リストに登録
@@ -1256,7 +1261,7 @@ void BlockManager::Shape_L(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_4 = new Block();
-		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_4->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_4->SetIsHardBlock(true);
 		newBlock_4->SetworldTransform_({ velocity.x ,velocity.y + height * 2 ,velocity.z });
 		//リストに登録
@@ -1282,7 +1287,7 @@ void BlockManager::Shape_Ten(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
@@ -1310,7 +1315,7 @@ void BlockManager::shape_side(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_1 = new Block();
-		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_1->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_1->SetIsHardBlock(true);
 		newBlock_1->SetworldTransform_({ velocity.x,velocity.y,velocity.z });
 		//リストに登録
@@ -1331,7 +1336,7 @@ void BlockManager::shape_side(Vector3 velocity, int index) {
 	}
 	else {
 		Block* newBlock_2 = new Block();
-		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, model_.get());
+		newBlock_2->Initialize(worldTransform_, hardBlockTexHandle_, hardBlockModel_.get());
 		newBlock_2->SetIsHardBlock(true);
 		newBlock_2->SetworldTransform_({ velocity.x + width,velocity.y,velocity.z });
 		//リストに登録
@@ -1427,7 +1432,7 @@ void BlockManager::CheckAndClearRow() {
 void BlockManager::DeleteBlocksAboveGoalLine() {
 	for (Block* block : blocks_) {
 		if (!block->GetFoolFlag()) {
-			if (goalLinePos_.y <= block->GetWorldPosition().y) {
+			if (goalLinePos_.y <= block->GetWorldPosition().y || block->GetWorldPosition().x >= wallWorld_[1].translation_.x || block->GetWorldPosition().x <= wallWorld_[0].translation_.x) {
 				block->SetIsAlive(false);
 				// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
 				isDelete_ = true;

@@ -92,7 +92,7 @@ void GameClearScene::Update(GameManager* gameManager) {
 	//	collisionManager_->SetColliderList(newBlock_);
 	//}
 
-	if (input_->IsPushKeyEnter(DIK_T))
+	if (input_->IsPushKeyEnter(DIK_T) || GamePad::GetInstance()->TriggerButton(XINPUT_GAMEPAD_A))
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;

@@ -161,7 +161,7 @@ private:// 定数
 	const int kBlockNumY = 20;
 	
 	// ブロックの落下クールタイム
-	const int kDropCoolTime = 20;
+	const int kDropCoolTime = 30;
 
 private:
 	//Input
@@ -201,6 +201,8 @@ private:
 	//3Dモデル
 	// ブロック
 	std::unique_ptr<Model> model_{};
+	// 消えないブロック
+	std::unique_ptr<Model> hardBlockModel_;
 	// ブロック
 	std::unique_ptr<Model> Nextmodel_[4]{};
 	// 壁

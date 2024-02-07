@@ -96,8 +96,24 @@ void GameOverScene::Update(GameManager* gameManager) {
 	//	collisionManager_->SetColliderList(newBlock_);
 	//}
 
-	if (input_->IsPushKeyEnter(DIK_T))
+	if (input_->IsPushKeyEnter(DIK_T) || GamePad::GetInstance()->TriggerButton(XINPUT_GAMEPAD_A))
 	{
+		if (!isTransition4Game_) {
+			isTransition4Title_ = true;
+		}
+		if (isTransitionEnd_) {
+			isTransition_ = true;
+			if (soundCount_ == 0)
+			{
+				soundCount_ = 1;
+				/*audio_->SoundPlayWave(SelectsoundHandle_, false);*/
+			}
+		}
+	}
+	else if (input_->IsPushKeyEnter(DIK_G) || GamePad::GetInstance()->TriggerButton(XINPUT_GAMEPAD_B)){
+		if (!isTransition4Title_) {
+			isTransition4Game_ = true;
+		}
 		if (isTransitionEnd_) {
 			isTransition_ = true;
 			if (soundCount_ == 0)
@@ -126,8 +142,13 @@ void GameOverScene::Update(GameManager* gameManager) {
 
 		if (transitionColor_.w >= 1.0f) {
 			audio_->StopAudio(overSoundHandle_);
-			gameManager->ChangeScene(new GameTitleScene);
+			if (isTransition4Title_) {
+				gameManager->ChangeScene(new GameTitleScene);
+			}
+			else if(isTransition4Game_) {
+				gameManager->ChangeScene(new GameScene);
 
+			}
 		}
 	}
 };

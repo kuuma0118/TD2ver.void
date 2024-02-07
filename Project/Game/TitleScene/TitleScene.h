@@ -16,6 +16,7 @@
 // GameObject
 #include "Project/Player/Player.h"
 #include "Project/Block/Block.h"
+#include "Project/Components/GamePad.h"
 
 class GameTitleScene : public IScene {
 public:
@@ -56,6 +57,8 @@ private:// メンバ変数
 	TextureManager* textureManager_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+	// ゲームパッド
+	GamePad* gamePad_ = nullptr;
 	//オーディオクラス
 	Audio* audio_ = nullptr;
 	//ポストプロセス

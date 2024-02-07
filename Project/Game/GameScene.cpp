@@ -77,13 +77,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 };
 
 void GameScene::Update(GameManager* gameManager) {
-	if (Input::GetInstance()->IsPushKeyEnter(DIK_1)) {
-		followCamera_->SetNextTarget(&goalLine_->GetWorldTransform());
-	}
-	if (Input::GetInstance()->IsPushKeyEnter(DIK_0)) {
-		followCamera_->SetNextTarget(nullptr);
-	}
-
 	worldTransform_.UpdateMatrix();
 	viewProjection_.UpdateMatrix();
 
@@ -201,10 +194,10 @@ void GameScene::Draw(GameManager* gameManager) {
 	moovUISprite_->Draw();
 
 	// ゴールライン
-	goalLine_->Draw2DLine();
+	//goalLine_->Draw2DLine();
 
 	// デッドライン
-	deadLine_->Draw2DLine();
+	//deadLine_->Draw2DLine();
 
 	Sprite::PostDraw();
 
