@@ -45,10 +45,6 @@ void DeadLine::Update(const ViewProjection& viewProjection) {
 
 	// 点滅処理
 	FlashUpdate();
-
-	ImGui::Begin("deadLine");
-	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.01f, -100, 100);
-	ImGui::End();
 }
 
 void DeadLine::Draw3DLine(const ViewProjection& viewProjection) {
