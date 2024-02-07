@@ -6,7 +6,7 @@
 GameManager::GameManager() {
 	//ウィンドウズアプリケーションの初期化
 	winApp_ = WinApp::GetInstance();
-	winApp_->CreateGameWindow(L"DirectXGame", WinApp::kClientWidth, WinApp::kClientHeight);
+	winApp_->CreateGameWindow(L"2327_中抜建設", WinApp::kClientWidth, WinApp::kClientHeight);
 
 	//DirectXの初期化
 	dxCommon_ = FCS::GetInstance();
