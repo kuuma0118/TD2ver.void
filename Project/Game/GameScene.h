@@ -71,6 +71,16 @@ private:// メンバ変数
 	//ワールドトランスフォーム(ブロックの発生場所)
 	WorldTransform worldTransform_;
 
+	//ブロックを落とすUIのスプライト
+	std::unique_ptr<Sprite>  dropUISprite_ = nullptr;
+	//ブロックを落とすUIのテクスチャ
+	uint32_t dropUITextureHandle_ = 0;
+
+	//ブロックの移動UIのスプライト
+	std::unique_ptr<Sprite>  moovUISprite_ = nullptr;
+	//ブロックの移動UIのテクスチャ
+	uint32_t moovUITextureHandle_ = 0;
+
 	// 自機に追従するカメラ
 	std::unique_ptr<FollowCamera> followCamera_;
 	// 自機

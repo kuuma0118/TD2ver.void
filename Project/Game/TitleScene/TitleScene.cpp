@@ -40,12 +40,16 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 	//player_->Initialize();
 
 	//タイトル
-	titleTextureHandle_ = TextureManager::Load("Resources/Pictures/title.png");
+	titleTextureHandle_ = TextureManager::Load("Resources/Pictures/nakanuki-construction.png");
 	titleSprite_.reset(Sprite::Create(titleTextureHandle_, { 0.0f,0.0f }));
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
+
+    TestUITextureHandle_ = TextureManager::Load("Resources/Pictures/taitoruUI_pressA.png");
+	TestUISprite_.reset(Sprite::Create(TestUITextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 500.0f * 0.5f , 550.0f }));
 
 	// 当たり判定のインスタンスを生成
 	//collisionManager_ = new CollisionManager();
@@ -116,6 +120,8 @@ void GameTitleScene::Draw(GameManager* gameManager) {
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	titleSprite_->Draw();
+
+	TestUISprite_->Draw();
 
 	transitionSprite_->Draw();
 

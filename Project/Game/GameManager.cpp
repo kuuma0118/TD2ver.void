@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GameScene.h"
+#include "TitleScene.h"
 #include "Engine/Utility/GlobalVariables.h"
 
 GameManager::GameManager() {
@@ -43,7 +44,7 @@ GameManager::GameManager() {
 	GlobalVariables::GetInstance()->LoadFiles();
 
 	//シーンの初期化
-	currentScene_ = new GameScene();
+	currentScene_ = new GameTitleScene();
 	currentScene_->Initialize(this);
 }
 

@@ -82,6 +82,12 @@ private:// メンバ変数
 	std::unique_ptr<Sprite>  titleSprite_ = nullptr;
 	//タイトルのテクスチャ
 	uint32_t titleTextureHandle_ = 0;
+
+	//テストUIのスプライト
+	std::unique_ptr<Sprite>  TestUISprite_ = nullptr;
+	//テストUIのテクスチャ
+	uint32_t TestUITextureHandle_ = 0;
+
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_ = nullptr;
 	//トランジションのテクスチャ

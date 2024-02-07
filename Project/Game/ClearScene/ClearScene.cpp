@@ -47,6 +47,10 @@ void GameClearScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
+	ReturnTitleUITextureHandle_ = TextureManager::Load("Resources/Pictures/ReturnTitleUI.png");
+	ReturnTitleUISprite_.reset(Sprite::Create(ReturnTitleUITextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 550.0f * 0.5f , 525.0f }));
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -150,6 +154,8 @@ void GameClearScene::Draw(GameManager* gameManager) {
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	clearSprite_->Draw();
+
+	ReturnTitleUISprite_->Draw();
 
 	transitionSprite_->Draw();
 
