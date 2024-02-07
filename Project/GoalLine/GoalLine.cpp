@@ -12,6 +12,7 @@ void GoalLine::Initialize() {
 
 	// 3Dモデル
 	line3DModel_.reset(Model::CreateFromOBJ("Resources", "block.obj"));
+	line3DModel_->GetDirectionalLight()->SetEnableLighting(false);
 	// 3Dモデルの初期設定
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0,10,0 };

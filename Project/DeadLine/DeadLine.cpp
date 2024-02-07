@@ -16,6 +16,8 @@ void DeadLine::Initialize() {
 
 	// 3Dモデル
 	line3DModel_.reset(Model::CreateFromOBJ("Resources", "block.obj"));
+	line3DModel_->GetDirectionalLight()->SetEnableLighting(false);
+	//ワールドトランスフォームの初期化
 	// 3Dモデルの初期設定
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0,kStartDeadLine_,0 };

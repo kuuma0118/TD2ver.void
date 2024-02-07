@@ -33,9 +33,11 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 #pragma region モデル読み込み
 	// ブロック
 	model_.reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
+	//model_->GetDirectionalLight()->SetEnableLighting(false);
 	assert(model_);
 	// 消えないブロック
 	hardBlockModel_.reset(Model::CreateFromOBJ("Resources/HardBlock", "HardBlock.obj"));
+	//hardBlockModel_->GetDirectionalLight()->SetEnableLighting(false);
 	assert(hardBlockModel_);
 	for (int i = 0; i < 4; i++) {
 		Nextmodel_[i].reset(Model::CreateFromOBJ("Resources/Cube", "scaffolding.obj"));
