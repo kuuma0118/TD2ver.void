@@ -40,6 +40,23 @@ void GameScene::Initialize(GameManager* gameManager) {
 	moovUISprite_.reset(Sprite::Create(moovUITextureHandle_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
 
+	// チュートリアル用の文字
+	guideGoalLineTexture_ = TextureManager::Load("Resources/Guide/Guide_Climb.png");
+	guideGoalLineSprite_.reset(Sprite::Create(guideGoalLineTexture_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 55.0f }));
+
+	guideDeadLineTexture_ = TextureManager::Load("Resources/Guide/Guide_away.png");
+	guideDeadLineSprite_.reset(Sprite::Create(guideDeadLineTexture_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
+
+	guideDeleteTexture_ = TextureManager::Load("Resources/Guide/Guide_block.png");
+	guideDeleteBlockSprite_.reset(Sprite::Create(guideDeleteTexture_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 0.0f }));
+
+	guideStartTexture_ = TextureManager::Load("Resources/Guide/Guide_Start.png");
+	guideStartSprite_.reset(Sprite::Create(guideStartTexture_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f , 50.0f }));
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = std::make_unique<CollisionManager>();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -78,6 +95,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// ゴールラインをセット
 	blockManager_->SetGoalLinePos(goalLine_->GetWorldPosition());
 	isOpeningCamera_ = true;
+
+	// 色設定
+	color_ = { 1,1,1,kMinAlpha_ };
+	// デッドラインの点滅に使用するアルファ値設定
+	alpha_ = 0.0f;
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -94,12 +116,21 @@ void GameScene::Update(GameManager* gameManager) {
 	if (isOpeningCamera_) {
 		if (currentFrame_ >= 120 && currentFrame_ <= 300) {
 			followCamera_->SetNextTarget(&goalLine_->GetWorldTransform());
+			isGuideDelete_ = false;
+			isGuideDeadLine_ = false;
+			isGuideGoalLine_ = true;
 		}
 		else if (currentFrame_ >= 301 && currentFrame_ <= 480) {
 			followCamera_->SetNextTarget(&deadLine_->GetWorldTransform());
+			isGuideGoalLine_ = false;
+			isGuideDelete_ = false;
+			isGuideDeadLine_ = true;
 		}
 		else if (currentFrame_ >= 481 && currentFrame_ <= 530) {
 			followCamera_->SetNextTarget(nullptr);
+			isGuideGoalLine_ = false;
+			isGuideDeadLine_ = false;
+			isGuideDelete_ = true;
 		}
 		else if (currentFrame_ >= 531 && currentFrame_ <= 700) {
 			blockManager_->GuideDeleteBlock();
@@ -108,6 +139,7 @@ void GameScene::Update(GameManager* gameManager) {
 			deadLine_->Update(viewProjection_);
 		}
 		else if(currentFrame_ >= 701){
+			isGuideStart_ = true;
 			currentFrame_ = 0;
 			isOpeningCamera_ = false;
 		}
@@ -115,6 +147,26 @@ void GameScene::Update(GameManager* gameManager) {
 	}
 	// ゲーム開始
 	else {
+		if (isGuideStart_) {
+			guideClearFrame_++;
+			// alphaが上限値までいったら0にする
+			if (alpha_ >= kMaxAlpha_) {
+				alpha_ = 0.0f;
+			}
+			// デッドラインを点滅
+			alpha_ += kFlashSpeed_;
+			color_.w = kMinAlpha_ + sinf(alpha_) * (kMaxAlpha_ - kMinAlpha_);
+			// アルファ値を反映
+			guideStartSprite_->SetColor(color_);
+
+			if (guideClearFrame_ >= 60) {
+				isGuideStart_ = false;
+			}
+		}
+
+		isGuideDelete_ = false;
+		isGuideDeadLine_ = false;
+		isGuideGoalLine_ = false;
 		// 自機
 		player_->Update();
 		// ブロックマネージャ
@@ -206,11 +258,18 @@ void GameScene::Draw(GameManager* gameManager) {
 		moovUISprite_->Draw();
 	}
 
-	// ゴールライン
-	//goalLine_->Draw2DLine();
-
-	// デッドライン
-	//deadLine_->Draw2DLine();
+	if (isGuideGoalLine_) {
+		guideGoalLineSprite_->Draw();
+	}
+	else if(isGuideDeadLine_) {
+		guideDeadLineSprite_->Draw();
+	}
+	else if (isGuideDelete_) {
+		guideDeleteBlockSprite_->Draw();
+	}
+	if (isGuideStart_) {
+		guideStartSprite_->Draw();
+	}
 
 	Sprite::PostDraw();
 

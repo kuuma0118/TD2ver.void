@@ -77,11 +77,39 @@ private:// メンバ変数
 	std::unique_ptr<Sprite>  dropUISprite_ = nullptr;
 	//ブロックを落とすUIのテクスチャ
 	uint32_t dropUITextureHandle_ = 0;
-
 	//ブロックの移動UIのスプライト
 	std::unique_ptr<Sprite>  moovUISprite_ = nullptr;
 	//ブロックの移動UIのテクスチャ
 	uint32_t moovUITextureHandle_ = 0;
+	
+	/// チュートリアル用の文字
+	// 登れ
+	std::unique_ptr<Sprite>  guideGoalLineSprite_ = nullptr;
+	uint32_t guideGoalLineTexture_ = 0;
+	bool isGuideGoalLine_ = false;
+	// 納期から逃げろ
+	std::unique_ptr<Sprite>  guideDeadLineSprite_ = nullptr;
+	uint32_t guideDeadLineTexture_ = 0;
+	bool isGuideDeadLine_ = false;
+	// 一列揃うとブロックが消える
+	std::unique_ptr<Sprite>  guideDeleteBlockSprite_ = nullptr;
+	uint32_t guideDeleteTexture_ = 0;
+	bool isGuideDelete_ = false;
+	// スタート
+	std::unique_ptr<Sprite>  guideStartSprite_ = nullptr;
+	uint32_t guideStartTexture_ = 0;
+	bool isGuideStart_ = false;
+	int guideClearFrame_ = 0;
+	// 色
+	Vector4 color_;
+	// デッドラインの点滅に使用するアルファ値
+	float alpha_;
+	// デッドラインの点滅速度
+	const float kFlashSpeed_ = 1.0f / 10.0f;
+	// デッドラインのアルファ値の最低値
+	const float kMinAlpha_ = 0.0f;
+	// デッドラインのアルファ値の最大値
+	const float kMaxAlpha_ = 1.0f;
 
 	// 自機に追従するカメラ
 	std::unique_ptr<FollowCamera> followCamera_;
