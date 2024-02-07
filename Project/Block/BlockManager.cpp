@@ -218,9 +218,6 @@ void BlockManager::Update() {
 	// ブロックが横一列になっていたら消す
 	CheckAndClearRow();
 
-	// ゴールラインより上にあるブロックを消す
-	DeleteBlocksAboveGoalLine();
-
 #ifdef _DEBUG
 	ImGui::Begin("shape");
 	if (ImGui::TreeNode("worldTransform")) {
@@ -1432,34 +1429,35 @@ void BlockManager::DeleteBlocksAboveGoalLine() {
 		if (!block->GetFoolFlag()) {
 			if (goalLinePos_.y <= block->GetWorldPosition().y) {
 				block->SetIsAlive(false);
+				// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
+				isDelete_ = true;
 			}
 		}
 	}
+	if (isDelete_) {
+		blocks_.remove_if([](Block* block) {
+			if (!block->GetIsAlive()) {
+				delete block;
+				return true;
+			}
+			return false;
+			});
+		;
 
-	blocks_.remove_if([](Block* block) {
-		if (!block->GetIsAlive()) {
-			delete block;
-			return true;
+		// コライダーをすべてクリア
+		collisionManager_->ClearColliderList();
+		AABB aabb = {
+			{-0.99999f,-1.0f,-0.99999f},
+			{0.99999f,1.0f,0.99999f}
+		};
+		// すでに生成されているブロックをコライダーに登録
+		// 落下するブロック
+		for (Block* block : blocks_) {
+			// 当たり判定の形状を設定
+			block->SetCollisionPrimitive(kCollisionPrimitiveAABB);
+			block->SetCollisionAttribute(kCollisionAttributeBlock);
+			block->SetAABB(aabb);
+			collisionManager_->SetColliderList(block);
 		}
-		return false;
-		});
-	;
-
-	// コライダーをすべてクリア
-	collisionManager_->ClearColliderList();
-	AABB aabb = {
-		{-0.99999f,-1.0f,-0.99999f},
-		{0.99999f,1.0f,0.99999f}
-	};
-	// すでに生成されているブロックをコライダーに登録
-	// 落下するブロック
-	for (Block* block : blocks_) {
-		// 当たり判定の形状を設定
-		block->SetCollisionPrimitive(kCollisionPrimitiveAABB);
-		block->SetCollisionAttribute(kCollisionAttributeBlock);
-		block->SetAABB(aabb);
-		collisionManager_->SetColliderList(block);
 	}
-	// コライダーのすべてが初期化されてしまっているのでplayerを再pushする
-	isDelete_ = true;
 }

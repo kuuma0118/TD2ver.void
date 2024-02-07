@@ -83,24 +83,24 @@ void GameScene::Update(GameManager* gameManager) {
 	viewProjection_.matView_ = followCamera_->GetViewProjection().matView_;
 	viewProjection_.matProjection_ = followCamera_->GetViewProjection().matProjection_;
 	viewProjection_.TransferMatrix();
-	if (isOpeningCamera_) {
-		if (currentFrame_ >= 120 && currentFrame_ <= 240) {
-			followCamera_->SetNextTarget(&goalLine_->GetWorldTransform());
-		}
-		else if (currentFrame_ >= 241 && currentFrame_ <= 420) {
-			followCamera_->SetNextTarget(&deadLine_->GetWorldTransform());
-		}
-		else if (currentFrame_ >= 421 && currentFrame_ <= 450) {
-			followCamera_->SetNextTarget(&player_->GetWorldTransform());
-		}
-		else if (currentFrame_ >= 450) {
-			followCamera_->SetNextTarget(nullptr);
-			currentFrame_ = 0;
-			isOpeningCamera_ = false;
-		}
-		currentFrame_++;
-	}
-	if(currentFrame_ <= 1){
+	//if (isOpeningCamera_) {
+	//	if (currentFrame_ >= 120 && currentFrame_ <= 240) {
+	//		followCamera_->SetNextTarget(&goalLine_->GetWorldTransform());
+	//	}
+	//	else if (currentFrame_ >= 241 && currentFrame_ <= 420) {
+	//		followCamera_->SetNextTarget(&deadLine_->GetWorldTransform());
+	//	}
+	//	else if (currentFrame_ >= 421 && currentFrame_ <= 450) {
+	//		followCamera_->SetNextTarget(&player_->GetWorldTransform());
+	//	}
+	//	else if (currentFrame_ >= 450) {
+	//		followCamera_->SetNextTarget(nullptr);
+	//		currentFrame_ = 0;
+	//		isOpeningCamera_ = false;
+	//	}
+	//	currentFrame_++;
+	//}
+	//if(currentFrame_ <= 1){
 
 		// 自機
 		player_->Update();
@@ -114,6 +114,8 @@ void GameScene::Update(GameManager* gameManager) {
 		deadLine_->SetIsBlockDelete(blockManager_->GetIsDelete());
 		deadLine_->Update(viewProjection_);
 
+		// ゴールラインより上にあるブロックを消す
+		blockManager_->DeleteBlocksAboveGoalLine();
 		// ブロックが消えていた場合
 		if (blockManager_->GetIsDelete()) {
 			AABB aabb = {
@@ -133,13 +135,13 @@ void GameScene::Update(GameManager* gameManager) {
 
 		// 自機が死んだらゲームオーバー
 		if (!player_->GetIsAlive()) {
-			//gameManager->ChangeScene(new GameOverScene);
+			gameManager->ChangeScene(new GameOverScene);
 		}
 		// ゴールラインに達したらクリア
 		else if (goalLine_->GetIsGoal()) {
-			//gameManager->ChangeScene(new GameClearScene);
+			gameManager->ChangeScene(new GameClearScene);
 		}
-	}
+	//}
 
 #ifdef _DEBUG
 	ImGui::Begin("Camera");
