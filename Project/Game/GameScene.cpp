@@ -28,6 +28,10 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
+	SceneSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
+
+	audio_->SoundPlayWave(SceneSoundHandle_, true);
+
 	dropUITextureHandle_ = TextureManager::Load("Resources/Pictures/dropUI.png");
 	dropUISprite_.reset(Sprite::Create(dropUITextureHandle_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f - 10.0f * 0.5f , 55.0f }));

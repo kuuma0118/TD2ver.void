@@ -66,6 +66,9 @@ private:// メンバ変数
 
 #pragma region ゲームオブジェクト
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+	uint32_t SceneSoundHandle_ = 0u;
 	//ビュープロジェクション(カメラ)
 	ViewProjection viewProjection_;
 	//ワールドトランスフォーム(ブロックの発生場所)
