@@ -41,7 +41,7 @@ GameManager::GameManager() {
 	Sprite::StaticInitialize();
 
 	//グローバル変数の読み込み
-	GlobalVariables::GetInstance()->LoadFiles();
+	//GlobalVariables::GetInstance()->LoadFiles();
 
 	//シーンの初期化
 	currentScene_ = new GameTitleScene();
@@ -91,7 +91,7 @@ void GameManager::run() {
 		// ゲームパッドの更新
 		gamePad_->Update();
 		//グローバル変数の更新
-		GlobalVariables::GetInstance()->Update();
+		//GlobalVariables::GetInstance()->Update();
 		//ゲームシーンの更新
 		currentScene_->Update(this);
 		//ポストプロセスの更新
