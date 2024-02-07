@@ -98,7 +98,7 @@ public:
 	/// </summary>
 	/// <param name="audioHandle"></param>
 	/// <param name="roopFlag"></param>
-	void SoundPlayWave(uint32_t audioHandle, bool roopFlag);
+	void SoundPlayWave(uint32_t audioHandle, bool roopFlag, float volume);
 
 	/// <summary>
 	/// 音声停止

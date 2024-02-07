@@ -20,6 +20,11 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	input_ = Input::GetInstance();
 	// ゲームパッドのインスタンスを生成
 	gamePad_ = GamePad::GetInstance();
+	//オーディオクラスのインスタンスを取得
+	audio_ = Audio::GetInstance();
+
+	soundHandle_[0] = audio_->SoundLoadWave("Resources/Sounds/BlockDead.wav");
+	soundHandle_[1] = audio_->SoundLoadWave("Resources/Sounds/BlockTrans.wav");
 
 	BlockTexHandle_ = TextureManager::Load("Resources/white.png");
 	hardBlockTexHandle_ = TextureManager::Load("Resources/gray.png");
@@ -189,6 +194,7 @@ void BlockManager::Update() {
 		}
 	}
 	if (input_->IsPushKeyEnter(DIK_SPACE) || gamePad_->TriggerButton(XINPUT_GAMEPAD_A)) {
+		audio_->SoundPlayWave(soundHandle_[1], false,1.5f);
 		if (isDropBlock_) {
 			//形状をランダムにする
 			ChangeShape_[0] = ChangeShape_[1];
@@ -1460,6 +1466,7 @@ void BlockManager::DeleteBlocksAboveGoalLine() {
 		}
 	}
 	if (isDelete_) {
+		audio_->SoundPlayWave(soundHandle_[0], false,1.5f);
 		blocks_.remove_if([](Block* block) {
 			if (!block->GetIsAlive()) {
 				delete block;

@@ -7,7 +7,7 @@
 
 // Project
 #include "Project/Components/GamePad.h"
-
+#include "Components/Audio.h"
 #include <set>
 
 enum class Shape {
@@ -169,6 +169,9 @@ private:// 定数
 	const int kDropCoolTime = 30;
 
 private:
+	//オーディオクラス
+	Audio* audio_ = nullptr;
+	uint32_t soundHandle_[4] = {};
 	//Input
 	Input* input_ = nullptr;
 	// GamePad

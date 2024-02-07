@@ -25,9 +25,10 @@ void GameOverScene::Initialize(GameManager* gameManager) {
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
 
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/select.wav");
 	overSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/over.wav");
 
-	audio_->SoundPlayWave(overSoundHandle_, true);
+	audio_->SoundPlayWave(overSoundHandle_, true,0.5f);
 
 	// カメラ
 	worldTransform_.Initialize();
@@ -106,7 +107,7 @@ void GameOverScene::Update(GameManager* gameManager) {
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				/*audio_->SoundPlayWave(SelectsoundHandle_, false);*/
+				audio_->SoundPlayWave(soundHandle_, false,1.0f);
 			}
 		}
 	}
@@ -119,7 +120,7 @@ void GameOverScene::Update(GameManager* gameManager) {
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				/*audio_->SoundPlayWave(SelectsoundHandle_, false);*/
+				audio_->SoundPlayWave(soundHandle_, false,1.0f);
 			}
 		}
 	}
@@ -143,6 +144,7 @@ void GameOverScene::Update(GameManager* gameManager) {
 		if (transitionColor_.w >= 1.0f) {
 			audio_->StopAudio(overSoundHandle_);
 			if (isTransition4Title_) {
+				
 				gameManager->ChangeScene(new GameTitleScene);
 			}
 			else if(isTransition4Game_) {

@@ -145,7 +145,7 @@ void Audio::SoundUnload(SoundData* soundData) {
 //}
 
 
-void Audio::SoundPlayWave(uint32_t audioHandle, bool roopFlag) {
+void Audio::SoundPlayWave(uint32_t audioHandle, bool roopFlag, float volume) {
 	HRESULT result;
 	//波形フォーマットを元にSourceVoiceの作成
 	sourceVoices_[audioHandle] = nullptr;
@@ -163,6 +163,7 @@ void Audio::SoundPlayWave(uint32_t audioHandle, bool roopFlag) {
 
 	//波形データの再生
 	result = sourceVoices_[audioHandle]->SubmitSourceBuffer(&buf);
+	result = sourceVoices_[audioHandle]->SetVolume(volume);
 	result = sourceVoices_[audioHandle]->Start();
 }
 

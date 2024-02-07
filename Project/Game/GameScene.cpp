@@ -30,7 +30,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	SceneSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
 
-	audio_->SoundPlayWave(SceneSoundHandle_, true);
+	audio_->SoundPlayWave(SceneSoundHandle_, true, 0.5f);
 
 	dropUITextureHandle_ = TextureManager::Load("Resources/Pictures/dropUI.png");
 	dropUISprite_.reset(Sprite::Create(dropUITextureHandle_,
@@ -147,10 +147,12 @@ void GameScene::Update(GameManager* gameManager) {
 
 	// 自機が死んだらゲームオーバー
 	if (!player_->GetIsAlive()) {
+		audio_->StopAudio(SceneSoundHandle_);
 		gameManager->ChangeScene(new GameOverScene);
 	}
 	// ゴールラインに達したらクリア
 	else if (goalLine_->GetIsGoal()) {
+		audio_->StopAudio(SceneSoundHandle_);
 		gameManager->ChangeScene(new GameClearScene);
 	}
 

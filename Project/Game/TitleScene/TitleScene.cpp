@@ -27,9 +27,10 @@ void GameTitleScene::Initialize(GameManager* gameManager) {
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
 
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/select.wav");
 	titleSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Title.wav");
 
-	audio_->SoundPlayWave(titleSoundHandle_, true);
+	audio_->SoundPlayWave(titleSoundHandle_, true,0.5f);
 
 	// カメラ
 	worldTransform_.Initialize();
@@ -67,7 +68,7 @@ void GameTitleScene::Update(GameManager* gameManager) {
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				/*audio_->SoundPlayWave(SelectsoundHandle_, false);*/
+				audio_->SoundPlayWave(soundHandle_, false,1.0f);
 			}
 		}
 	}

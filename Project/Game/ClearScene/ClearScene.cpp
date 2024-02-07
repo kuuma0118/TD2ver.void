@@ -25,9 +25,10 @@ void GameClearScene::Initialize(GameManager* gameManager) {
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
 
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/select.wav");
 	clearSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/clear.wav");
 
-	audio_->SoundPlayWave(clearSoundHandle_, true);
+	audio_->SoundPlayWave(clearSoundHandle_, true,0.5f);
 
 	// カメラ
 	worldTransform_.Initialize();
@@ -99,7 +100,7 @@ void GameClearScene::Update(GameManager* gameManager) {
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				/*audio_->SoundPlayWave(SelectsoundHandle_, false);*/
+				audio_->SoundPlayWave(soundHandle_, false,1.0f);
 			}
 		}
 	}
