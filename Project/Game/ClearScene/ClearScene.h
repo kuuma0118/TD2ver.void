@@ -102,6 +102,9 @@ private:// メンバ変数
 	bool isTransitionEnd_ = false;
 	//トランジションのタイマー
 	float transitionTimer_ = 0;
+	// 背景
+	std::unique_ptr<Sprite>  backGround_ = nullptr;
+	uint32_t backGroundTexture_ = 0;
 
 	//ブロック
 	std::list<Block*> blocks_;

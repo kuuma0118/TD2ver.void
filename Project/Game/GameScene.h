@@ -111,6 +111,10 @@ private:// メンバ変数
 	// デッドラインのアルファ値の最大値
 	const float kMaxAlpha_ = 1.0f;
 
+	// 背景
+	std::unique_ptr<Sprite>  backGround_ = nullptr;
+	uint32_t backGroundTexture_ = 0;
+
 	// 自機に追従するカメラ
 	std::unique_ptr<FollowCamera> followCamera_;
 	// 自機

@@ -15,7 +15,6 @@ GameOverScene::~GameOverScene() {
 };
 
 void GameOverScene::Initialize(GameManager* gameManager) {
-
 	//TextureManagerのインスタンスを取得
 	textureManager_ = TextureManager::GetInstance();
 	//Inputのインスタンスを取得
@@ -24,6 +23,9 @@ void GameOverScene::Initialize(GameManager* gameManager) {
 	audio_ = Audio::GetInstance();
 	//ポストプロセスのインスタンスを取得
 	postProcess_ = PostProcess::GetInstance();
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/select.wav");
 	overSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/over.wav");
@@ -55,6 +57,11 @@ void GameOverScene::Initialize(GameManager* gameManager) {
 	ReturnTitleUITextureHandle_ = TextureManager::Load("Resources/Pictures/ReturnTitleUI.png");
 	ReturnTitleUISprite_.reset(Sprite::Create(ReturnTitleUITextureHandle_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f - 490.0f * 0.5f , 570.0f }));
+
+	// 背景
+	backGroundTexture_ = TextureManager::Load("Resources/background.png");
+	backGround_.reset(Sprite::Create(backGroundTexture_,
+		{ 0 , 0.0f }));
 
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
@@ -160,6 +167,9 @@ void GameOverScene::Draw(GameManager* gameManager) {
 #pragma region 背景スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	// 背景
+	backGround_->Draw();
 
 	Sprite::PostDraw();
 

@@ -90,6 +90,9 @@ private:// メンバ変数
 	std::unique_ptr<Sprite>  TestUISprite_ = nullptr;
 	//テストUIのテクスチャ
 	uint32_t TestUITextureHandle_ = 0;
+	// 背景
+	std::unique_ptr<Sprite>  backGround_ = nullptr;
+	uint32_t backGroundTexture_ = 0;
 
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_ = nullptr;

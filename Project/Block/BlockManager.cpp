@@ -29,6 +29,7 @@ void BlockManager::Initialize(CollisionManager* collisionManager) {
 	BlockTexHandle_ = TextureManager::Load("Resources/white.png");
 	hardBlockTexHandle_ = TextureManager::Load("Resources/gray.png");
 	fallingRangeTexHandle_ = TextureManager::Load("Resources/white.png");
+	mapTexHandle_ = TextureManager::Load("Resources/kabe.png");
 
 #pragma region モデル読み込み
 	// ブロック
@@ -300,10 +301,10 @@ void BlockManager::Draw(ViewProjection viewProjection_) {
 	//}
 	// 壁
 	for (int i = 0; i < 2; i++) {
-		wall_[i]->Draw(wallWorld_[i], viewProjection_);
+		wall_[i]->Draw(wallWorld_[i], viewProjection_, mapTexHandle_);
 	}
 	// 床
-	floor_->Draw(floorWorld_, viewProjection_);
+	floor_->Draw(floorWorld_, viewProjection_, mapTexHandle_);
 	// 落下予測地点
 	if (isFallingPoint_) {
 		for (int i = 0; i < 4; i++) {

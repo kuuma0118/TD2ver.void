@@ -226,6 +226,7 @@ private:
 	uint32_t BlockTexHandle_ = 0;
 	uint32_t hardBlockTexHandle_ = 0;
 	uint32_t fallingRangeTexHandle_ = 0;
+	uint32_t mapTexHandle_ = 0;
 
 	// 
 	Vector2 clearBlock_[20];

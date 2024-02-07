@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Engine/Utility/MathStruct.h"
+#include "Engine/Base/TextureManager.h"
 #include <cassert>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -16,6 +17,11 @@ void Player::Initialize() {
 	// モデルの読み込み
 	model_.reset(Model::CreateFromOBJ("Resources", "block.obj"));
 	assert(model_);
+	helmetModel_.reset(Model::CreateFromOBJ("Resources", "helmet.obj"));
+	assert(helmetModel_);
+
+	// テクスチャ読み込み
+	playerTexture_ = TextureManager::Load("Resources/player.png");
 
 	// ワールド座標の初期化
 	worldTransform_.Initialize();
@@ -23,8 +29,15 @@ void Player::Initialize() {
 	worldTransform_.translation_ = { -5,0,0 };
 	// 右向きに設定
 	worldTransform_.rotation_ = { 0,(float)M_PI / 2, 0 };
+	worldTransform_.scale_ = { 0.8f, 1,0.8f };
 	// worldMatrixに反映
 	worldTransform_.UpdateMatrix();
+
+	// ヘルメットのワールド座標
+	helmetWorld_.Initialize();
+	helmetWorld_.parent_ = &worldTransform_;
+	helmetWorld_.translation_.y = 0.3f;
+	helmetWorld_.scale_ = { 1.5f,1.5f,1.5f };
 
 	// 速度ベクトル
 	velocity_ = { 0,0,kSpeed };
@@ -59,6 +72,7 @@ void Player::Initialize() {
 }
 
 void Player::Update() {
+	helmetWorld_.UpdateMatrix();
 	// 重力を速度に足す
 	velocity_.y += acceleration_.y;
 
@@ -89,7 +103,8 @@ void Player::Update() {
 }
 
 void Player::Draw(const ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection);
+	model_->Draw(worldTransform_, viewProjection, playerTexture_);
+	helmetModel_->Draw(helmetWorld_, viewProjection);
 }
 
 void Player::OnCollision(Collider* collider) {

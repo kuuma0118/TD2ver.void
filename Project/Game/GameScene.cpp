@@ -57,6 +57,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 	guideStartSprite_.reset(Sprite::Create(guideStartTexture_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f , 50.0f }));
 
+	// 背景
+	backGroundTexture_ = TextureManager::Load("Resources/background.png");
+	backGround_.reset(Sprite::Create(backGroundTexture_,
+		{ 0 , 0.0f }));
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = std::make_unique<CollisionManager>();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -223,6 +228,9 @@ void GameScene::Draw(GameManager* gameManager) {
 #pragma region 背景スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	// 背景
+	backGround_->Draw();
 
 	Sprite::PostDraw();
 

@@ -106,9 +106,14 @@ private:
 
 	// 移動処理用のワールド座標
 	WorldTransform worldTransform_;
+	// ヘルメットのワールド座標
+	WorldTransform helmetWorld_;
 
 	// モデル
 	std::unique_ptr<Model> model_;
+	uint32_t playerTexture_ = 0;
+	// ヘルメット
+	std::unique_ptr<Model> helmetModel_;
 
 	// 速度ベクトル
 	Vector3 velocity_;
@@ -121,10 +126,6 @@ private:
 	bool inverseVelSignal_;
 	// ジャンプしたか
 	bool isJump_;
-	//// 空中にいるか
-	//bool isAir_;
-	//// 着地したか
-	//bool isLanding_;
 	// 生きてるか
 	bool isAlive_;
 

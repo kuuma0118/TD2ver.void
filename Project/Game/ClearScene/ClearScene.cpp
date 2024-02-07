@@ -52,6 +52,11 @@ void GameClearScene::Initialize(GameManager* gameManager) {
 	ReturnTitleUISprite_.reset(Sprite::Create(ReturnTitleUITextureHandle_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f - 550.0f * 0.5f , 525.0f }));
 
+	// 背景
+	backGroundTexture_ = TextureManager::Load("Resources/background.png");
+	backGround_.reset(Sprite::Create(backGroundTexture_,
+		{ 0 , 0.0f }));
+
 	// 当たり判定のインスタンスを生成
 	collisionManager_ = new CollisionManager();
 	// ゲームオブジェクトをコライダーのリストに登録
@@ -134,6 +139,9 @@ void GameClearScene::Draw(GameManager* gameManager) {
 #pragma region 背景スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	// 背景
+	backGround_->Draw();
 
 	Sprite::PostDraw();
 

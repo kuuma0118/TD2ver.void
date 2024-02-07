@@ -2,7 +2,7 @@
 
 void GoalLine::Initialize() {
 	// 使用するテクスチャを読み込む
-	lineTexture_ = TextureManager::Load("Resources/goal.png");
+	lineTexture_ = TextureManager::Load("Resources/white.png");
 	// 実体を生成
 	line2DSprite_.reset(Sprite::Create(lineTexture_, Vector2{0,0}));
 	// サイズ設定
